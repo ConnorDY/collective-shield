@@ -9,17 +9,17 @@ class HomeView extends Component {
         super(props);
 
         this.state = {
-            district: null
+            user: null
         };
     }
 
     componentDidMount() {
-        // axios.get(buildEndpointUrl('district'))
-        //     .then(res => {
-        //         this.setState({
-        //             district: res.data
-        //         });
-        //     })
+        axios.get(buildEndpointUrl('me'))
+            .then(res => {
+                this.setState({
+                    user: res.data
+                });
+            })
     }
 
     render() {
@@ -33,16 +33,6 @@ class HomeView extends Component {
                         <p>Content here</p>
                     </div>
                 </div>
-                {/* <div className="c-quickstart container">
-                    <h2>Getting Started</h2>
-                    {this.state.district.started.map((s) => {
-                        return (
-                            <QuickstartItem
-                                content={s.content}
-                                title={s.title} />
-                        )
-                    })}
-                </div> */}
             </div>
         );
     }
