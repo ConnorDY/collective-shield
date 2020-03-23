@@ -8,6 +8,7 @@ const requestSchema = new mongoose.Schema({
     createDate: Date,
     coordinates: [Number],
     name: String,
+    position: String,
 })
 
 const Request = mongoose.model('request', requestSchema);

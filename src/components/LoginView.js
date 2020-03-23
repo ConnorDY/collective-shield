@@ -31,8 +31,8 @@ class LoginView extends Component {
                 <Navbar activePage="attendance" />
                 <div className="container">
                     <div className="c-intro">
-                        <h1>Development in Progress</h1>
-                        <p>This section will be customized per student to display attendance by day and class.</p>
+                        <a href="/login/facebook">Login with Facebook</a>
+                        <a href="/login/google">Login with Google</a>
                     </div>
                 </div>
             </div>

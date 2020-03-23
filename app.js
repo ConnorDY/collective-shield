@@ -5,8 +5,10 @@ const session = require("express-session");
 const mongoose = require("mongoose");
 const path = require("path");
 const config = require("./server/config.js");
-const Maker = require("./server/schemas/maker");
-const Request = require("./server/schemas/request");
+const makerSchema = require("./server/schemas/maker");
+const requestSchema = require("./server/schemas/request");
+const userSchema = require("./server/schemas/user");
+const userLoginSchema = require("./server/schemas/userLogin");
 const moment = require('moment');
 var passport = require('passport')
   , FacebookStrategy = require('passport-facebook').Strategy
@@ -34,36 +36,117 @@ mongoose.connect(config.mongoUri, { useNewUrlParser: true, useUnifiedTopology: t
 passport.use(new FacebookStrategy({
   clientID: config.facebook.id,
   clientSecret: config.facebook.secret,
-  callbackURL: 'http://localhost:' + portNumber + '/login/facebook/callback'
+  callbackURL: `${config.domainName}/login/facebook/callback`,
+  profileFields: ['id', 'email', 'first_name', 'last_name'],
+  passReqToCallback: true
 },
-  (accessToken, refreshToken, profile, done) => {
-    // asynchronous verification, for effect...
-    process.nextTick(function () {
+  (req, accessToken, refreshToken, profile, done) => {
+    if (profile == null) {
+      return done(null, null);
+    }
 
-      // To keep the example simple, the user's Facebook profile is returned to
-      // represent the logged-in user.  In a typical application, you would want
-      // to associate the Facebook account with a user record in your database,
-      // and return that user instead.
-      return done(null, profile);
-    });
+    const email = profile.emails[0].value
+
+    userSchema.User
+      .findOne({ $or: [{ email: email }, { providers: { facebook: profile.id } }] })
+      .then((user) => {
+        if (user == null) {
+          user = new userSchema.User()
+        }
+        if (user.providers == null) {
+          user.providers = {}
+        }
+
+        user.email = email
+        user.firstName = profile.name.givenName
+        user.lastName = profile.name.familyName
+        user.providers.facebook = profile.id
+
+        user.save()
+          .then((user) => {
+            new userLoginSchema.UserLogin({
+              userId: user._id,
+              accessToken: accessToken,
+              refreshToken: refreshToken,
+              createDate: new Date(),
+              remoteIp: getIp(req)
+            }).save()
+              .then((login) => {
+                user.login = login
+                return done(null, user)
+              })
+              .catch((err) => {
+                console.error(err)
+                return done(err, null)
+              })
+          })
+          .catch((err) => {
+            console.error(err)
+            return done(err, null)
+          })
+      })
+      .catch((err) => {
+        console.error(err)
+        return done(err, null)
+      })
   }
 ));
 
 passport.use(new GoogleStrategy({
   clientID: config.google.id,
   clientSecret: config.google.secret,
-  callbackURL: 'http://localhost:' + portNumber + '/login/google/callback'
+  callbackURL: `${config.domainName}/login/google/callback`,
+  passReqToCallback: true
 },
-  (accessToken, refreshToken, profile, done) => {
-    // asynchronous verification, for effect...
-    process.nextTick(function () {
+  (req, accessToken, refreshToken, profile, done) => {
+    if (profile == null) {
+      return done(null, null);
+    }
 
-      // To keep the example simple, the user's Facebook profile is returned to
-      // represent the logged-in user.  In a typical application, you would want
-      // to associate the Facebook account with a user record in your database,
-      // and return that user instead.
-      return done(null, profile);
-    });
+    const email = profile.emails[0].value
+
+    userSchema.User
+      .findOne({ $or: [{ email: email }, { providers: { google: profile.id } }] })
+      .then((user) => {
+        if (user == null) {
+          user = new userSchema.User()
+        }
+        if (user.providers == null) {
+          user.providers = {}
+        }
+
+        user.email = email
+        user.firstName = profile.name.givenName
+        user.lastName = profile.name.familyName
+        user.providers.google = profile.id
+
+        user.save()
+          .then((user) => {
+            new userLoginSchema.UserLogin({
+              userId: user._id,
+              accessToken: accessToken,
+              refreshToken: refreshToken,
+              createDate: new Date(),
+              remoteIp: getIp(req)
+            }).save()
+              .then((login) => {
+                user.login = login
+                return done(null, user)
+              })
+              .catch((err) => {
+                console.error(err)
+                return done(err, null)
+              })
+          })
+          .catch((err) => {
+            console.error(err)
+            return done(err, null)
+          })
+      })
+      .catch((err) => {
+        console.error(err)
+        return done(err, null)
+      })
   }
 ));
 
@@ -95,6 +178,13 @@ function ensureAuthenticated(req, res, next) {
   res.redirect('/login')
 }
 
+function getIp(req) {
+  return (req.headers['x-forwarded-for'] || '').split(',').pop() ||
+    req.connection.remoteAddress ||
+    req.socket.remoteAddress ||
+    req.connection.socket.remoteAddress
+}
+
 app.use(cookieParser());
 app.use(session(cookieSession));
 app.use(passport.initialize());
@@ -114,8 +204,13 @@ if (process.env.NODE_ENV !== "development") {
   })
 }
 
+app.get("/api/me", (req, res) => {
+  console.log(req.user)
+  return res.send(req.user)
+})
+
 app.get("/api/makers", (req, res) => {
-  Maker.Maker
+  makerSchema.Maker
     .find({})
     .exec((err, results) => {
       if (err) {
@@ -126,7 +221,7 @@ app.get("/api/makers", (req, res) => {
 })
 
 app.get("/api/makers/:id", (req, res) => {
-  Maker.Maker
+  makerSchema.Maker
     .findById(req.params.id)
     .exec((err, result) => {
       if (err) {
@@ -137,7 +232,7 @@ app.get("/api/makers/:id", (req, res) => {
 })
 
 app.put("/api/makers/:id", (req, res) => {
-  Maker.Maker
+  makerSchema.Maker
     .findOneAndUpdate({ _id: req.params.id }, req.body, (err, result) => {
       if (err) {
         console.error(err)
@@ -147,7 +242,7 @@ app.put("/api/makers/:id", (req, res) => {
 })
 
 app.get("/api/requests", (req, res) => {
-  Request.Request
+  requestSchema.Request
     .find({})
     .exec((err, results) => {
       if (err) {
@@ -158,7 +253,7 @@ app.get("/api/requests", (req, res) => {
 })
 
 app.post("/api/requests", (req, res) => {
-  Request.Request
+  requestSchema.Request
     .create(req.body, (err, result) => {
       if (err) {
         console.error(err)
@@ -168,7 +263,7 @@ app.post("/api/requests", (req, res) => {
 })
 
 app.get("api/requests/:id", (req, res) => {
-  Request.Request
+  requestSchema.Request
     .findById(req.params.id)
     .exec((err, result) => {
       if (err) {
@@ -179,7 +274,7 @@ app.get("api/requests/:id", (req, res) => {
 })
 
 app.put("api/requests/:id", (req, res) => {
-  Request.Request
+  requestSchema.Request
     .findOneAndUpdate({ _id: req.params.id }, req.body, (err, result) => {
       if (err) {
         console.error(err)
@@ -188,13 +283,13 @@ app.put("api/requests/:id", (req, res) => {
     })
 })
 
-app.get('/login/facebook', passport.authenticate('facebook'))
+app.get('/login/facebook', passport.authenticate('facebook', { scope: 'email' }))
 
 app.get('/login/facebook/callback', passport.authenticate('facebook', { successRedirect: '/', failureRedirect: '/login' }), (req, res) => {
-  res.send('Logged In.');
+  res.send('Logged In.')
 })
 
-app.get('/login/google', passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }))
+app.get('/login/google', passport.authenticate('google', { scope: ['profile', 'email'] }))
 
 app.get('/login/google/callback', passport.authenticate('google', { successRedirect: '/', failureRedirect: '/login' }), (req, res) => {
   res.send('Logged In.');

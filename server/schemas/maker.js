@@ -9,6 +9,8 @@ const makerSchema = new mongoose.Schema({
     lastLoggedInDate: Date,
     name: String,
     email: String,
+    localPickup: Boolean,
+    multiship: Boolean,
 })
 
 const Maker = mongoose.model('maker', makerSchema);

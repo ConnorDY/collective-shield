@@ -8,5 +8,6 @@ module.exports = {
         id: process.env.GOOGLE_ID || "***REMOVED***",
         secret: process.env.GOOGLE_SECRET || "***REMOVED***"
     },
+    domainName: process.env.OAUTH_DOMAIN || "http://localhost:3050",
     cookieSecret: process.env.COOKIE_SECRET || "***REMOVED***"
 };
