@@ -1,0 +1,18 @@
+// Font Functions
+// ------------------------------------
+
+@function get-font-size($size: "base") {
+    @if not map-has-key($font-sizes, $size) {
+        @return $size;
+    }
+
+    @return map-get($font-sizes, $size);
+}
+
+
+// Icon Functions
+// ------------------------------------
+
+@function get-icon($icon) {
+    @return map-get($icons, $icon);
+}

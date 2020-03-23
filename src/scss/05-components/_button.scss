@@ -1,0 +1,15 @@
+.c-button {
+    background: $purple;
+    border: none;
+    border-radius: 3px;
+    color: $white;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: bold;
+    padding: 10px 16px;
+
+    &[disabled] {
+        cursor: not-allowed;
+        opacity: 0.2;
+    }
+}

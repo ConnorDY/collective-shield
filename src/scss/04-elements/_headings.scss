@@ -1,0 +1,62 @@
+/*------------------------------------*\
+  HEADINGS
+\*------------------------------------*/
+
+h1, h2, h3, h4, h5, h6 {
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+}
+
+h1 {
+    @include font-style(
+        $font-normal,                     // Font Family
+        $size-1,                          // Font Size
+        $grey,                            // Font Color
+        $weight-light,                    // Font Weight
+        $height-1                         // Line Height
+    );
+
+    @include respond-to("phone") {
+        font-size: 52px;
+        line-height: 62px;
+    }
+
+    .fade {
+        opacity: 0.3;
+    }
+}
+
+h2 {
+    @include font-style(
+        $font-normal,                     // Font Family
+        $size-2,                          // Font Size
+        $grey,                       // Font Color
+        $weight-semibold,                 // Font Weight
+        $height-2                         // Line Height
+    );
+
+    @include respond-to("phone") {
+        font-size: 30px;
+        line-height: 40px;
+    }
+}
+
+h3 {
+    @include font-style(
+        $font-normal,                     // Font Family
+        $size-3,                          // Font Size
+        $grey,                            // Font Color
+        $weight-semibold,                 // Font Weight
+        $height-3                         // Line Height
+    );
+}
+
+h4 {
+    @include font-style(
+        $font-normal,                     // Font Family
+        $size-4,                          // Font Size
+        $grey-light,                      // Font Color
+        $weight-bold,                     // Font Weight
+        $height-4                         // Line Height
+    );
+}

@@ -1,0 +1,48 @@
+.c-makers {
+    &__controls {
+        padding: 50px 0;
+
+        button {
+            background: $grey-lightest;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            margin-right: 6px;
+        }
+
+        p {
+            display: inline-block;
+        }
+    }
+
+    &__item {
+        border-bottom: 2px solid $grey-light;
+        padding: 17px 0;
+
+        &.-header {
+            font-weight: bold;
+            padding: 6px 0;
+        }
+
+        > div {
+            display: inline-block;
+            width: 21%;
+
+            &:last-child {
+                width: 16%;
+            }
+        }
+
+        a {
+            color: $purple;
+            text-decoration: underline;
+
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+
+    &__items {
+    }
+}
