@@ -39,6 +39,10 @@ class MakerView extends Component {
     }
 
     render() {
+        if (this.state.makers == null || this.state.makers.length === 0) {
+            return (null);
+        }
+
         return (
             <div>
                 <Navbar activePage="makers" />
