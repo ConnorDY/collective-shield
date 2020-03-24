@@ -264,13 +264,8 @@ app.post('/public/request', (req, res) => {
   request.save()
     .then(result => {
       sparkpostClient.transmissions.send({
-        options: {
-          sandbox: true
-        },
         content: {
-          from: 'testing@sparkpostbox.com',
-          subject: 'Hello, World!',
-          html: '<html><body><p>Testing SparkPost - the world\'s most awesomest email service!</p></body></html>'
+          template_id: 'request-confirmation'
         },
         recipients: [
           { address: data.email }
