@@ -1,5 +1,6 @@
 const bodyParser = require("body-parser");
 const express = require("express");
+const csurf = require("csurf");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const mongoose = require("mongoose");
@@ -9,6 +10,7 @@ const makerSchema = require("./server/schemas/maker");
 const requestSchema = require("./server/schemas/request");
 const userSchema = require("./server/schemas/user");
 const userLoginSchema = require("./server/schemas/userLogin");
+const SparkPost = require('sparkpost');
 const moment = require('moment');
 var passport = require('passport')
   , FacebookStrategy = require('passport-facebook').Strategy
@@ -20,6 +22,17 @@ const cookieSession = {
   secret: config.cookieSecret,
   cookie: {}
 }
+const csrfProtection = csurf({
+  cookie: {
+    key: 'XSRF-TOKEN',
+    path: '/',
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 3600 // 1-hour
+  }
+})
+const parseForm = bodyParser.urlencoded({ extended: false })
+const sparkpostClient = new SparkPost(config.sparkpostKey)
 
 const server = require("http").Server(app);
 
@@ -154,7 +167,7 @@ if (process.env.NODE_ENV === "development") {
   process.on("SIGTERM", () => process.kill(process.pid, "SIGINT"));
   app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, csrf-token");
     res.header("Access-Control-Allow-Methods", "*");
     next();
   });
@@ -175,7 +188,7 @@ function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next(null)
   }
-  res.redirect('/login')
+  res.redirect(401, '/login')
 }
 
 function getIp(req) {
@@ -185,18 +198,37 @@ function getIp(req) {
     req.connection.socket.remoteAddress
 }
 
+function getUser(req) {
+  user = req.user
+
+  if (process.env.NODE_ENV === "development") {
+    user = {
+      _id: "TEST",
+      firstName: "Test",
+      lastName: "Test",
+      // makerId: "5e781b3ee7179a17e21a89e1"
+    }
+  }
+
+  return user;
+}
+
 app.use(cookieParser());
 app.use(session(cookieSession));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(parseForm);
+app.use(express.static(path.join(__dirname, 'build'), { index: false }));
 
 server.listen(portNumber, () => {
   console.log(`Express web server started: http://localhost:${portNumber}`);
 });
 
+// app.all("*", csrfProtection, (req, res, next) => {
+//   res.cookie('XSRF-TOKEN', req.csrfToken())
+//   next()
+// })
 
 if (process.env.NODE_ENV !== "development") {
   app.all("/api/*", ensureAuthenticated, (req, res) => {
@@ -204,12 +236,85 @@ if (process.env.NODE_ENV !== "development") {
   })
 }
 
+app.post('/public/request', (req, res) => {
+  const data = req.body
+  if (data.count == null) {
+    data.count = 4
+  }
+  data.createDate = new Date()
+
+  const request = new requestSchema.Request({
+    address: {
+      line1: data.line1,
+      line2: data.line2,
+      city: data.city,
+      state: data.state,
+      zip: data.zip,
+    },
+    details: data.details,
+    count: data.count,
+    createDate: new Date(),
+    name: data.name,
+    email: data.email,
+  })
+
+  request.save()
+    .then(result => {
+      sparkpostClient.transmissions.send({
+        options: {
+          sandbox: true
+        },
+        content: {
+          from: 'testing@sparkpostbox.com',
+          subject: 'Hello, World!',
+          html: '<html><body><p>Testing SparkPost - the world\'s most awesomest email service!</p></body></html>'
+        },
+        recipients: [
+          { address: data.email }
+        ]
+      })
+        .then(data => {
+          return res.send(result)
+        })
+        .catch(err => {
+          console.log('Whoops! Something went wrong');
+          console.error(err);
+          return res.send(result)
+        });
+    })
+    .catch(err => {
+      if (err) {
+        console.error(err)
+      }
+    })
+})
+
 app.get("/api/me", (req, res) => {
-  console.log(req.user)
-  return res.send(req.user)
+  user = getUser(req)
+
+  if (user == null || user.makerId == null) {
+    return res.send(user)
+  }
+
+  makerSchema.Maker
+    .findById(user.makerId)
+    .then(result => {
+      user.maker = result
+      return res.send(user)
+    })
+    .catch(err => {
+      console.error(err);
+      return res.error(err)
+    })
 })
 
 app.get("/api/makers", (req, res) => {
+  user = getUser(req)
+
+  if (user == null || !user.isSuperAdmin) {
+    return res.send([])
+  }
+
   makerSchema.Maker
     .find({})
     .exec((err, results) => {
@@ -249,6 +354,31 @@ app.get("/api/requests", (req, res) => {
         console.error(err)
       }
       return res.send(results)
+    })
+})
+
+app.get("/api/requests/me", (req, res) => {
+  user = getUser(req)
+
+  if (user == null || user.makerId != null) {
+    return res.send([])
+  }
+
+  requestSchema.Request
+    .find({ userId: user._id })
+    .then(results => {
+      results.forEach(r => {
+        r.createDate = new Date(r.createDate)
+      })
+
+      results.sort((a, b) => a.start - b.start)
+
+      return res.send(results)
+    })
+    .catch(err => {
+      if (err) {
+        console.error(err)
+      }
     })
 })
 

@@ -13,27 +13,63 @@ class RequestView extends Component {
     }
 
     componentDidMount() {
-        axios.get(buildEndpointUrl('district'))
+        axios.get(buildEndpointUrl('requests'))
             .then(res => {
                 this.setState({
-                    district: res.data
+                    requests: res.data
                 });
             })
     }
 
     render() {
-        if (this.state.district == null) {
-            return (<Navbar activePage="attendance" />);
-        }
-
         return (
             <div>
-                <Navbar activePage="attendance" />
                 <div className="container">
                     <div className="c-intro">
-                        <h1>Development in Progress</h1>
-                        <p>This section will be customized per student to display attendance by day and class.</p>
+                        <h1>All Requests</h1>
                     </div>
+                </div>
+                <div className="c-requests container">
+                    {
+                        (this.state.requests == null || this.state.requests.length === 0) &&
+                        <div className="c-list__items -none">
+                            No reqests
+                        </div>
+                    }
+                    {
+                        this.state.requests != null && this.state.requests.length > 0 &&
+                        <div className="c-list__items">
+                            <div className="c-list__item -header">
+                                <div>
+                                    Name
+                                </div>
+                                <div>
+                                    Email
+                                </div>
+                                <div>
+                                    Date
+                                </div>
+                                <div>
+                                    Status
+                                </div>
+                            </div>
+                            {this.state.requests.map((r, key) => {
+                                return (
+                                    <div key={key} className="c-list__item">
+                                        <div>
+                                            {r.name}
+                                        </div>
+                                        <div>
+                                            {r.email}
+                                        </div>
+                                        <div>
+                                            {r.createdOn}
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    }
                 </div>
             </div>
         );

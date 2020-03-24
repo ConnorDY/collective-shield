@@ -1,5 +1,5 @@
 .c-button {
-    background: $purple;
+    background-color: $purple;
     border: none;
     border-radius: 3px;
     color: $white;
@@ -7,6 +7,10 @@
     display: inline-block;
     font-weight: bold;
     padding: 10px 16px;
+
+    &:hover {
+        background-color: rgba($purple, 0.8);
+    }
 
     &[disabled] {
         cursor: not-allowed;

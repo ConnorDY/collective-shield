@@ -1,0 +1,20 @@
+.c-requestForm {
+    @include grid-column(8);
+
+    &.-pad {
+        padding-top: 60px;
+    }
+
+    form {
+        .-error {
+            display: inline-block;
+            color: red;
+        }
+
+        .-short {
+            display: inline-block;
+            width: 30%;
+            vertical-align: bottom;
+        }
+    }
+}

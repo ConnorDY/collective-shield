@@ -11,6 +11,8 @@ const userSchema = new mongoose.Schema({
     lastName: String,
     email: String,
     providers: oauthProviders,
+    makerId: String,
+    isSuperAdmin: Boolean,
 })
 
 const User = mongoose.model('user', userSchema);

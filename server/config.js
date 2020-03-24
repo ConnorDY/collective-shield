@@ -9,5 +9,6 @@ module.exports = {
         secret: process.env.GOOGLE_SECRET || "***REMOVED***"
     },
     domainName: process.env.OAUTH_DOMAIN || "http://localhost:3050",
-    cookieSecret: process.env.COOKIE_SECRET || "***REMOVED***"
+    cookieSecret: process.env.COOKIE_SECRET || "***REMOVED***",
+    sparkpostKey: process.env.SPARKPOST_KEY || "***REMOVED***"
 };

@@ -16,7 +16,7 @@ const customStyles = {
     }
 };
 
-class MakerView extends Component {
+class WorkView extends Component {
     constructor(props) {
         super(props)
 
@@ -45,7 +45,10 @@ class MakerView extends Component {
 
         return (
             <div>
-                <Navbar activePage="makers" />
+                {
+                    this.props.showNav &&
+                    <Navbar activePage="makers" />
+                }
                 <div className="container">
                     <div className="c-intro">
                         <h1>Maker List</h1>
@@ -163,4 +166,4 @@ class MakerView extends Component {
     }
 }
 
-export default MakerView;
+export default WorkView;
