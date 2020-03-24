@@ -1,6 +1,6 @@
 const bodyParser = require("body-parser");
 const express = require("express");
-const forceSSL = require('express-force-ssl');
+const sslRedirect = require('heroku-ssl-redirect');
 const csurf = require("csurf");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
@@ -236,7 +236,7 @@ if (process.env.NODE_ENV !== "development") {
 
   })
 
-  app.use(forceSSL);
+  app.use(sslRedirect());
 }
 
 app.post('/public/request', (req, res) => {
