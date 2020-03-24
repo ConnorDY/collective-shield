@@ -35,7 +35,7 @@ form {
 
     .Dropdown-root {
         font-size: 18px;
-        margin: 10px;
+        margin: 10px 0;
 
         &.is-open {
             .Dropdown-arrow {
@@ -73,11 +73,7 @@ form {
         margin-top: 20px;
 
         input,textarea {
-            margin: 10px;
-        }
-
-        span {
-            margin: 0 10px;
+            margin: 10px 0;
         }
     }
 }

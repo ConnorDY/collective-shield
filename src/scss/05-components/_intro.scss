@@ -1,4 +1,5 @@
 .c-intro {
+    @include grid-column(12);
     padding-top: 20px;
 
     p {
