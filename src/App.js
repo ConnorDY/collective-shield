@@ -14,11 +14,11 @@ function App() {
     <div>
       <Router>
         <main className="main">
-          <Route path="/" exact component={NewRequestView} />
-          <Route path="/app" component={HomeView} />
-          <Route path="/app/makers" component={MakerView} />
-          <Route path="/app/requests" component={RequestView} />
-          <Route path="/app/login" component={LoginView} />
+          {/* <Route path="/" exact component={NewRequestView} /> */}
+          <Route path="/" component={HomeView} />
+          <Route path="/makers" component={MakerView} />
+          <Route path="/requests" component={RequestView} />
+          <Route path="/login" component={LoginView} />
         </main>
       </Router>
     </div>

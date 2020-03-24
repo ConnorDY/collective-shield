@@ -50,7 +50,7 @@ mongoose.connect(config.mongoUri, { useNewUrlParser: true, useUnifiedTopology: t
 passport.use(new FacebookStrategy({
   clientID: config.facebook.id,
   clientSecret: config.facebook.secret,
-  callbackURL: `${config.domainName}/app/login/facebook/callback`,
+  callbackURL: `${config.domainName}/login/facebook/callback`,
   profileFields: ['id', 'email', 'first_name', 'last_name'],
   passReqToCallback: true
 },
@@ -109,7 +109,7 @@ passport.use(new FacebookStrategy({
 passport.use(new GoogleStrategy({
   clientID: config.google.id,
   clientSecret: config.google.secret,
-  callbackURL: `${config.domainName}/app/login/google/callback`,
+  callbackURL: `${config.domainName}/login/google/callback`,
   passReqToCallback: true
 },
   (req, accessToken, refreshToken, profile, done) => {
@@ -190,7 +190,7 @@ function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
     return next(null)
   }
-  res.redirect(401, '/app/login')
+  res.redirect(401, '/login')
 }
 
 function getIp(req) {
@@ -208,7 +208,7 @@ function getUser(req) {
       _id: "TEST",
       firstName: "Test",
       lastName: "Test",
-      // makerId: "5e781b3ee7179a17e21a89e1"
+      makerId: "5e781b3ee7179a17e21a89e1"
     }
   }
 
@@ -216,7 +216,7 @@ function getUser(req) {
 }
 
 app.use(cookieParser());
-//app.use(session(cookieSession));
+app.use(session(cookieSession));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.json());
@@ -412,15 +412,17 @@ app.put("api/requests/:id", (req, res) => {
     })
 })
 
-app.get('/app/login/facebook', passport.authenticate('facebook', { scope: 'email' }))
+app.get('/login/facebook', passport.authenticate('facebook', { scope: 'email' }))
 
-app.get('/app/login/facebook/callback', passport.authenticate('facebook', { successRedirect: '/app', failureRedirect: '/app/login' }), (req, res) => {
+app.get('/login/facebook/callback', passport.authenticate('facebook', { successRedirect: '/', failureRedirect: '/login' }), (req, res) => {
+  console.log('facebook logged in')
   res.send('Logged In.')
 })
 
-app.get('/app/login/google', passport.authenticate('google', { scope: ['profile', 'email'] }))
+app.get('/login/google', passport.authenticate('google', { scope: ['profile', 'email'] }))
 
-app.get('/app/login/google/callback', passport.authenticate('google', { successRedirect: '/app', failureRedirect: '/app/login' }), (req, res) => {
+app.get('/login/google/callback', passport.authenticate('google', { successRedirect: '/', failureRedirect: '/login' }), (req, res) => {
+  console.log('google logged in')
   res.send('Logged In.');
 })
 
