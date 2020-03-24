@@ -1,5 +1,6 @@
 const bodyParser = require("body-parser");
 const express = require("express");
+const forceSSL = require('express-force-ssl');
 const csurf = require("csurf");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
@@ -234,6 +235,8 @@ if (process.env.NODE_ENV !== "development") {
   app.all("/api/*", ensureAuthenticated, (req, res) => {
 
   })
+
+  app.use(forceSSL);
 }
 
 app.post('/public/request', (req, res) => {
