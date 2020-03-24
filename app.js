@@ -186,6 +186,7 @@ passport.deserializeUser(function (obj, done) {
 });
 
 function ensureAuthenticated(req, res, next) {
+  console.log(req.isAuthenticated())
   if (req.isAuthenticated()) {
     return next(null)
   }
@@ -215,7 +216,7 @@ function getUser(req) {
 }
 
 app.use(cookieParser());
-app.use(session(cookieSession));
+//app.use(session(cookieSession));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.json());
@@ -236,7 +237,7 @@ if (process.env.NODE_ENV !== "development") {
 
   })
 
-  app.use(sslRedirect());
+  // app.use(sslRedirect());
 }
 
 app.post('/public/request', (req, res) => {
@@ -413,13 +414,13 @@ app.put("api/requests/:id", (req, res) => {
 
 app.get('/app/login/facebook', passport.authenticate('facebook', { scope: 'email' }))
 
-app.get('/app/login/facebook/callback', passport.authenticate('facebook', { successRedirect: '/', failureRedirect: '/app/login' }), (req, res) => {
+app.get('/app/login/facebook/callback', passport.authenticate('facebook', { successRedirect: '/app', failureRedirect: '/app/login' }), (req, res) => {
   res.send('Logged In.')
 })
 
 app.get('/app/login/google', passport.authenticate('google', { scope: ['profile', 'email'] }))
 
-app.get('/app/login/google/callback', passport.authenticate('google', { successRedirect: '/', failureRedirect: '/app/login' }), (req, res) => {
+app.get('/app/login/google/callback', passport.authenticate('google', { successRedirect: '/app', failureRedirect: '/app/login' }), (req, res) => {
   res.send('Logged In.');
 })
 
