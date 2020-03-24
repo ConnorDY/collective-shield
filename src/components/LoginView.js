@@ -13,8 +13,8 @@ class LoginView extends Component {
             <div>
                 <div className="container">
                     <div className="c-intro">
-                        <a href="/login/facebook">Login with Facebook</a>
-                        <a href="/login/google">Login with Google</a>
+                        <a href="/app/login/facebook">Login with Facebook</a>
+                        <a href="/app/login/google">Login with Google</a>
                     </div>
                 </div>
             </div>

@@ -142,7 +142,7 @@ class MakerView extends Component {
             })
             .catch(err => {
                 if (err.response != null && err.response.status === 401) {
-                    return this.props.history.push('/login')
+                    return this.props.history.push('/app/login')
                 }
                 console.error(err)
             })
