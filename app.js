@@ -232,7 +232,7 @@ server.listen(portNumber, () => {
 //   next()
 // })
 
-if (process.env.NODE_ENV !== "development") {
+if (process.env.NODE_ENV != null && process.env.NODE_ENV !== "development") {
   app.all("/api/*", ensureAuthenticated, (req, res) => {
 
   })
@@ -327,11 +327,24 @@ app.get("/api/makers", (req, res) => {
 app.get("/api/makers/:id", (req, res) => {
   makerSchema.Maker
     .findById(req.params.id)
-    .exec((err, result) => {
+    .then(result => {
+      return res.send(result)
+    })
+    .catch(err => {
       if (err) {
         console.error(err)
       }
+    })
+})
+
+app.get("/api/makers/:id/work", (req, res) => {
+  requestSchema.Request
+    .find({ makerId: req.params.id })
+    .then(result => {
       return res.send(result)
+    })
+    .catch(err => {
+      console.error(err)
     })
 })
 
@@ -365,6 +378,25 @@ app.get("/api/requests/me", (req, res) => {
 
   requestSchema.Request
     .find({ userId: user._id })
+    .then(results => {
+      results.forEach(r => {
+        r.createDate = new Date(r.createDate)
+      })
+
+      results.sort((a, b) => a.start - b.start)
+
+      return res.send(results)
+    })
+    .catch(err => {
+      if (err) {
+        console.error(err)
+      }
+    })
+})
+
+app.get("/api/requests/open", (req, res) => {
+  requestSchema.Request
+    .find({ makerId: null })
     .then(results => {
       results.forEach(r => {
         r.createDate = new Date(r.createDate)

@@ -18,6 +18,7 @@ const requestSchema = new mongoose.Schema({
     name: String,
     email: String,
     position: String,
+    makerId: String,
 })
 
 const Request = mongoose.model('request', requestSchema);

@@ -23,69 +23,120 @@ class WorkView extends Component {
         this.refreshTimer = null
 
         this.state = {
-            makers: [],
-            newMaker: null,
+            availableWork: [],
+            maker: [],
+            work: [],
         };
 
         this._getMaker = this._getMaker.bind(this)
-        this._getMakers = this._getMakers.bind(this)
+        this._getWork = this._getWork.bind(this)
+        this._getAvailableWork = this._getAvailableWork.bind(this)
         // this._handleJoinClassClick = this._handleJoinClassClick.bind(this)
         // this._handleNavigateDateClick = this._handleNavigateDateClick.bind(this)
         this._handleModalClose = this._handleModalClose.bind(this)
     }
 
     componentDidMount() {
-        this._getMakers();
+        this._getMaker();
+        this._getWork();
+        this._getAvailableWork();
     }
 
     render() {
-        if (this.state.makers == null || this.state.makers.length === 0) {
+        if (this.state.maker == null) {
             return (null);
         }
 
         return (
             <div>
-                {
-                    this.props.showNav &&
-                    <Navbar activePage="makers" />
-                }
                 <div className="container">
                     <div className="c-intro">
-                        <h1>Maker List</h1>
+                        <h1>Your Work</h1>
                     </div>
                 </div>
-                <div className="c-makers container">
+                <div className="c-list container">
                     {
-                        (this.state.makers == null || this.state.makers.length === 0) &&
-                        <div className="c-makers__items -none">
-                            No makers found
+                        (this.state.work == null || this.state.work.length === 0) &&
+                        <div className="c-list__items -none">
+                            No work found
                         </div>
                     }
                     {
-                        this.state.makers != null && this.state.makers.length > 0 &&
-                        <div className="c-makers__items">
-                            <div className="c-makers__item -header">
+                        this.state.work != null && this.state.work.length > 0 &&
+                        <div className="c-list__items">
+                            <div className="c-list__item -header">
                                 <div>
-                                    Name
+                                    Date
                                 </div>
                                 <div>
-                                    Email
+                                    Count
                                 </div>
                                 <div>
-                                    Total Prints
+                                    Details
+                                </div>
+                                <div>
+                                    Status
                                 </div>
                             </div>
-                            {this.state.makers.map((maker, key) => {
+                            {this.state.work.map((w, key) => {
                                 return (
-                                    <div key={key} className="c-makers__item">
+                                    <div key={key} className="c-list__item">
                                         <div>
-                                            {maker.name}
+                                            {moment(w.createDate).format("M/D/YYYY h:mm A")}
                                         </div>
                                         <div>
-                                            {maker.email}
+                                            {w.count} shields
                                         </div>
                                         <div>
-                                            {maker.prints}
+                                            {w.details}
+                                        </div>
+                                        <div>
+                                            Queued
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    }
+                </div>
+                <div className="c-list container">
+                    <div className="c-intro">
+                        <h1>Open Requests</h1>
+                    </div>
+                    {
+                        (this.state.availableWork == null || this.state.availableWork.length === 0) &&
+                        <div className="c-list__items -none">
+                            No work found
+                        </div>
+                    }
+                    {
+                        this.state.availableWork != null && this.state.availableWork.length > 0 &&
+                        <div className="c-list__items">
+                            <div className="c-list__item -header">
+                                <div>
+                                    Date
+                                </div>
+                                <div>
+                                    Count
+                                </div>
+                                <div>
+                                    Details
+                                </div>
+                            </div>
+                            {this.state.availableWork.map((w, key) => {
+                                return (
+                                    <div key={key} className="c-list__item">
+                                        <div>
+                                            {moment(w.createDate).format("M/D/YYYY h:mm A")}
+                                        </div>
+                                        <div>
+                                            {w.count} shields
+                                        </div>
+                                        <div>
+                                            {w.details}
+                                        </div>
+                                        <div>
+                                            Claim
                                         </div>
                                     </div>
                                 )
@@ -124,30 +175,33 @@ class WorkView extends Component {
     }
 
     _getMaker() {
-        if (this.state.selectedEvent == null || this.state.selectedEvent.meetingId == null) {
+        if (this.props.user == null || this.props.user.makerId == null) {
             return;
         }
 
-        axios.get(buildEndpointUrl(`makers/${this.state.selectedEvent.meetingId}`))
+        axios.get(buildEndpointUrl(`makers/${this.props.user.makerId}`))
             .then(res => {
                 this.setState({
-                    eventStudent: res.data
+                    maker: res.data
                 });
             })
     }
 
-    _getMakers() {
-        axios.get(buildEndpointUrl(`makers`))
+    _getWork() {
+        axios.get(buildEndpointUrl(`makers/${this.props.user.makerId}/work`))
             .then(res => {
                 this.setState({
-                    makers: res.data
+                    work: res.data
                 });
             })
-            .catch(err => {
-                if (err.response != null && err.response.status === 401) {
-                    return this.props.history.push('/login')
-                }
-                console.error(err)
+    }
+
+    _getAvailableWork() {
+        axios.get(buildEndpointUrl(`requests/open`))
+            .then(res => {
+                this.setState({
+                    availableWork: res.data
+                });
             })
     }
 
