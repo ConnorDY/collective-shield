@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+
 import HomeView from './components/HomeView';
 import LoginView from './components/LoginView';
 import MakerView from './components/MakerView';
@@ -9,7 +10,7 @@ import NewRequestView from './components/NewRequestView';
 import 'input-moment/dist/input-moment.css';
 import './scss/app.scss';
 
-function App() {
+export default function App() {
   return (
     <div>
       <Router>
@@ -24,5 +25,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
