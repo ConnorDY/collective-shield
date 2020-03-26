@@ -75,6 +75,8 @@ export default function WorkView({ user }: { user: any }) {
         <Col>
           <h1>My Work</h1>
         </Col>
+
+        <Col className="download-models">Download Models</Col>
       </Row>
 
       <Row>
