@@ -1,21 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import Modal from 'react-modal';
 import axios from 'axios';
-import moment from 'moment';
 
 import { buildEndpointUrl } from '../Utilities';
-
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)'
-  }
-};
 
 export default function WorkView({ user }: { user: any }) {
   //this.refreshTimer = null;
@@ -44,18 +31,6 @@ export default function WorkView({ user }: { user: any }) {
     axios.get(buildEndpointUrl(`requests/open`)).then((res) => {
       setAvailableWork(res.data);
     });
-  }
-
-  // function handleJoinClassClick(event, e) {
-  //     e.preventDefault()
-
-  //     this.setState({
-  //         selectedEvent: event
-  //     })
-  // }
-
-  function handleModalClose() {
-    // setSelectedEvent(null);
   }
 
   // on load
@@ -151,16 +126,6 @@ export default function WorkView({ user }: { user: any }) {
           </Col>
         )}
       </Row>
-
-      <Modal
-        contentLabel="Add a maker"
-        //isOpen={selectedEvent != null}
-        isOpen={false}
-        onRequestClose={handleModalClose}
-        //style={customStyles}
-      >
-        modal content
-      </Modal>
     </>
   );
 }
