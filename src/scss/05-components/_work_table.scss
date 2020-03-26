@@ -1,0 +1,14 @@
+.my-work-table,
+.available-work-table {
+  th:first-child,
+  td:first-child {
+    width: 100px;
+  }
+}
+
+.available-work-table {
+  th:nth-child(2),
+  td:nth-child(2) {
+    width: 125px;
+  }
+}

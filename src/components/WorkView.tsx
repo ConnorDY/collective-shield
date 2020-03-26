@@ -84,26 +84,28 @@ export default function WorkView({ user }: { user: any }) {
 
         {work && work.length > 0 && (
           <Col>
-            <table>
-              <thead>
-                <th>Count</th>
-                <th>Requestor</th>
-                <th colSpan={2}>Status</th>
-              </thead>
+            <div className="table-wrapper">
+              <table className="my-work-table">
+                <thead>
+                  <th>Count</th>
+                  <th>Requestor</th>
+                  <th colSpan={2}>Status</th>
+                </thead>
 
-              <tbody>
-                {work.map((w, key) => {
-                  return (
-                    <tr key={key}>
-                      <td>{w.count}</td>
-                      <td>{w.name}</td>
-                      <td>{w.status}</td>
-                      <td></td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                <tbody>
+                  {work.map((w, key) => {
+                    return (
+                      <tr key={key}>
+                        <td>{w.count}</td>
+                        <td>{w.name}</td>
+                        <td>{w.status}</td>
+                        <td></td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </Col>
         )}
       </Row>
@@ -121,27 +123,29 @@ export default function WorkView({ user }: { user: any }) {
 
         {availableWork && availableWork.length > 0 && (
           <Col>
-            <table>
-              <thead>
-                <th>Count</th>
-                <th>Distance</th>
-                <th>Requestor</th>
-                <th></th>
-              </thead>
+            <div className="table-wrapper">
+              <table className="available-work-table">
+                <thead>
+                  <th>Count</th>
+                  <th>Distance</th>
+                  <th>Requestor</th>
+                  <th></th>
+                </thead>
 
-              <tbody>
-                {availableWork.map((w, key) => {
-                  return (
-                    <tr key={key}>
-                      <td>{w.count}</td>
-                      <td></td>
-                      <td>{w.name}</td>
-                      <td>Claim</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                <tbody>
+                  {availableWork.map((w, key) => {
+                    return (
+                      <tr key={key}>
+                        <td>{w.count}</td>
+                        <td>X miles</td>
+                        <td>{w.name}</td>
+                        <td>Claim</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </Col>
         )}
       </Row>
