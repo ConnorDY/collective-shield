@@ -17,67 +17,67 @@
  * All items that describe the physical attributes like buttons, sliders, cards, badges, etc...
  */
 
- @import "00-vendor/__vendor";
- @import "01-settings/__settings";
- @import "02-tools/__tools";
- @import "03-generic/__generic";
- @import "04-elements/__elements";
- @import "05-components/__components";
+@import '00-vendor/__vendor';
+@import '01-settings/__settings';
+@import '02-tools/__tools';
+@import '03-generic/__generic';
+@import '04-elements/__elements';
+@import '05-components/__components';
 
-.App {
-  text-align: center;
-}
+// .App {
+//   text-align: center;
+// }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
+// .App-logo {
+//   animation: App-logo-spin infinite 20s linear;
+//   height: 80px;
+// }
 
-.App-header {
-  background-color: #222;
-  height: 50px;
-  padding: 20px;
-  color: white;
-}
+// .App-header {
+//   background-color: #222;
+//   height: 50px;
+//   padding: 20px;
+//   color: white;
+// }
 
-.App-title {
-  font-size: 1.5em;
-}
+// .App-title {
+//   font-size: 1.5em;
+// }
 
-.App-intro {
-  font-size: large;
-}
+// .App-intro {
+//   font-size: large;
+// }
 
-.items {
-   display: inline-block;
-   margin-bottom: 50px;
-   padding: 20px 50px;
-   vertical-align: top;
-   width: 25%;
-}
+// .items {
+//   display: inline-block;
+//   margin-bottom: 50px;
+//   padding: 20px 50px;
+//   vertical-align: top;
+//   width: 25%;
+// }
 
-.item {
-   display: inline-block;
-   margin-left: 10px;
-   margin-right: 10px;
-   margin-top: 5px;
-   margin-bottom: 5px;
-}
+// .item {
+//   display: inline-block;
+//   margin-left: 10px;
+//   margin-right: 10px;
+//   margin-top: 5px;
+//   margin-bottom: 5px;
+// }
 
-.item.color .toggle {
-  margin-bottom: 10px;
-}
+// .item.color .toggle {
+//   margin-bottom: 10px;
+// }
 
-.slider {
-   width: 200px;
-   display: block;
-}
+// .slider {
+//   width: 200px;
+//   display: block;
+// }
 
-.toggle {
-   width: 200px;
-}
+// .toggle {
+//   width: 200px;
+// }
 
-.warning {
-   color:red;
-   font-style: italic;
-}
+// .warning {
+//   color: red;
+//   font-style: italic;
+// }
