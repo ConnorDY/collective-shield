@@ -66,7 +66,10 @@ export default function WorkView({ user }: { user: any }) {
                 <thead>
                   <th>Count</th>
                   <th>Requestor</th>
-                  <th colSpan={2}>Status</th>
+                  <th>Status</th>
+                  <th>
+                    <span className="sr-only">Action</span>
+                  </th>
                 </thead>
 
                 <tbody>
@@ -106,7 +109,9 @@ export default function WorkView({ user }: { user: any }) {
                   <th>Count</th>
                   <th>Distance</th>
                   <th>Requestor</th>
-                  <th></th>
+                  <th>
+                    <span className="sr-only">Claim</span>
+                  </th>
                 </thead>
 
                 <tbody>
