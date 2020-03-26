@@ -71,7 +71,7 @@ export default function WorkView({ user }: { user: any }) {
 
   return (
     <>
-      <Row>
+      <Row className="work-view-header">
         <Col>
           <h1>My Work</h1>
         </Col>
@@ -112,7 +112,7 @@ export default function WorkView({ user }: { user: any }) {
         )}
       </Row>
 
-      <Row>
+      <Row className="work-view-header">
         <Col>
           <h1>Open Requests</h1>
         </Col>
