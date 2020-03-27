@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Col, Dropdown, Row } from 'react-bootstrap';
 import axios from 'axios';
 
 import { buildEndpointUrl } from '../utilities';
 import User from '../models/User';
 import Maker from '../models/Maker';
+import StatusCircle from './StatusCircle';
 
 const WorkView: React.FC<{ user: User }> = ({ user }) => {
   //this.refreshTimer = null;
@@ -29,6 +30,14 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
     axios.get(buildEndpointUrl(`requests/open`)).then((res) => {
       setAvailableWork(res.data);
     });
+  }
+
+  function StatusOption(status: string): JSX.Element {
+    return (
+      <>
+        <StatusCircle status={status} /> {status}
+      </>
+    );
   }
 
   // on load
@@ -64,7 +73,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                 <thead>
                   <tr>
                     <th className="count">Count</th>
-                    <th>Requestor</th>
+                    <th className="requestor">Requestor</th>
                     <th>Status</th>
                     <th>
                       <span className="sr-only">Action</span>
@@ -73,13 +82,43 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                 </thead>
 
                 <tbody>
-                  {work.map((w, key) => {
+                  {work.map((w, index) => {
                     return (
-                      <tr key={key}>
+                      <tr key={index}>
                         <td className="count">{w.count}</td>
-                        <td>{w.name}</td>
-                        <td>{w.status}</td>
-                        <td></td>
+                        <td className="requestor">{w.name}</td>
+                        <td className="status">
+                          <Dropdown>
+                            <Dropdown.Toggle id={`status-dropdown-${index}`}>
+                              {StatusOption(w.status || 'Requested')}
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                              <Dropdown.Item>
+                                {StatusOption('Requested')}
+                              </Dropdown.Item>
+
+                              <Dropdown.Item>
+                                {StatusOption('Queued')}
+                              </Dropdown.Item>
+
+                              <Dropdown.Item>
+                                {StatusOption('Printing')}
+                              </Dropdown.Item>
+
+                              <Dropdown.Item>
+                                {StatusOption('Completed')}
+                              </Dropdown.Item>
+
+                              <Dropdown.Item>
+                                {StatusOption('Shipped')}
+                              </Dropdown.Item>
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </td>
+                        <td className="action">
+                          <Button variant="primary">{'{Action}'}</Button>
+                        </td>
                       </tr>
                     );
                   })}
@@ -109,7 +148,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                   <tr>
                     <th className="count">Count</th>
                     <th className="distance">Distance</th>
-                    <th>Requestor</th>
+                    <th className="requestor">Requestor</th>
                     <th>
                       <span className="sr-only">Claim</span>
                     </th>
@@ -122,7 +161,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                       <tr key={key}>
                         <td className="count">{w.count}</td>
                         <td className="distance">X miles</td>
-                        <td>{w.name}</td>
+                        <td className="requestor">{w.name}</td>
                         <td className="claim">
                           <Button variant="primary">Claim</Button>
                         </td>

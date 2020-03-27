@@ -1,0 +1,33 @@
+.my-work-table,
+.available-work-table {
+  .count {
+    width: 6rem;
+  }
+
+  .requestor {
+    width: 99%;
+  }
+
+  .action button {
+    width: 10rem;
+  }
+}
+
+.my-work-table {
+  .status .dropdown button {
+    background-color: $white;
+    border-color: $grey;
+    border-width: 2px;
+    color: $black;
+  }
+}
+
+.available-work-table {
+  .distance {
+    width: 7rem;
+  }
+
+  .claim button {
+    width: 10rem;
+  }
+}
