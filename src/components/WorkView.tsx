@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import axios from 'axios';
 
 import { buildEndpointUrl } from '../utilities';
@@ -63,7 +63,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
               <table className="my-work-table">
                 <thead>
                   <tr>
-                    <th>Count</th>
+                    <th className="count">Count</th>
                     <th>Requestor</th>
                     <th>Status</th>
                     <th>
@@ -76,7 +76,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                   {work.map((w, key) => {
                     return (
                       <tr key={key}>
-                        <td>{w.count}</td>
+                        <td className="count">{w.count}</td>
                         <td>{w.name}</td>
                         <td>{w.status}</td>
                         <td></td>
@@ -107,8 +107,8 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
               <table className="available-work-table">
                 <thead>
                   <tr>
-                    <th>Count</th>
-                    <th>Distance</th>
+                    <th className="count">Count</th>
+                    <th className="distance">Distance</th>
                     <th>Requestor</th>
                     <th>
                       <span className="sr-only">Claim</span>
@@ -120,10 +120,12 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                   {availableWork.map((w, key) => {
                     return (
                       <tr key={key}>
-                        <td>{w.count}</td>
-                        <td>X miles</td>
+                        <td className="count">{w.count}</td>
+                        <td className="distance">X miles</td>
                         <td>{w.name}</td>
-                        <td>Claim</td>
+                        <td className="claim">
+                          <Button variant="primary">Claim</Button>
+                        </td>
                       </tr>
                     );
                   })}
