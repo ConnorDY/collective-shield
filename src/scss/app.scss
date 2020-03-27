@@ -17,8 +17,8 @@
  * All items that describe the physical attributes like buttons, sliders, cards, badges, etc...
  */
 
-@import '00-vendor/__vendor';
-@import '01-settings/__settings';
+@import '00-settings/__settings';
+@import '01-vendor/__vendor';
 @import '02-tools/__tools';
 @import '03-generic/__generic';
 @import '04-elements/__elements';

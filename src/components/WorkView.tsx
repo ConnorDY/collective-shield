@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Dropdown, Row } from 'react-bootstrap';
+import { Button, ButtonGroup, Col, Dropdown, Row } from 'react-bootstrap';
 import axios from 'axios';
 
 import { buildEndpointUrl } from '../utilities';
@@ -88,8 +88,11 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                         <td className="count">{w.count}</td>
                         <td className="requestor">{w.name}</td>
                         <td className="status">
-                          <Dropdown>
-                            <Dropdown.Toggle id={`status-dropdown-${index}`}>
+                          <Dropdown as={ButtonGroup}>
+                            <Dropdown.Toggle
+                              id={`status-dropdown-${index}`}
+                              variant="outline-secondary"
+                            >
                               {StatusOption(w.status || 'Requested')}
                             </Dropdown.Toggle>
 

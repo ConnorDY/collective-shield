@@ -20,6 +20,12 @@
       border-color: $grey;
       border-width: 2px;
       color: $black;
+
+      &:hover,
+      :active {
+        background-color: $white;
+        color: $black;
+      }
     }
 
     .dropdown-item {

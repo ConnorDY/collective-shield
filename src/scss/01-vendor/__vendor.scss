@@ -1,3 +1,7 @@
-@import '~bootstrap/dist/css/bootstrap.min.css';
+$theme-colors: (
+  primary: $blue-purple
+);
+
+@import '~bootstrap/scss/bootstrap';
 @import '~input-moment/dist/input-moment.css';
 @import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
