@@ -1,51 +1,15 @@
-.c-navbar {
-    width: 100%;
-    height: 15vh;
-    background: $grey-lightest;
-    padding: 30px 60px;
+.nav {
+  margin: 3em 0;
 
-    &__logo {
-        @include grid-column(3);
+  line-height: 24px;
+  color: $blue-grey-dark;
 
-        img {
-            max-height: 100%;
-            max-width: 100%;
-        }
-    }
+  .logo {
+    font-size: 16px;
+  }
 
-    &__items {
-        @include grid-column(9);
-        text-align: center;
-
-        ul {
-            list-style: none;
-            margin: 0;
-
-            li {
-                display: inline-block;
-
-                a {
-                    display: inline-block;
-                    font-size: 24px;
-                    color: $grey;
-                    padding: 20px 0 5px;
-                    margin: 0 40px 15px;
-                    text-decoration: none;
-
-                    &.-active {
-                        border-bottom: 2px solid $purple;
-                        color: $purple;
-                    }
-
-                    &:hover {
-                        border-bottom: 2px solid $purple;
-                    }
-                }
-            }
-        }
-    }
-
-    &__wrapper {
-        @include site-container;
-    }
+  .user {
+    text-align: right;
+    font-size: 12px;
+  }
 }

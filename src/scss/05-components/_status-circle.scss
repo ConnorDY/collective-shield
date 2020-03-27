@@ -1,0 +1,23 @@
+.status-circle {
+  margin-right: 0.5rem;
+
+  &.status-Requested > circle {
+    fill: $orange;
+  }
+
+  &.status-Queued > circle {
+    fill: $yellow;
+  }
+
+  &.status-Printing > circle {
+    fill: $green;
+  }
+
+  &.status-Completed > circle {
+    fill: $blue;
+  }
+
+  &.status-Shipped > circle {
+    fill: $purple;
+  }
+}

@@ -1,6 +1,38 @@
-@import "container",
-        "forms",
-        "headings",
-        "labels",
-        "links",
-        "paragraphs";
+.main {
+  h1 {
+    font-size: 40px;
+    line-height: 56px;
+    color: $blue-grey-dark;
+  }
+
+  .table-wrapper {
+    border: 2px solid $grey;
+    border-radius: 4px;
+    margin-bottom: 3em;
+  }
+
+  table {
+    width: 100%;
+
+    font-size: 16px;
+    line-height: 24px;
+
+    thead > tr,
+    tr:not(:last-child) {
+      border-bottom: 2px solid $grey;
+    }
+
+    th,
+    td {
+      padding: 1em;
+    }
+
+    th {
+      color: $grey-dark;
+    }
+
+    td {
+      color: $blue-grey-dark;
+    }
+  }
+}
