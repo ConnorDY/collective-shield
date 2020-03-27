@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function LoginView() {
+const LoginView: React.FC = () => {
   return (
     <div>
       <div className="container">
@@ -11,4 +11,6 @@ export default function LoginView() {
       </div>
     </div>
   );
-}
+};
+
+export default LoginView;

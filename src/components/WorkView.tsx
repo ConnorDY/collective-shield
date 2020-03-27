@@ -2,20 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import axios from 'axios';
 
-import { buildEndpointUrl } from '../Utilities';
+import { buildEndpointUrl } from '../utilities';
+import User from '../models/User';
+import Maker from '../models/Maker';
 
-export default function WorkView({ user }: { user: any }) {
+const WorkView: React.FC<{ user: User }> = ({ user }) => {
   //this.refreshTimer = null;
 
   const [availableWork, setAvailableWork] = useState<any[]>([]);
-  const [maker, setMaker] = useState<any[]>([]);
+  const [maker, setMaker] = useState<Maker>();
   const [work, setWork] = useState<any[]>([]);
 
   function getMaker() {
-    if (!user || !user.makerId) {
-      return;
-    }
-
     axios.get(buildEndpointUrl(`makers/${user.makerId}`)).then((res) => {
       setMaker(res.data);
     });
@@ -64,12 +62,14 @@ export default function WorkView({ user }: { user: any }) {
             <div className="table-wrapper">
               <table className="my-work-table">
                 <thead>
-                  <th>Count</th>
-                  <th>Requestor</th>
-                  <th>Status</th>
-                  <th>
-                    <span className="sr-only">Action</span>
-                  </th>
+                  <tr>
+                    <th>Count</th>
+                    <th>Requestor</th>
+                    <th>Status</th>
+                    <th>
+                      <span className="sr-only">Action</span>
+                    </th>
+                  </tr>
                 </thead>
 
                 <tbody>
@@ -106,12 +106,14 @@ export default function WorkView({ user }: { user: any }) {
             <div className="table-wrapper">
               <table className="available-work-table">
                 <thead>
-                  <th>Count</th>
-                  <th>Distance</th>
-                  <th>Requestor</th>
-                  <th>
-                    <span className="sr-only">Claim</span>
-                  </th>
+                  <tr>
+                    <th>Count</th>
+                    <th>Distance</th>
+                    <th>Requestor</th>
+                    <th>
+                      <span className="sr-only">Claim</span>
+                    </th>
+                  </tr>
                 </thead>
 
                 <tbody>
@@ -133,4 +135,6 @@ export default function WorkView({ user }: { user: any }) {
       </Row>
     </>
   );
-}
+};
+
+export default WorkView;

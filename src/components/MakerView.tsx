@@ -3,8 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Modal from 'react-modal';
 import axios from 'axios';
 
-import Navbar from './Navbar';
-import { buildEndpointUrl } from '../Utilities';
+import { buildEndpointUrl } from '../utilities';
 import Maker from '../models/Maker';
 
 const customStyles = {
@@ -32,7 +31,7 @@ export default function MakerView() {
 
     axios
       .get(buildEndpointUrl(`makers/${selectedEvent.meetingId}`))
-      .then(res => {
+      .then((res) => {
         setEventStudent(res.data);
       });
   }
@@ -40,10 +39,10 @@ export default function MakerView() {
   function getMakers() {
     axios
       .get(buildEndpointUrl(`makers`))
-      .then(res => {
+      .then((res) => {
         setMakers(res.data);
       })
-      .catch(err => {
+      .catch((err) => {
         if (err.response != null && err.response.status === 401) {
           return history.push('/login');
         }
@@ -71,7 +70,6 @@ export default function MakerView() {
 
   return (
     <div>
-      <Navbar activePage="makers" />
       <div className="container">
         <div className="c-intro">
           <h1>Maker List</h1>
