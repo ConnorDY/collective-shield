@@ -25,8 +25,9 @@ const App: React.FC = () => {
         setUser(res.data);
       })
       .catch((err) => {
-        if (err.response != null && err.response.status === 401) {
-          return history.push('/login');
+        if (err.response !== null && err.response.status === 401) {
+          history.push('/login');
+          return null;
         }
       });
   }, []);
@@ -40,8 +41,14 @@ const App: React.FC = () => {
             <Route path="/">
               <HomeView user={user} />
             </Route>
-            <Route path="/makers" component={MakerView} />
-            <Route path="/requests" component={RequestView} />
+
+            <Route path="/makers">
+              <MakerView />
+            </Route>
+
+            <Route path="/requests">
+              <RequestView />
+            </Route>
 
             <Route path="/work">
               <WorkView user={user} />
