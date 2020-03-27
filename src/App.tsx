@@ -13,6 +13,7 @@ import RequestView from './components/RequestView';
 import WorkView from './components/WorkView';
 
 import './scss/app.scss';
+import Navbar from './components/Navbar';
 
 const App: React.FC = () => {
   const history = useHistory();
@@ -33,36 +34,40 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <main className="main">
-      <Container>
-        {user ? (
-          <>
-            {/* <Route path="/" exact component={NewRequestView} /> */}
-            <Route path="/">
-              <HomeView user={user} />
-            </Route>
+    <>
+      <Navbar user={user} />
 
-            <Route path="/makers">
-              <MakerView />
-            </Route>
+      <main className="main">
+        <Container>
+          {user ? (
+            <>
+              {/* <Route path="/" exact component={NewRequestView} /> */}
+              <Route path="/">
+                <HomeView user={user} />
+              </Route>
 
-            <Route path="/requests">
-              <RequestView />
-            </Route>
+              <Route path="/makers">
+                <MakerView />
+              </Route>
 
-            <Route path="/work">
-              <WorkView user={user} />
-            </Route>
-          </>
-        ) : (
-          <>
-            <Route path="/login">
-              <LoginView />
-            </Route>
-          </>
-        )}
-      </Container>
-    </main>
+              <Route path="/requests">
+                <RequestView />
+              </Route>
+
+              <Route path="/work">
+                <WorkView user={user} />
+              </Route>
+            </>
+          ) : (
+            <>
+              <Route path="/login">
+                <LoginView />
+              </Route>
+            </>
+          )}
+        </Container>
+      </main>
+    </>
   );
 };
 
