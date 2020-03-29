@@ -11,10 +11,7 @@ import { Strategy as FacebookStrategy } from 'passport-facebook';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 
 import config from './config.js';
-import makerSchema from './schemas/maker';
-import requestSchema from './schemas/request';
-import userSchema from './schemas/user';
-import userLoginSchema from './schemas/userLogin';
+import { Maker, Request, User, UserLogin } from './schemas';
 
 const portNumber = process.env.PORT || 3050;
 const app = express();
@@ -65,14 +62,15 @@ passport.use(
 
       const email = profile.emails[0].value;
 
-      userSchema.User.findOne({
+      User.findOne({
         $or: [{ email: email }, { providers: { facebook: profile.id } }]
       })
         .then((user) => {
-          if (user == null) {
-            user = new userSchema.User();
+          if (!user) {
+            user = new User();
           }
-          if (user.providers == null) {
+
+          if (!user.providers) {
             user.providers = {};
           }
 
@@ -84,7 +82,7 @@ passport.use(
           user
             .save()
             .then((user) => {
-              new userLoginSchema.UserLogin({
+              new UserLogin({
                 userId: user._id,
                 accessToken: accessToken,
                 refreshToken: refreshToken,
@@ -129,12 +127,12 @@ passport.use(
 
       const email = profile.emails[0].value;
 
-      userSchema.User.findOne({
+      User.findOne({
         $or: [{ email: email }, { providers: { google: profile.id } }]
       })
         .then((user) => {
           if (user == null) {
-            user = new userSchema.User();
+            user = new User();
           }
           if (user.providers == null) {
             user.providers = {};
@@ -148,7 +146,7 @@ passport.use(
           user
             .save()
             .then((user) => {
-              new userLoginSchema.UserLogin({
+              new UserLogin({
                 userId: user._id,
                 accessToken: accessToken,
                 refreshToken: refreshToken,
@@ -264,7 +262,7 @@ app.post('/public/request', (req, res) => {
   }
   data.createDate = new Date();
 
-  const request = new requestSchema.Request({
+  const request = new Request({
     address: {
       line1: data.line1,
       line2: data.line2,
@@ -312,7 +310,7 @@ app.get('/api/me', (req, res) => {
     return res.send(user);
   }
 
-  makerSchema.Maker.findById(user.makerId)
+  Maker.findById(user.makerId)
     .then((result) => {
       user.maker = result;
       return res.send(user);
@@ -330,7 +328,7 @@ app.get('/api/makers', (req, res) => {
     return res.send([]);
   }
 
-  makerSchema.Maker.find({}).exec((err, results) => {
+  Maker.find({}).exec((err, results) => {
     if (err) {
       console.error(err);
     }
@@ -339,7 +337,7 @@ app.get('/api/makers', (req, res) => {
 });
 
 app.get('/api/makers/:id', (req, res) => {
-  makerSchema.Maker.findById(req.params.id)
+  Maker.findById(req.params.id)
     .then((result) => {
       return res.send(result);
     })
@@ -351,7 +349,7 @@ app.get('/api/makers/:id', (req, res) => {
 });
 
 app.get('/api/makers/:id/work', (req, res) => {
-  requestSchema.Request.find({ makerId: req.params.id })
+  Request.find({ makerId: req.params.id })
     .then((result) => {
       return res.send(result);
     })
@@ -361,20 +359,16 @@ app.get('/api/makers/:id/work', (req, res) => {
 });
 
 app.put('/api/makers/:id', (req, res) => {
-  makerSchema.Maker.findOneAndUpdate(
-    { _id: req.params.id },
-    req.body,
-    (err, result) => {
-      if (err) {
-        console.error(err);
-      }
-      return res.send(result);
+  Maker.findOneAndUpdate({ _id: req.params.id }, req.body, (err, result) => {
+    if (err) {
+      console.error(err);
     }
-  );
+    return res.send(result);
+  });
 });
 
 app.get('/api/requests', (req, res) => {
-  requestSchema.Request.find({}).exec((err, results) => {
+  Request.find({}).exec((err, results) => {
     if (err) {
       console.error(err);
     }
@@ -389,7 +383,7 @@ app.get('/api/requests/me', (req, res) => {
     return res.send([]);
   }
 
-  requestSchema.Request.find({ userId: user._id })
+  Request.find({ userId: user._id })
     .then((results) => {
       results.forEach((r) => {
         r.createDate = new Date(r.createDate);
@@ -407,7 +401,7 @@ app.get('/api/requests/me', (req, res) => {
 });
 
 app.get('/api/requests/open', (req, res) => {
-  requestSchema.Request.find({ makerId: null })
+  Request.find({ makerId: null })
     .then((results) => {
       results.forEach((r) => {
         r.createDate = new Date(r.createDate);
@@ -425,7 +419,7 @@ app.get('/api/requests/open', (req, res) => {
 });
 
 app.post('/api/requests', (req, res) => {
-  requestSchema.Request.create(req.body, (err, result) => {
+  Request.create(req.body, (err, result) => {
     if (err) {
       console.error(err);
     }
@@ -434,7 +428,7 @@ app.post('/api/requests', (req, res) => {
 });
 
 app.get('api/requests/:id', (req, res) => {
-  requestSchema.Request.findById(req.params.id).exec((err, result) => {
+  Request.findById(req.params.id).exec((err, result) => {
     if (err) {
       console.error(err);
     }
@@ -443,16 +437,12 @@ app.get('api/requests/:id', (req, res) => {
 });
 
 app.put('api/requests/:id', (req, res) => {
-  requestSchema.Request.findOneAndUpdate(
-    { _id: req.params.id },
-    req.body,
-    (err, result) => {
-      if (err) {
-        console.error(err);
-      }
-      return res.send(result);
+  Request.findOneAndUpdate({ _id: req.params.id }, req.body, (err, result) => {
+    if (err) {
+      console.error(err);
     }
-  );
+    return res.send(result);
+  });
 });
 
 app.get(
