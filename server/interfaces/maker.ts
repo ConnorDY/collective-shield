@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 
-import IAddress from './address';
+import { IAddress } from '.';
 
 export default interface IMaker extends Document {
   address: IAddress;

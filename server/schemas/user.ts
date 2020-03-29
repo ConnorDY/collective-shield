@@ -1,6 +1,8 @@
 import { Schema, model } from 'mongoose';
 
 import { IUser } from '../interfaces';
+import { MakerSchema } from './maker';
+import { UserLoginSchema } from './user-login';
 
 const oauthProviders = {
   facebook: String,
@@ -13,7 +15,9 @@ export const UserSchema = new Schema({
   email: String,
   providers: oauthProviders,
   makerId: String,
-  isSuperAdmin: Boolean
+  maker: MakerSchema,
+  isSuperAdmin: Boolean,
+  login: UserLoginSchema
 });
 
 const User = model<IUser>('user', UserSchema);

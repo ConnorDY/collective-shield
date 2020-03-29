@@ -1,23 +1,25 @@
+require('dotenv').config();
 import bodyParser from 'body-parser';
 import express from 'express';
 import csurf from 'csurf';
 import cookieParser from 'cookie-parser';
-import session from 'express-session';
-import mongoose from 'mongoose';
+import session, { SessionOptions } from 'express-session';
+import { connect } from 'mongoose';
 import path from 'path';
 import SparkPost from 'sparkpost';
 import passport from 'passport';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 
-import config from './config.js';
+import config from './config';
 import { Maker, Request, User, UserLogin } from './schemas';
+import { IMaker, IUser } from './interfaces';
 
 const portNumber = process.env.PORT || 3050;
 const app = express();
-const cookieSession = {
-  secret: config.cookieSecret,
-  cookie: {} as { secure: boolean }
+const cookieSession: SessionOptions = {
+  secret: config.cookieSecret!,
+  cookie: {}
 };
 const csrfProtection = csurf({
   cookie: {
@@ -33,8 +35,8 @@ const sparkpostClient = new SparkPost(config.sparkpostKey);
 
 const server = require('http').Server(app);
 
-mongoose.connect(
-  config.mongoUri,
+connect(
+  config.mongoUri!,
   { useNewUrlParser: true, useUnifiedTopology: true },
   (err) => {
     if (err) {
@@ -49,18 +51,18 @@ mongoose.connect(
 passport.use(
   new FacebookStrategy(
     {
-      clientID: config.facebook.id,
-      clientSecret: config.facebook.secret,
+      clientID: config.facebook.id!,
+      clientSecret: config.facebook.secret!,
       callbackURL: `${config.domainName}/login/facebook/callback`,
       profileFields: ['id', 'email', 'first_name', 'last_name'],
       passReqToCallback: true
     },
     (req, accessToken, refreshToken, profile, done) => {
-      if (profile == null) {
+      if (!profile) {
         return done(null, null);
       }
 
-      const email = profile.emails[0].value;
+      const email = profile.emails![0].value;
 
       User.findOne({
         $or: [{ email: email }, { providers: { facebook: profile.id } }]
@@ -75,8 +77,8 @@ passport.use(
           }
 
           user.email = email;
-          user.firstName = profile.name.givenName;
-          user.lastName = profile.name.familyName;
+          user.firstName = profile.name!.givenName;
+          user.lastName = profile.name!.familyName;
           user.providers.facebook = profile.id;
 
           user
@@ -115,8 +117,8 @@ passport.use(
 passport.use(
   new GoogleStrategy(
     {
-      clientID: config.google.id,
-      clientSecret: config.google.secret,
+      clientID: config.google.id!,
+      clientSecret: config.google.secret!,
       callbackURL: `${config.domainName}/login/google/callback`,
       passReqToCallback: true
     },
@@ -125,7 +127,7 @@ passport.use(
         return done(null, null);
       }
 
-      const email = profile.emails[0].value;
+      const email = profile.emails![0].value;
 
       User.findOne({
         $or: [{ email: email }, { providers: { google: profile.id } }]
@@ -139,8 +141,8 @@ passport.use(
           }
 
           user.email = email;
-          user.firstName = profile.name.givenName;
-          user.lastName = profile.name.familyName;
+          user.firstName = profile.name!.givenName;
+          user.lastName = profile.name!.familyName;
           user.providers.google = profile.id;
 
           user
@@ -188,19 +190,23 @@ if (process.env.NODE_ENV === 'development') {
     next();
   });
 } else {
-  cookieSession.cookie.secure = true;
+  cookieSession.cookie!.secure = true;
 }
 
 //define REST proxy options based on logged in user
-passport.serializeUser(function(user, done) {
+passport.serializeUser((user, done) => {
   done(null, user);
 });
 
-passport.deserializeUser(function(obj, done) {
+passport.deserializeUser((obj, done) => {
   done(null, obj);
 });
 
-function ensureAuthenticated(req, res, next) {
+function ensureAuthenticated(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
   console.log(req.isAuthenticated());
   if (req.isAuthenticated()) {
     return next(null);
@@ -208,16 +214,16 @@ function ensureAuthenticated(req, res, next) {
   res.redirect(401, '/login');
 }
 
-function getIp(req) {
+function getIp(req: express.Request) {
+  console.log(req.headers['x-forwarded-for']);
   return (
-    (req.headers['x-forwarded-for'] || '').split(',').pop() ||
+    ((req.headers['x-forwarded-for'] as string) || '').split(',').pop() ||
     req.connection.remoteAddress ||
-    req.socket.remoteAddress ||
-    req.connection.socket.remoteAddress
+    req.socket.remoteAddress
   );
 }
 
-function getUser(req) {
+function getUser(req: express.Request) {
   let user = req.user;
 
   if (process.env.NODE_ENV === 'development') {
@@ -229,7 +235,7 @@ function getUser(req) {
     };
   }
 
-  return user;
+  return user as IUser;
 }
 
 app.use(cookieParser());
@@ -312,12 +318,12 @@ app.get('/api/me', (req, res) => {
 
   Maker.findById(user.makerId)
     .then((result) => {
-      user.maker = result;
+      user.maker = result as IMaker;
       return res.send(user);
     })
     .catch((err) => {
       console.error(err);
-      return res.error(err);
+      throw err;
     });
 });
 
@@ -389,7 +395,7 @@ app.get('/api/requests/me', (req, res) => {
         r.createDate = new Date(r.createDate);
       });
 
-      results.sort((a, b) => a.start - b.start);
+      results.sort((a: any, b: any) => a.start - b.start);
 
       return res.send(results);
     })
@@ -401,13 +407,13 @@ app.get('/api/requests/me', (req, res) => {
 });
 
 app.get('/api/requests/open', (req, res) => {
-  Request.find({ makerId: null })
+  Request.find({ makerId: undefined })
     .then((results) => {
       results.forEach((r) => {
         r.createDate = new Date(r.createDate);
       });
 
-      results.sort((a, b) => a.start - b.start);
+      results.sort((a: any, b: any) => a.start - b.start);
 
       return res.send(results);
     })
@@ -419,12 +425,13 @@ app.get('/api/requests/open', (req, res) => {
 });
 
 app.post('/api/requests', (req, res) => {
-  Request.create(req.body, (err, result) => {
-    if (err) {
-      console.error(err);
-    }
-    return res.send(result);
-  });
+  return Request.create(req.body)
+    .then((result) => {
+      return res.send(result);
+    })
+    .catch((err) => {
+      throw err;
+    });
 });
 
 app.get('api/requests/:id', (req, res) => {
