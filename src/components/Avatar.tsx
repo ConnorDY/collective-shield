@@ -12,8 +12,8 @@ interface Props {
   googleId?: string;
 }
 
-const AvatarProfile: React.FC<{ user: User | any }> = ({ user }) => {
-  const name=`${user.firstName} ${user.lastName}`;
+const AvatarProfile: React.FC<{ user: User | undefined }> = ({ user }) => {
+  const name= user && user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : undefined;
   const size="40";
   const round=true;
   const facebookId = get(user, 'providers.facebook');
