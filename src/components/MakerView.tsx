@@ -64,6 +64,8 @@ export default function MakerView() {
     getMakers();
   }, []);
 
+  console.log(makers)
+
   if (makers === null || makers.length === 0) {
     return null;
   }
