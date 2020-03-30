@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Navbar matches snapshot 1`] = `ShallowWrapper {}`;
+
+exports[`Navbar matches snapshot when there is a user object 1`] = `ShallowWrapper {}`;
