@@ -1,4 +1,5 @@
 export default {
+  apiPrefix: '/api',
   mongoUri: process.env.MONGODB,
   facebook: {
     id: process.env.FACEBOOK_ID,

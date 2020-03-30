@@ -1,6 +1,8 @@
 require('dotenv').config();
+import 'reflect-metadata';
 import bodyParser from 'body-parser';
 import express from 'express';
+import { createExpressServer } from 'routing-controllers';
 import csurf from 'csurf';
 import cookieParser from 'cookie-parser';
 import session, { SessionOptions } from 'express-session';
@@ -13,10 +15,14 @@ import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 
 import config from './config';
 import { Maker, Request, User, UserLogin } from './schemas';
-import { IMaker, IUser } from './interfaces';
+import { IMaker } from './interfaces';
+import { RequestsController } from './controllers';
+import { getUser } from './utils';
 
 const portNumber = process.env.PORT || 3050;
-const app = express();
+const app = createExpressServer({
+  controllers: [RequestsController]
+});
 const cookieSession: SessionOptions = {
   secret: config.cookieSecret!,
   cookie: {}
@@ -180,7 +186,11 @@ passport.use(
 
 if (process.env.NODE_ENV === 'development') {
   process.on('SIGTERM', () => process.kill(process.pid, 'SIGINT'));
-  app.use(function(req, res, next) {
+  app.use(function(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) {
     res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.header(
       'Access-Control-Allow-Headers',
@@ -223,21 +233,6 @@ function getIp(req: express.Request) {
   );
 }
 
-function getUser(req: express.Request) {
-  let user = req.user;
-
-  if (process.env.NODE_ENV === 'development') {
-    user = {
-      _id: 'TEST',
-      firstName: 'Test',
-      lastName: 'Test',
-      makerId: '5e781b3ee7179a17e21a89e1'
-    };
-  }
-
-  return user as IUser;
-}
-
 app.use(cookieParser());
 app.use(session(cookieSession));
 app.use(passport.initialize());
@@ -256,12 +251,16 @@ server.listen(portNumber, () => {
 // })
 
 if (process.env.NODE_ENV != null && process.env.NODE_ENV !== 'development') {
-  app.all('/api/*', ensureAuthenticated, (req, res) => {});
+  app.all(
+    '/api/*',
+    ensureAuthenticated,
+    (req: express.Request, res: express.Response) => {}
+  );
 
   // app.use(sslRedirect());
 }
 
-app.post('/public/request', (req, res) => {
+app.post('/public/request', (req: express.Request, res: express.Response) => {
   const data = req.body;
   if (data.count == null) {
     data.count = 4;
@@ -309,7 +308,7 @@ app.post('/public/request', (req, res) => {
     });
 });
 
-app.get('/api/me', (req, res) => {
+app.get('/api/me', (req: express.Request, res: express.Response) => {
   const user = getUser(req);
 
   if (!user || !user.makerId) {
@@ -327,7 +326,7 @@ app.get('/api/me', (req, res) => {
     });
 });
 
-app.get('/api/makers', (req, res) => {
+app.get('/api/makers', (req: express.Request, res: express.Response) => {
   const user = getUser(req);
 
   if (!user || !user.isSuperAdmin) {
@@ -342,7 +341,7 @@ app.get('/api/makers', (req, res) => {
   });
 });
 
-app.get('/api/makers/:id', (req, res) => {
+app.get('/api/makers/:id', (req: express.Request, res: express.Response) => {
   Maker.findById(req.params.id)
     .then((result) => {
       return res.send(result);
@@ -354,97 +353,21 @@ app.get('/api/makers/:id', (req, res) => {
     });
 });
 
-app.get('/api/makers/:id/work', (req, res) => {
-  Request.find({ makerId: req.params.id })
-    .then((result) => {
-      return res.send(result);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-});
-
-app.put('/api/makers/:id', (req, res) => {
-  Maker.findOneAndUpdate({ _id: req.params.id }, req.body, (err, result) => {
-    if (err) {
-      console.error(err);
-    }
-    return res.send(result);
-  });
-});
-
-app.get('/api/requests', (req, res) => {
-  Request.find({}).exec((err, results) => {
-    if (err) {
-      console.error(err);
-    }
-    return res.send(results);
-  });
-});
-
-app.get('/api/requests/me', (req, res) => {
-  const user = getUser(req);
-
-  if (!user || !user.makerId) {
-    return res.send([]);
+app.get(
+  '/api/makers/:id/work',
+  (req: express.Request, res: express.Response) => {
+    Request.find({ makerId: req.params.id })
+      .then((result) => {
+        return res.send(result);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
+);
 
-  Request.find({ userId: user._id })
-    .then((results) => {
-      results.forEach((r) => {
-        r.createDate = new Date(r.createDate);
-      });
-
-      results.sort((a: any, b: any) => a.start - b.start);
-
-      return res.send(results);
-    })
-    .catch((err) => {
-      if (err) {
-        console.error(err);
-      }
-    });
-});
-
-app.get('/api/requests/open', (req, res) => {
-  Request.find({ makerId: undefined })
-    .then((results) => {
-      results.forEach((r) => {
-        r.createDate = new Date(r.createDate);
-      });
-
-      results.sort((a: any, b: any) => a.start - b.start);
-
-      return res.send(results);
-    })
-    .catch((err) => {
-      if (err) {
-        console.error(err);
-      }
-    });
-});
-
-app.post('/api/requests', (req, res) => {
-  return Request.create(req.body)
-    .then((result) => {
-      return res.send(result);
-    })
-    .catch((err) => {
-      throw err;
-    });
-});
-
-app.get('api/requests/:id', (req, res) => {
-  Request.findById(req.params.id).exec((err, result) => {
-    if (err) {
-      console.error(err);
-    }
-    return res.send(result);
-  });
-});
-
-app.put('api/requests/:id', (req, res) => {
-  Request.findOneAndUpdate({ _id: req.params.id }, req.body, (err, result) => {
+app.put('/api/makers/:id', (req: express.Request, res: express.Response) => {
+  Maker.findOneAndUpdate({ _id: req.params.id }, req.body, (err, result) => {
     if (err) {
       console.error(err);
     }
@@ -463,7 +386,7 @@ app.get(
     successRedirect: '/',
     failureRedirect: '/login'
   }),
-  (req, res) => {
+  (req: express.Request, res: express.Response) => {
     console.log('facebook logged in');
     res.send('Logged In.');
   }
@@ -480,7 +403,7 @@ app.get(
     successRedirect: '/',
     failureRedirect: '/login'
   }),
-  (req, res) => {
+  (req: express.Request, res: express.Response) => {
     console.log('google logged in');
     res.send('Logged In.');
   }
@@ -488,6 +411,6 @@ app.get(
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
-app.get('*', (req, res) => {
+app.get('*', (req: express.Request, res: express.Response) => {
   res.sendFile(path.join(__dirname + '/build/index.html'));
 });
