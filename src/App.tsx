@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Route, useHistory } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import axios from 'axios';
+import { Provider } from 'react-redux';
+import { get } from 'lodash';
 
+import configureStore from './store';
 import { buildEndpointUrl } from './utilities';
 import User from './models/User';
 import HomeView from './components/HomeView';
@@ -15,6 +18,8 @@ import WorkView from './components/WorkView';
 import './scss/app.scss';
 import Navbar from './components/Navbar';
 
+const store = configureStore()
+
 const App: React.FC = () => {
   const history = useHistory();
   const [user, setUser] = useState<User>();
@@ -26,7 +31,7 @@ const App: React.FC = () => {
         setUser(res.data);
       })
       .catch((err) => {
-        if (err.response !== null && err.response.status === 401) {
+        if (get(err, 'response.status') === 401) {
           history.push('/login');
           return null;
         }
@@ -34,9 +39,8 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <>
+    <Provider store={store}>
       <Navbar user={user} />
-
       <main className="main">
         <Container>
           {user ? (
@@ -67,7 +71,7 @@ const App: React.FC = () => {
           )}
         </Container>
       </main>
-    </>
+    </Provider>
   );
 };
 
