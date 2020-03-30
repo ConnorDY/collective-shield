@@ -11,6 +11,7 @@
     "start-server": "ts-node-dev --project server/tsconfig.json server/app.ts",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:coverage": "react-scripts test --coverage --watchAll=false --runInBand=true",
     "eject": "react-scripts eject"
   },
   "dependencies": {
@@ -55,8 +56,10 @@
     "@types/body-parser": "^1.19.0",
     "@types/cookie-parser": "^1.4.2",
     "@types/csurf": "^1.9.36",
+    "@types/enzyme": "^3.10.5",
     "@types/express": "^4.17.3",
     "@types/express-session": "^1.17.0",
+    "@types/jest": "^25.1.4",
     "@types/mongoose": "^5.7.8",
     "@types/passport": "^1.0.3",
     "@types/passport-facebook": "^2.1.9",
@@ -69,8 +72,12 @@
     "@types/redux": "^3.6.0",
     "@types/sparkpost": "^2.1.4",
     "chai": "^4.2.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
+    "enzyme-to-json": "^3.4.4",
     "node-dev": "^4.0.0",
     "npm-run-all": "^4.1.5",
+    "ts-jest": "^25.2.1",
     "ts-node": "^8.8.1",
     "ts-node-dev": "^1.0.0-pre.44"
   },
@@ -91,6 +98,24 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!<rootDir>/node_modules/"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 0,
+        "functions": 0,
+        "lines": 0,
+        "statements": 0
+      }
+    },
+    "coverageReporters": [
+      "text-summary",
+      "lcov"
     ]
   }
 }

@@ -10,6 +10,7 @@ import SparkPost from 'sparkpost';
 import passport from 'passport';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 
 import config from './config';
 import { Maker, Request, User, UserLogin } from './schemas';
@@ -488,6 +489,10 @@ app.get(
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname + '/build/index.html'));
-});
+if (process.env.NODE_ENV === "development") {
+  app.use('*', createProxyMiddleware({ target: 'http://localhost:3000', changeOrigin: true, ws: true }));
+} else {
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname + '/build/index.html'));
+  });
+}
