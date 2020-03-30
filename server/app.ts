@@ -17,12 +17,9 @@ import config from './config';
 import { Maker, Request, User, UserLogin } from './schemas';
 import { IMaker } from './interfaces';
 import { RequestsController } from './controllers';
-import { getUser } from './utils';
+import { ensureAuthenticated, getIp, getUser } from './utils';
 
 const portNumber = process.env.PORT || 3050;
-const app = createExpressServer({
-  controllers: [RequestsController]
-});
 const cookieSession: SessionOptions = {
   secret: config.cookieSecret!,
   cookie: {}
@@ -38,8 +35,6 @@ const csrfProtection = csurf({
 });
 const parseForm = bodyParser.urlencoded({ extended: false });
 const sparkpostClient = new SparkPost(config.sparkpostKey);
-
-const server = require('http').Server(app);
 
 connect(
   config.mongoUri!,
@@ -184,9 +179,11 @@ passport.use(
   )
 );
 
+const middlewares = [];
+
 if (process.env.NODE_ENV === 'development') {
   process.on('SIGTERM', () => process.kill(process.pid, 'SIGINT'));
-  app.use(function(
+  middlewares.push(function(
     req: express.Request,
     res: express.Response,
     next: express.NextFunction
@@ -212,34 +209,21 @@ passport.deserializeUser((obj, done) => {
   done(null, obj);
 });
 
-function ensureAuthenticated(
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction
-) {
-  console.log(req.isAuthenticated());
-  if (req.isAuthenticated()) {
-    return next(null);
-  }
-  res.redirect(401, '/login');
-}
+middlewares.push(
+  cookieParser(),
+  session(cookieSession),
+  passport.initialize(),
+  passport.session(),
+  bodyParser.json(),
+  parseForm,
+  express.static(path.join(__dirname, 'build'), { index: false })
+);
 
-function getIp(req: express.Request) {
-  console.log(req.headers['x-forwarded-for']);
-  return (
-    ((req.headers['x-forwarded-for'] as string) || '').split(',').pop() ||
-    req.connection.remoteAddress ||
-    req.socket.remoteAddress
-  );
-}
-
-app.use(cookieParser());
-app.use(session(cookieSession));
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(bodyParser.json());
-app.use(parseForm);
-app.use(express.static(path.join(__dirname, 'build'), { index: false }));
+const app: express.Application = createExpressServer({
+  controllers: [RequestsController],
+  middlewares
+});
+const server = require('http').Server(app);
 
 server.listen(portNumber, () => {
   console.log(`Express web server started: http://localhost:${portNumber}`);
