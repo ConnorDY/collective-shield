@@ -12,6 +12,7 @@ import HomeView from './components/HomeView';
 import LoginView from './components/LoginView';
 import MakerView from './components/MakerView';
 import RequestView from './components/RequestView';
+import RequestListView from './components/RequestListView';
 // import NewRequestView from './components/NewRequestView';
 import WorkView from './components/WorkView';
 
@@ -46,7 +47,7 @@ const App: React.FC = () => {
           {user ? (
             <>
               {/* <Route path="/" exact component={NewRequestView} /> */}
-              <Route path="/">
+              <Route path="/" exact>
                 <HomeView user={user} />
               </Route>
 
@@ -60,6 +61,10 @@ const App: React.FC = () => {
 
               <Route path="/work">
                 <WorkView user={user} />
+              </Route>
+
+              <Route path="/allRequests">
+                <RequestListView user={user} />
               </Route>
             </>
           ) : (
