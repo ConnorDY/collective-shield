@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   mongoUri: process.env.MONGODB,
   facebook: {
     id: process.env.FACEBOOK_ID,
