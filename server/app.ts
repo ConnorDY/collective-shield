@@ -53,19 +53,21 @@ const middlewares = [];
 
 if (process.env.NODE_ENV === 'development') {
   process.on('SIGTERM', () => process.kill(process.pid, 'SIGINT'));
-  middlewares.push(function(
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-    res.header(
-      'Access-Control-Allow-Headers',
-      'Origin, X-Requested-With, Content-Type, Accept, csrf-token'
-    );
-    res.header('Access-Control-Allow-Methods', '*');
-    next();
-  });
+  middlewares.push(
+    (
+      req: express.Request,
+      res: express.Response,
+      next: express.NextFunction
+    ) => {
+      res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+      res.header(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept, csrf-token'
+      );
+      res.header('Access-Control-Allow-Methods', '*');
+      next();
+    }
+  );
 } else {
   cookieSession.cookie!.secure = true;
 }
