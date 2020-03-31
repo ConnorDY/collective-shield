@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ts-node --project server/tsconfig.json server/app.ts",
     "heroku-postbuild": "npm run build",
-    "start-dev": "run-p start-server start-client",
+    "start-dev": "env BROWSER=false run-p start-server start-client",
     "start-client": "react-scripts start",
     "start-server": "ts-node-dev --project server/tsconfig.json server/app.ts",
     "build": "react-scripts build",
