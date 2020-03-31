@@ -84,7 +84,8 @@ middlewares.push(
 
 const app: express.Application = createExpressServer({
   controllers: [LoginController, RequestsController],
-  middlewares
+  middlewares,
+  classTransformer: false
 });
 const server = require('http').Server(app);
 
