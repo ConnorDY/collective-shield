@@ -96,11 +96,7 @@ server.listen(portNumber, () => {
 // })
 
 if (process.env.NODE_ENV != null && process.env.NODE_ENV !== 'development') {
-  app.all(
-    '/api/*',
-    ensureAuthenticated,
-    (req: express.Request, res: express.Response) => {}
-  );
+  app.all('/api/*', ensureAuthenticated);
 
   // app.use(sslRedirect());
 }
