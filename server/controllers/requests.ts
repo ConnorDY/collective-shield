@@ -16,13 +16,12 @@ import { getUser } from '../utils';
 @JsonController(`${config.apiPrefix}/requests`)
 export default class RequestsController {
   @Get()
-  getAll() {
-    Request.find({}).exec((err, results) => {
-      if (err) {
-        console.error(err);
-      }
-      return results;
-    });
+  async getAll() {
+    try {
+      return await Request.find();
+    } catch (err) {
+      throw err;
+    }
   }
 
   @Get('/me')
@@ -33,7 +32,7 @@ export default class RequestsController {
       return [];
     }
 
-    Request.find({ userId: user._id })
+    return Request.find({ userId: user._id })
       .then((results) => {
         results.forEach((r) => {
           r.createDate = new Date(r.createDate);
@@ -52,7 +51,7 @@ export default class RequestsController {
 
   @Get('/open')
   getOpen() {
-    Request.find({ makerId: undefined })
+    return Request.find({ makerId: undefined })
       .then((results) => {
         results.forEach((r) => {
           r.createDate = new Date(r.createDate);
@@ -82,7 +81,7 @@ export default class RequestsController {
 
   @Get('/:id')
   getOneById(@Req() req: express.Request) {
-    Request.findById(req.params.id).exec((err, result) => {
+    return Request.findById(req.params.id).exec((err, result) => {
       if (err) {
         console.error(err);
       }
@@ -92,7 +91,7 @@ export default class RequestsController {
 
   @Put('/:id')
   updateOneById(@Req() req: express.Request) {
-    Request.findOneAndUpdate(
+    return Request.findOneAndUpdate(
       { _id: req.params.id },
       req.body,
       (err, result) => {
