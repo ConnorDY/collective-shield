@@ -4,4 +4,5 @@ export default interface User {
   lastName: string;
   maker?: boolean;
   isSuperAdmin?: boolean;
+  roles: string[];
 }
