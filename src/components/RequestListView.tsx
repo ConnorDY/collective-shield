@@ -28,8 +28,8 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
 
   function getAllRequests() {
     axios.get(buildEndpointUrl(`requests/`)).then((res) => {
-        console.log(res);
-        setAllRequests(res.data);
+      console.log(res);
+      setAllRequests(res.data);
     });
   }
 
@@ -52,45 +52,47 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
     return null;
   }
 
+  var options = { weekday: 'long', month: 'long', day: 'numeric' };
+
   return (
     <>
       <Row className="work-view-header">
         <Col>
-          <h1>Open Requests</h1>
+          <h1>Requests</h1>
         </Col>
       </Row>
 
       <Row>
         {(!allRequests || allRequests.length === 0) && (
-          <Col className="no-work">No work found</Col>
+          <Col className="no-work">No request found</Col>
         )}
 
         {allRequests && allRequests.length > 0 && (
           <Col>
             <div className="table-wrapper">
-              <table className="available-work-table">
+              <table className="requested-list-table">
                 <thead>
                   <tr>
+                    <th className="requestedDate">Date Requested</th>
                     <th className="count">Count</th>
-                    <th className="distance">Distance</th>
                     <th className="requestor">Requestor</th>
-                    <th>
-                      <span className="sr-only">Claim</span>
-                    </th>
+                    <th className="printer">Printer</th>
+                    <th className="status">Status</th>
                   </tr>
                 </thead>
 
                 <tbody>
-                  {allRequests.map((w, key) => {
-                      console.log(w);
+                  {allRequests.map((r, key) => {
+                    const date = new Date(r.createDate);
+                    console.log(date);
                     return (
                       <tr key={key}>
-                        <td className="count">{w.count}</td>
-                        <td className="distance">X miles</td>
-                        <td className="requestor">{w.name}</td>
-                        <td className="claim">
-                          <Button variant="primary">Claim</Button>
-                        </td>
+                        <td className="requestedDate">
+                          {new Intl.DateTimeFormat('en-US', options).format(date)}</td>
+                        <td className="count">{r.count}</td>
+                        <td className="requestor">{r.name}</td>
+                        <td className="printer">Printer</td>
+                        <td className="status">{StatusOption(r.status || 'Requested')}</td>
                       </tr>
                     );
                   })}
