@@ -1,0 +1,25 @@
+// .requested-list-table {
+//     padding: 28rem;
+// }
+
+.requested-list-table {
+    .requestedDate {
+        width: 20%;
+        padding: 0 1.8rem 0 1.8rem;
+    }
+
+    .count {
+        width: 10%;
+    }
+
+   tbody > tr {
+    .requestedDate {
+        padding: 1.8rem;
+    }
+
+    .requestor {
+        font-weight: 700;
+    }
+   }
+}
+
