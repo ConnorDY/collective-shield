@@ -1,6 +1,8 @@
 require('dotenv').config();
+import 'reflect-metadata';
 import bodyParser from 'body-parser';
 import express from 'express';
+import { createExpressServer } from 'routing-controllers';
 import csurf from 'csurf';
 import cookieParser from 'cookie-parser';
 import session, { SessionOptions } from 'express-session';
@@ -8,16 +10,16 @@ import { connect } from 'mongoose';
 import path from 'path';
 import SparkPost from 'sparkpost';
 import passport from 'passport';
-import { Strategy as FacebookStrategy } from 'passport-facebook';
-import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 
+import './passport';
 import config from './config';
-import { Maker, Request, User, UserLogin } from './schemas';
-import { IMaker, IUser } from './interfaces';
+import { Maker, Request } from './schemas';
+import { IMaker } from './interfaces';
+import { LoginController, RequestsController } from './controllers';
+import { ensureAuthenticated, getUser } from './utils';
 
 const portNumber = process.env.PORT || 3050;
-const app = express();
 const cookieSession: SessionOptions = {
   secret: config.cookieSecret!,
   cookie: {}
@@ -34,8 +36,6 @@ const csrfProtection = csurf({
 const parseForm = bodyParser.urlencoded({ extended: false });
 const sparkpostClient = new SparkPost(config.sparkpostKey);
 
-const server = require('http').Server(app);
-
 connect(
   config.mongoUri!,
   { useNewUrlParser: true, useUnifiedTopology: true },
@@ -49,203 +49,45 @@ connect(
   }
 );
 
-passport.use(
-  new FacebookStrategy(
-    {
-      clientID: config.facebook.id!,
-      clientSecret: config.facebook.secret!,
-      callbackURL: `${config.domainName}/login/facebook/callback`,
-      profileFields: ['id', 'email', 'first_name', 'last_name'],
-      passReqToCallback: true
-    },
-    (req, accessToken, refreshToken, profile, done) => {
-      if (!profile) {
-        return done(null, null);
-      }
-
-      const email = profile.emails![0].value;
-
-      User.findOne({
-        $or: [{ email: email }, { providers: { facebook: profile.id } }]
-      })
-        .then((user) => {
-          if (!user) {
-            user = new User();
-          }
-
-          if (!user.providers) {
-            user.providers = {};
-          }
-
-          user.email = email;
-          user.firstName = profile.name!.givenName;
-          user.lastName = profile.name!.familyName;
-          user.providers.facebook = profile.id;
-
-          user
-            .save()
-            .then((user) => {
-              new UserLogin({
-                userId: user._id,
-                accessToken: accessToken,
-                refreshToken: refreshToken,
-                createDate: new Date(),
-                remoteIp: getIp(req)
-              })
-                .save()
-                .then((login) => {
-                  user.login = login;
-                  return done(null, user);
-                })
-                .catch((err) => {
-                  console.error(err);
-                  return done(err, null);
-                });
-            })
-            .catch((err) => {
-              console.error(err);
-              return done(err, null);
-            });
-        })
-        .catch((err) => {
-          console.error(err);
-          return done(err, null);
-        });
-    }
-  )
-);
-
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: config.google.id!,
-      clientSecret: config.google.secret!,
-      callbackURL: `${config.domainName}/login/google/callback`,
-      passReqToCallback: true
-    },
-    (req, accessToken, refreshToken, profile, done) => {
-      if (profile == null) {
-        return done(null, null);
-      }
-
-      const email = profile.emails![0].value;
-
-      User.findOne({
-        $or: [{ email: email }, { providers: { google: profile.id } }]
-      })
-        .then((user) => {
-          if (user == null) {
-            user = new User();
-          }
-          if (user.providers == null) {
-            user.providers = {};
-          }
-
-          user.email = email;
-          user.firstName = profile.name!.givenName;
-          user.lastName = profile.name!.familyName;
-          user.providers.google = profile.id;
-
-          user
-            .save()
-            .then((user) => {
-              new UserLogin({
-                userId: user._id,
-                accessToken: accessToken,
-                refreshToken: refreshToken,
-                createDate: new Date(),
-                remoteIp: getIp(req)
-              })
-                .save()
-                .then((login) => {
-                  user.login = login;
-                  return done(null, user);
-                })
-                .catch((err) => {
-                  console.error(err);
-                  return done(err, null);
-                });
-            })
-            .catch((err) => {
-              console.error(err);
-              return done(err, null);
-            });
-        })
-        .catch((err) => {
-          console.error(err);
-          return done(err, null);
-        });
-    }
-  )
-);
+const middlewares = [];
 
 if (process.env.NODE_ENV === 'development') {
   process.on('SIGTERM', () => process.kill(process.pid, 'SIGINT'));
-  app.use(function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-    res.header(
-      'Access-Control-Allow-Headers',
-      'Origin, X-Requested-With, Content-Type, Accept, csrf-token'
-    );
-    res.header('Access-Control-Allow-Methods', '*');
-    next();
-  });
+  middlewares.push(
+    (
+      req: express.Request,
+      res: express.Response,
+      next: express.NextFunction
+    ) => {
+      res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+      res.header(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept, csrf-token'
+      );
+      res.header('Access-Control-Allow-Methods', '*');
+      next();
+    }
+  );
 } else {
   cookieSession.cookie!.secure = true;
 }
 
-//define REST proxy options based on logged in user
-passport.serializeUser((user, done) => {
-  done(null, user);
+middlewares.push(
+  cookieParser(),
+  session(cookieSession),
+  passport.initialize(),
+  passport.session(),
+  bodyParser.json(),
+  parseForm,
+  express.static(path.join(__dirname, 'build'), { index: false })
+);
+
+const app: express.Application = createExpressServer({
+  controllers: [LoginController, RequestsController],
+  middlewares,
+  classTransformer: false
 });
-
-passport.deserializeUser((obj, done) => {
-  done(null, obj);
-});
-
-function ensureAuthenticated(
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction
-) {
-  console.log(req.isAuthenticated());
-  if (req.isAuthenticated()) {
-    return next(null);
-  }
-  res.redirect(401, '/login');
-}
-
-function getIp(req: express.Request) {
-  console.log(req.headers['x-forwarded-for']);
-  return (
-    ((req.headers['x-forwarded-for'] as string) || '').split(',').pop() ||
-    req.connection.remoteAddress ||
-    req.socket.remoteAddress
-  );
-}
-
-function getUser(req: express.Request) {
-  let user = req.user;
-
-  if (process.env.NODE_ENV === 'development') {
-    user = {
-      _id: 'TEST',
-      firstName: 'Test',
-      lastName: 'Test',
-      makerId: '5e781b3ee7179a17e21a89e1'
-    };
-  }
-
-  return user as IUser;
-}
-
-app.use(cookieParser());
-app.use(session(cookieSession));
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(bodyParser.json());
-app.use(parseForm);
-app.use(express.static(path.join(__dirname, 'build'), { index: false }));
+const server = require('http').Server(app);
 
 server.listen(portNumber, () => {
   console.log(`Express web server started: http://localhost:${portNumber}`);
@@ -257,12 +99,12 @@ server.listen(portNumber, () => {
 // })
 
 if (process.env.NODE_ENV != null && process.env.NODE_ENV !== 'development') {
-  app.all('/api/*', ensureAuthenticated, (req, res) => {});
+  app.all('/api/*', ensureAuthenticated);
 
   // app.use(sslRedirect());
 }
 
-app.post('/public/request', (req, res) => {
+app.post('/public/request', (req: express.Request, res: express.Response) => {
   const data = req.body;
   if (data.count == null) {
     data.count = 4;
@@ -310,7 +152,7 @@ app.post('/public/request', (req, res) => {
     });
 });
 
-app.get('/api/me', (req, res) => {
+app.get('/api/me', (req: express.Request, res: express.Response) => {
   const user = getUser(req);
 
   if (!user || !user.makerId) {
@@ -328,7 +170,7 @@ app.get('/api/me', (req, res) => {
     });
 });
 
-app.get('/api/makers', (req, res) => {
+app.get('/api/makers', (req: express.Request, res: express.Response) => {
   const user = getUser(req);
 
   if (!user || !user.isSuperAdmin) {
@@ -343,7 +185,7 @@ app.get('/api/makers', (req, res) => {
   });
 });
 
-app.get('/api/makers/:id', (req, res) => {
+app.get('/api/makers/:id', (req: express.Request, res: express.Response) => {
   Maker.findById(req.params.id)
     .then((result) => {
       return res.send(result);
@@ -355,17 +197,20 @@ app.get('/api/makers/:id', (req, res) => {
     });
 });
 
-app.get('/api/makers/:id/work', (req, res) => {
-  Request.find({ makerId: req.params.id })
-    .then((result) => {
-      return res.send(result);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-});
+app.get(
+  '/api/makers/:id/work',
+  (req: express.Request, res: express.Response) => {
+    Request.find({ makerId: req.params.id })
+      .then((result) => {
+        return res.send(result);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+);
 
-app.put('/api/makers/:id', (req, res) => {
+app.put('/api/makers/:id', (req: express.Request, res: express.Response) => {
   Maker.findOneAndUpdate({ _id: req.params.id }, req.body, (err, result) => {
     if (err) {
       console.error(err);
@@ -374,125 +219,19 @@ app.put('/api/makers/:id', (req, res) => {
   });
 });
 
-app.get('/api/requests', (req, res) => {
-  Request.find({}).exec((err, results) => {
-    if (err) {
-      console.error(err);
-    }
-    return res.send(results);
-  });
-});
-
-app.get('/api/requests/me', (req, res) => {
-  const user = getUser(req);
-
-  if (!user || !user.makerId) {
-    return res.send([]);
-  }
-
-  Request.find({ userId: user._id })
-    .then((results) => {
-      results.forEach((r) => {
-        r.createDate = new Date(r.createDate);
-      });
-
-      results.sort((a: any, b: any) => a.start - b.start);
-
-      return res.send(results);
-    })
-    .catch((err) => {
-      if (err) {
-        console.error(err);
-      }
-    });
-});
-
-app.get('/api/requests/open', (req, res) => {
-  Request.find({ makerId: undefined })
-    .then((results) => {
-      results.forEach((r) => {
-        r.createDate = new Date(r.createDate);
-      });
-
-      results.sort((a: any, b: any) => a.start - b.start);
-
-      return res.send(results);
-    })
-    .catch((err) => {
-      if (err) {
-        console.error(err);
-      }
-    });
-});
-
-app.post('/api/requests', (req, res) => {
-  return Request.create(req.body)
-    .then((result) => {
-      return res.send(result);
-    })
-    .catch((err) => {
-      throw err;
-    });
-});
-
-app.get('api/requests/:id', (req, res) => {
-  Request.findById(req.params.id).exec((err, result) => {
-    if (err) {
-      console.error(err);
-    }
-    return res.send(result);
-  });
-});
-
-app.put('api/requests/:id', (req, res) => {
-  Request.findOneAndUpdate({ _id: req.params.id }, req.body, (err, result) => {
-    if (err) {
-      console.error(err);
-    }
-    return res.send(result);
-  });
-});
-
-app.get(
-  '/login/facebook',
-  passport.authenticate('facebook', { scope: 'email' })
-);
-
-app.get(
-  '/login/facebook/callback',
-  passport.authenticate('facebook', {
-    successRedirect: '/',
-    failureRedirect: '/login'
-  }),
-  (req, res) => {
-    console.log('facebook logged in');
-    res.send('Logged In.');
-  }
-);
-
-app.get(
-  '/login/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
-);
-
-app.get(
-  '/login/google/callback',
-  passport.authenticate('google', {
-    successRedirect: '/',
-    failureRedirect: '/login'
-  }),
-  (req, res) => {
-    console.log('google logged in');
-    res.send('Logged In.');
-  }
-);
-
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
-if (process.env.NODE_ENV === "development") {
-  app.use('*', createProxyMiddleware({ target: 'http://localhost:3000', changeOrigin: true, ws: true }));
+if (process.env.NODE_ENV === 'development') {
+  app.use(
+    '*',
+    createProxyMiddleware({
+      target: 'http://localhost:3000',
+      changeOrigin: true,
+      ws: true
+    })
+  );
 } else {
-  app.get('*', (req, res) => {
+  app.get('*', (req: express.Request, res: express.Response) => {
     res.sendFile(path.join(__dirname + '/build/index.html'));
   });
 }
