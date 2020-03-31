@@ -10,6 +10,7 @@ import { connect } from 'mongoose';
 import path from 'path';
 import SparkPost from 'sparkpost';
 import passport from 'passport';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 
 import './passport';
 import config from './config';
@@ -221,6 +222,17 @@ app.put('/api/makers/:id', (req: express.Request, res: express.Response) => {
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
-app.get('*', (req: express.Request, res: express.Response) => {
-  res.sendFile(path.join(__dirname + '/build/index.html'));
-});
+if (process.env.NODE_ENV === 'development') {
+  app.use(
+    '*',
+    createProxyMiddleware({
+      target: 'http://localhost:3000',
+      changeOrigin: true,
+      ws: true
+    })
+  );
+} else {
+  app.get('*', (req: express.Request, res: express.Response) => {
+    res.sendFile(path.join(__dirname + '/build/index.html'));
+  });
+}
