@@ -2,7 +2,7 @@
 
 ## Development
 
-To start the API and UI together, use: `npm run start-dev`.
+To start the API and UI together, use: `npm run start-dev`. Then, access `http://localhost:3050` in your browser.
 
 ## UI
 
