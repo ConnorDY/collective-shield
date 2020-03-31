@@ -17,7 +17,8 @@ export const UserSchema = new Schema({
   makerId: String,
   maker: MakerSchema,
   isSuperAdmin: Boolean,
-  login: UserLoginSchema
+  login: UserLoginSchema,
+  roles: [String]
 });
 
 const User = model<IUser>('user', UserSchema);

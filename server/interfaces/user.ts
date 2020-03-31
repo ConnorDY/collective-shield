@@ -11,4 +11,5 @@ export default interface IUser extends Document {
   maker?: IMaker;
   isSuperAdmin: boolean;
   login?: IUserLogin;
+  roles: string[];
 }
