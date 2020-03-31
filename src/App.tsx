@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Route, useHistory } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
-import axios from 'axios';
-import { Provider } from 'react-redux';
 import { get } from 'lodash';
+import { Dispatch } from 'redux';
 
-import configureStore from './store';
-import { buildEndpointUrl } from './utilities';
 import User from './models/User';
 import HomeView from './components/HomeView';
 import LoginView from './components/LoginView';
@@ -17,33 +15,28 @@ import WorkView from './components/WorkView';
 
 import './scss/app.scss';
 import Navbar from './components/Navbar';
+import { getUser } from './actions/user';
+import { RootState } from './reducers';
 
-const store = configureStore()
+const App: React.FC = (props) => {
 
-const App: React.FC = () => {
-  const history = useHistory();
-  const [user, setUser] = useState<User>();
+  const dispatch = useDispatch()
+  const userProfile = useSelector((state: RootState) => state.user)
+
+  const { user, isLoading, hasErrored } = userProfile;
 
   useEffect(() => {
-    axios
-      .get(buildEndpointUrl('me'))
-      .then((res) => {
-        setUser(res.data);
-      })
-      .catch((err) => {
-        if (get(err, 'response.status') === 401) {
-          history.push('/login');
-          return null;
-        }
-      });
+    dispatch(getUser());
   }, []);
 
   return (
-    <Provider store={store}>
+    <>
       <Navbar user={user} />
       <main className="main">
         <Container>
-          {user ? (
+          { isLoading && <div>Loading...</div> }
+          { hasErrored && <div>An error has occurred.</div> }
+          {user && !isLoading && !hasErrored ? (
             <>
               {/* <Route path="/" exact component={NewRequestView} /> */}
               <Route path="/">
@@ -71,7 +64,7 @@ const App: React.FC = () => {
           )}
         </Container>
       </main>
-    </Provider>
+    </>
   );
 };
 
