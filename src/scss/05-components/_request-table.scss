@@ -16,10 +16,30 @@
     .requestedDate {
         padding: 1.8rem;
     }
-
-    .requestor {
-        font-weight: 700;
-    }
    }
 }
 
+.toggleFilter {
+    color: black;
+}
+
+.all-requests-view-header {
+    margin-bottom: 2em;
+}
+
+.searchInput {
+    padding: 6px;
+    input {
+        height: 3rem;
+    }
+}
+
+#status-dropdown-1 {
+    height: 3rem;
+    width: 14rem;
+    border: 1px solid #c2c2ca;
+}
+
+.statusFilter {
+    padding: 6px;
+}
