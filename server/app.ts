@@ -16,7 +16,7 @@ import './passport';
 import config from './config';
 import { Maker, Request } from './schemas';
 import { IMaker } from './interfaces';
-import { LoginController, RequestsController } from './controllers';
+import { RequestsController } from './controllers';
 import { ensureAuthenticated, getUser } from './utils';
 
 const portNumber = process.env.PORT || 3050;
@@ -49,11 +49,15 @@ connect(
   }
 );
 
-const middlewares = [];
+const app: express.Application = createExpressServer({
+  controllers: [RequestsController],
+  classTransformer: false
+});
 
+// apply middleware
 if (process.env.NODE_ENV === 'development') {
   process.on('SIGTERM', () => process.kill(process.pid, 'SIGINT'));
-  middlewares.push(
+  app.use(
     (
       req: express.Request,
       res: express.Response,
@@ -72,24 +76,16 @@ if (process.env.NODE_ENV === 'development') {
   cookieSession.cookie!.secure = true;
 }
 
-middlewares.push(
-  cookieParser(),
-  session(cookieSession),
-  passport.initialize(),
-  passport.session(),
-  bodyParser.json(),
-  parseForm,
-  express.static(path.join(__dirname, 'build'), { index: false })
-);
+app.use(cookieParser());
+app.use(session(cookieSession));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(bodyParser.json());
+app.use(parseForm);
+app.use(express.static(path.join(__dirname, 'build'), { index: false }));
 
-const app: express.Application = createExpressServer({
-  controllers: [LoginController, RequestsController],
-  middlewares,
-  classTransformer: false
-});
-const server = require('http').Server(app);
-
-server.listen(portNumber, () => {
+// start listening
+app.listen(portNumber, () => {
   console.log(`Express web server started: http://localhost:${portNumber}`);
 });
 
@@ -103,6 +99,40 @@ if (process.env.NODE_ENV != null && process.env.NODE_ENV !== 'development') {
 
   // app.use(sslRedirect());
 }
+
+app.get(
+  '/login/facebook',
+  passport.authenticate('facebook', { scope: 'email' })
+);
+
+app.get(
+  '/login/facebook/callback',
+  passport.authenticate('facebook', {
+    successRedirect: '/',
+    failureRedirect: '/login'
+  }),
+  (req, res) => {
+    console.log('facebook logged in');
+    res.send('Logged In.');
+  }
+);
+
+app.get(
+  '/login/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+app.get(
+  '/login/google/callback',
+  passport.authenticate('google', {
+    successRedirect: '/',
+    failureRedirect: '/login'
+  }),
+  (req, res) => {
+    console.log('google logged in');
+    res.send('Logged In.');
+  }
+);
 
 app.post('/public/request', (req: express.Request, res: express.Response) => {
   const data = req.body;
