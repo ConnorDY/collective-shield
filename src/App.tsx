@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Route, useHistory } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import { get } from 'lodash';
-import { Dispatch } from 'redux';
 
 import User from './models/User';
 import HomeView from './components/HomeView';
