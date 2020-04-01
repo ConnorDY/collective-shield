@@ -1,5 +1,14 @@
 .status-circle {
   margin-right: 0.5rem;
+  
+  // &.status-FilterbyStatus > circle {
+  //   // fill: $white;
+  //   border: rgb(109, 86, 86);
+  // }
+
+  &.status-All > circle {
+    fill: $grey;
+  }
 
   &.status-Requested > circle {
     fill: $orange;
@@ -19,5 +28,9 @@
 
   &.status-Shipped > circle {
     fill: $purple;
+  }
+
+  &.status-Delivered > circle {
+    fill: #86868B
   }
 }
