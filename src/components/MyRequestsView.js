@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Modal from 'react-modal';
+import { Button, ButtonGroup, Col, Dropdown, Row } from 'react-bootstrap';
 import { buildEndpointUrl } from '../utilities';
 
 const customStyles = {
@@ -37,40 +38,46 @@ class MyRequestsView extends Component {
 
   render() {
     return (
-      <div>
-        <div className="container">
-          <div className="c-intro">
-            <h1>Your Requests</h1>
-          </div>
-          <div className="c-profile">
-            <button className="c-button" onClick={this._createNewRequest}>
-              Create New Request
-            </button>
-          </div>
-        </div>
-        <div className="c-requests container">
-          {(this.state.makers == null || this.state.makers.length === 0) && (
-            <div className="c-list__items -none">No reqests</div>
-          )}
-          {this.state.makers != null && this.state.makers.length > 0 && (
-            <div className="c-list__items">
-              <div className="c-list__item -header">
-                <div>Name</div>
-                <div>Email</div>
-                <div>Total Prints</div>
-              </div>
-              {this.state.makers.map((maker, key) => {
-                return (
-                  <div key={key} className="c-list__item">
-                    <div>{maker.name}</div>
-                    <div>{maker.email}</div>
-                    <div>{maker.prints}</div>
-                  </div>
-                );
-              })}
+      <div className="my-requests">
+        <Row className="view-header">
+          <Col>
+            <h1 className="h1">Your Requests</h1>
+          </Col>
+
+          <Col className="right-col">
+            <Button variant="primary" onClick={this._createNewRequest}>New Request</Button>
+          </Col>
+        </Row>
+        {(this.state.makers == null || this.state.makers.length === 0) && (
+          <Col className="no-work panel empty">You have not made a request. <Button variant="link" onClick={this._createNewRequest}>Create A New Request Now.</Button></Col>
+        )}
+        {this.state.makers != null && this.state.makers.length > 0 && (
+          <Col>
+            <div className="table-wrapper">
+              <table className="my-work-table">
+                <thead>
+                  <tr>
+                    <th className="name">Name</th>
+                    <th className="email">Email</th>
+                    <th className="prints">Total Prints</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {this.state.makers.map((maker, key) => {
+                    return (
+                      <tr key={key}>
+                        <td className="name">{maker.name}</td>
+                        <td className="email">{maker.email}</td>
+                        <td className="prints">{maker.prints}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
-          )}
-        </div>
+          </Col>
+        )}
         <Modal
           contentLabel="Add A Request"
           isOpen={this.state.newRequest != null}
@@ -82,6 +89,7 @@ class MyRequestsView extends Component {
           </div>
         </Modal>
       </div>
+
     );
   }
 
