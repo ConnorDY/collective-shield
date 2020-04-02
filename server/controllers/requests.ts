@@ -28,19 +28,13 @@ export default class RequestsController {
   @Get('/me')
   getMine(@Req() req: express.Request) {
     const user = getUser(req);
-
-    if (!user || !user.makerId) {
-      return [];
+    if (!user) {
+      return undefined;
     }
 
     return Request.find({ userId: user._id })
       .then((results) => {
-        results.forEach((r) => {
-          r.createDate = new Date(r.createDate);
-        });
-
-        results.sort((a: any, b: any) => a.start - b.start);
-
+        this.sortRequestsByCreateDate(results);
         return results;
       })
       .catch((err) => {
@@ -54,12 +48,7 @@ export default class RequestsController {
   getOpen() {
     return Request.find({ makerId: undefined })
       .then((results) => {
-        results.forEach((r) => {
-          r.createDate = new Date(r.createDate);
-        });
-
-        results.sort((a: any, b: any) => a.start - b.start);
-
+        this.sortRequestsByCreateDate(results);
         return results;
       })
       .catch((err) => {
@@ -98,5 +87,12 @@ export default class RequestsController {
       }
       return result;
     });
+  }
+
+  sortRequestsByCreateDate(requests: IRequest[]) {
+    requests.forEach((r) => {
+      r.createDate = new Date(r.createDate);
+    });
+    requests.sort((a, b) => a.createDate.getTime() - b.createDate.getTime());
   }
 }
