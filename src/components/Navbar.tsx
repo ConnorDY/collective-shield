@@ -9,7 +9,12 @@ const Navbar: React.FC<{ user: User | undefined }> = ({ user }) => {
     <nav className="nav">
       <Container>
         <Row>
-          <Col className="logo">
+          <Col className="branding">
+            <img 
+              alt="Logo"
+              className="logo" 
+              src={require("../assets/img/navlogo.png")}
+            ></img>
             <div>MaskShield</div>
           </Col>
 
