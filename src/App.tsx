@@ -8,14 +8,14 @@ import { get } from 'lodash';
 import configureStore from './store';
 import { buildEndpointUrl } from './utilities';
 import User from './models/User';
-import HomeView from './components/HomeView';
+import HomeView from './views/HomeView';
 import LoginView from './components/LoginView';
 import MakerView from './components/MakerView';
 import RequestListView from './components/RequestListView';
 // import NewRequestView from './components/NewRequestView';
 import WorkView from './components/WorkView';
 
-import './scss/app.scss';
+import './assets/scss/app.scss';
 import Navbar from './components/Navbar';
 
 const store = configureStore()
