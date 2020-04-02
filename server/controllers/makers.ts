@@ -35,10 +35,10 @@ export default class MakersController {
   }
 
   @Get('/:id')
-  getOneById(req: express.Request, res: express.Response) {
-    return Maker.findById(req.params.id)
+  getOneById(@Param('id') id: string) {
+    return Maker.findById(id)
       .then((result) => {
-        return res.send(result);
+        return result;
       })
       .catch((err) => {
         throw err;
