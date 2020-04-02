@@ -1,9 +1,9 @@
 import express from 'express';
 import {
   JsonController,
-  // Param,
-  // Body,
+  Body,
   Get,
+  Param,
   Post,
   Put,
   Req
@@ -11,6 +11,7 @@ import {
 
 import config from '../config';
 import { Request } from '../schemas';
+import { IRequest } from '../interfaces';
 import { getUser } from '../utils';
 
 @JsonController(`${config.apiPrefix}/requests`)
@@ -69,8 +70,8 @@ export default class RequestsController {
   }
 
   @Post()
-  createRequest(@Req() req: express.Request) {
-    return Request.create(req.body)
+  createRequest(@Body() body: IRequest) {
+    return Request.create(body)
       .then((result) => {
         return result;
       })
@@ -80,8 +81,8 @@ export default class RequestsController {
   }
 
   @Get('/:id')
-  getOneById(@Req() req: express.Request) {
-    return Request.findById(req.params.id).exec((err, result) => {
+  getOneById(@Param('id') id: string) {
+    return Request.findById(id).exec((err, result) => {
       if (err) {
         console.error(err);
       }
@@ -90,16 +91,12 @@ export default class RequestsController {
   }
 
   @Put('/:id')
-  updateOneById(@Req() req: express.Request) {
-    return Request.findOneAndUpdate(
-      { _id: req.params.id },
-      req.body,
-      (err, result) => {
-        if (err) {
-          console.error(err);
-        }
-        return result;
+  updateOneById(@Param('id') id: string, @Body() body: IRequest) {
+    return Request.findOneAndUpdate({ _id: id }, body, (err, result) => {
+      if (err) {
+        console.error(err);
       }
-    );
+      return result;
+    });
   }
 }
