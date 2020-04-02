@@ -14,9 +14,9 @@ import { createProxyMiddleware } from 'http-proxy-middleware';
 
 import './passport';
 import config from './config';
-import { Maker, Request } from './schemas';
+import { Maker } from './schemas';
 import { IMaker } from './interfaces';
-import { RequestsController } from './controllers';
+import { MakersController, RequestsController } from './controllers';
 import { ensureAuthenticated, getUser } from './utils';
 
 const portNumber = process.env.PORT || 3050;
@@ -24,17 +24,18 @@ const cookieSession: SessionOptions = {
   secret: config.cookieSecret!,
   cookie: {}
 };
-const csrfProtection = csurf({
-  cookie: {
-    key: 'XSRF-TOKEN',
-    path: '/',
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: 3600 // 1-hour
-  }
-});
 const parseForm = bodyParser.urlencoded({ extended: false });
-const sparkpostClient = new SparkPost(config.sparkpostKey);
+
+// const csrfProtection = csurf({
+//   cookie: {
+//     key: 'XSRF-TOKEN',
+//     path: '/',
+//     httpOnly: true,
+//     secure: process.env.NODE_ENV === 'production',
+//     maxAge: 3600 // 1-hour
+//   }
+// });
+// const sparkpostClient = new SparkPost(config.sparkpostKey);
 
 connect(
   config.mongoUri!,
@@ -50,7 +51,7 @@ connect(
 );
 
 const app: express.Application = createExpressServer({
-  controllers: [RequestsController],
+  controllers: [MakersController, RequestsController],
   classTransformer: false
 });
 
@@ -134,54 +135,6 @@ app.get(
   }
 );
 
-app.post('/public/request', (req: express.Request, res: express.Response) => {
-  const data = req.body;
-  if (data.count == null) {
-    data.count = 4;
-  }
-  data.createDate = new Date();
-
-  const request = new Request({
-    address: {
-      line1: data.line1,
-      line2: data.line2,
-      city: data.city,
-      state: data.state,
-      zip: data.zip
-    },
-    details: data.details,
-    count: data.count,
-    createDate: new Date(),
-    name: data.name,
-    email: data.email
-  });
-
-  request
-    .save()
-    .then((result) => {
-      sparkpostClient.transmissions
-        .send({
-          content: {
-            template_id: 'request-confirmation'
-          },
-          recipients: [{ address: data.email }]
-        })
-        .then((data) => {
-          return res.send(result);
-        })
-        .catch((err) => {
-          console.log('Whoops! Something went wrong');
-          console.error(err);
-          return res.send(result);
-        });
-    })
-    .catch((err) => {
-      if (err) {
-        console.error(err);
-      }
-    });
-});
-
 app.get('/api/me', (req: express.Request, res: express.Response) => {
   const user = getUser(req);
 
@@ -198,55 +151,6 @@ app.get('/api/me', (req: express.Request, res: express.Response) => {
       console.error(err);
       throw err;
     });
-});
-
-app.get('/api/makers', (req: express.Request, res: express.Response) => {
-  const user = getUser(req);
-
-  if (!user || !user.isSuperAdmin) {
-    return res.send([]);
-  }
-
-  Maker.find({}).exec((err, results) => {
-    if (err) {
-      console.error(err);
-    }
-    return res.send(results);
-  });
-});
-
-app.get('/api/makers/:id', (req: express.Request, res: express.Response) => {
-  Maker.findById(req.params.id)
-    .then((result) => {
-      return res.send(result);
-    })
-    .catch((err) => {
-      if (err) {
-        console.error(err);
-      }
-    });
-});
-
-app.get(
-  '/api/makers/:id/work',
-  (req: express.Request, res: express.Response) => {
-    Request.find({ makerId: req.params.id })
-      .then((result) => {
-        return res.send(result);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }
-);
-
-app.put('/api/makers/:id', (req: express.Request, res: express.Response) => {
-  Maker.findOneAndUpdate({ _id: req.params.id }, req.body, (err, result) => {
-    if (err) {
-      console.error(err);
-    }
-    return res.send(result);
-  });
 });
 
 // The "catchall" handler: for any request that doesn't
