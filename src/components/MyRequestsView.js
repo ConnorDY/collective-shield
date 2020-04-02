@@ -39,20 +39,20 @@ class MyRequestsView extends Component {
   render() {
     return (
       <div className="my-requests">
-      <Row className="view-header">
-        <Col>
-          <h1 className="h1">Your Requests</h1>
-        </Col>
+        <Row className="view-header">
+          <Col>
+            <h1 className="h1">Your Requests</h1>
+          </Col>
 
-        <Col className="download-models">
-          <Button variant="primary" onClick={this._createNewRequest}>New Request</Button>
-        </Col>
-      </Row>
-          {(this.state.makers == null || this.state.makers.length === 0) && (
-              <Col className="no-work panel empty">You have not made a request. <Button variant="link" onClick={this._createNewRequest}>Create A New Request Now.</Button></Col>
-          )}
-          {this.state.makers != null && this.state.makers.length > 0 && (
-            <Col>
+          <Col className="new-request">
+            <Button variant="primary" onClick={this._createNewRequest}>New Request</Button>
+          </Col>
+        </Row>
+        {(this.state.makers == null || this.state.makers.length === 0) && (
+          <Col className="no-work panel empty">You have not made a request. <Button variant="link" onClick={this._createNewRequest}>Create A New Request Now.</Button></Col>
+        )}
+        {this.state.makers != null && this.state.makers.length > 0 && (
+          <Col>
             <div className="table-wrapper">
               <table className="my-work-table">
                 <thead>
@@ -67,17 +67,17 @@ class MyRequestsView extends Component {
                   {this.state.makers.map((maker, key) => {
                     return (
                       <tr key={key}>
-                          <td className="name">{maker.name}</td>
-                          <td className="email">{maker.email}</td>
-                          <td className="prints">{maker.prints}</td>
-                          </tr>
+                        <td className="name">{maker.name}</td>
+                        <td className="email">{maker.email}</td>
+                        <td className="prints">{maker.prints}</td>
+                      </tr>
                     );
                   })}
                 </tbody>
               </table>
             </div>
           </Col>
-          )}
+        )}
         <Modal
           contentLabel="Add A Request"
           isOpen={this.state.newRequest != null}
