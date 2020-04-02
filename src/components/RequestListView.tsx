@@ -5,7 +5,7 @@ import axios from 'axios';
 import { buildEndpointUrl } from '../utilities';
 import User from '../models/User';
 import Maker from '../models/Maker';
-import StatusCircle from './StatusCircle';
+import StatusOption from './StatusOption';
 import MockData from '../models/MockRequestData';
 
 const RequestListView: React.FC<{ user: User }> = ({ user }) => {
@@ -24,27 +24,12 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
     });
   }
 
-  function getWork() {
-    axios.get(buildEndpointUrl(`makers/${user.makerId}/work`)).then((res) => {
-      setWork(res.data);
-    });
-  }
-
   function getAllRequests() {
     axios.get(buildEndpointUrl(`requests/`)).then((res) => {
       console.log(res);
       setAllRequests(res.data);
     });
   }
-
-  function StatusOption(status: string): JSX.Element {
-    return (
-      <>
-        <StatusCircle status={status} /> {status == 'FilterbyStatus' ? <span className="toggleFilter">Filter by Status</span> : status}
-      </>
-    );
-  }
-
   const handleChange = (event: any) => {
     setSearchTerm(event.target.value);
   };
@@ -52,7 +37,6 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
   // on load
   useEffect(() => {
     getMaker();
-    getWork();
     getAllRequests();
   }, []);
 
@@ -94,7 +78,6 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
         <Col className="statusFilter">
           <Dropdown as={ButtonGroup} onSelect={onSelect}>
             <Dropdown.Toggle
-            // onSelect={realnuno}
               id={`status-dropdown-1`}
               variant="outline-secondary"
             >

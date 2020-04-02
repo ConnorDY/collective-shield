@@ -5,7 +5,7 @@ import axios from 'axios';
 import { buildEndpointUrl } from '../utilities';
 import User from '../models/User';
 import Maker from '../models/Maker';
-import StatusCircle from './StatusCircle';
+import StatusOption from './StatusOption';
 
 const WorkView: React.FC<{ user: User }> = ({ user }) => {
   //this.refreshTimer = null;
@@ -30,14 +30,6 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
     axios.get(buildEndpointUrl(`requests/open`)).then((res) => {
       setAvailableWork(res.data);
     });
-  }
-
-  function StatusOption(status: string): JSX.Element {
-    return (
-      <>
-        <StatusCircle status={status} /> {status}
-      </>
-    );
   }
 
   // on load
