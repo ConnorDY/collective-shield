@@ -11,7 +11,6 @@ import User from './models/User';
 import HomeView from './components/HomeView';
 import LoginView from './components/LoginView';
 import MakerView from './components/MakerView';
-import RequestView from './components/RequestView';
 import RequestListView from './components/RequestListView';
 // import NewRequestView from './components/NewRequestView';
 import WorkView from './components/WorkView';
@@ -53,10 +52,6 @@ const App: React.FC = () => {
 
               <Route path="/makers">
                 <MakerView />
-              </Route>
-
-              <Route path="/requests" exact>
-                <RequestView />
               </Route>
 
               <Route path="/work">
