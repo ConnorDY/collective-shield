@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import User from '../models/User';
-import MyRequestsView from './MyRequestsView';
+import MyRequestsView from '../views/MyRequestsView';
 
 const HomeView: React.FC<{ user: User }> = ({ user }) => {
   const history = useHistory();

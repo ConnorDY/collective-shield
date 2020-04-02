@@ -8,16 +8,16 @@ import { get } from 'lodash';
 import configureStore from './store';
 import { buildEndpointUrl } from './utilities';
 import User from './models/User';
-import HomeView from './components/HomeView';
-import LoginView from './components/LoginView';
-import MakerView from './components/MakerView';
-import RequestView from './components/RequestView';
-import RequestListView from './components/RequestListView';
+import HomeView from './views/HomeView';
+import LoginView from './views/LoginView';
+import MakerView from './views/MakerView';
+import RequestView from './views/RequestView';
+import RequestListView from './views/RequestListView';
 // import NewRequestView from './components/NewRequestView';
-import WorkView from './components/WorkView';
+import WorkView from './views/WorkView';
 
-import './scss/app.scss';
-import Navbar from './components/Navbar';
+import './assets/scss/app.scss';
+import Navbar from './components/Navbars/Navbar';
 
 const store = configureStore()
 
