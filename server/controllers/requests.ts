@@ -17,12 +17,14 @@ import { getUser } from '../utils';
 @JsonController(`${config.apiPrefix}/requests`)
 export default class RequestsController {
   @Get()
-  async getAll() {
-    try {
-      return await Request.find();
-    } catch (err) {
-      throw err;
-    }
+  getAll() {
+    Request.find()
+      .then((result) => {
+        return result;
+      })
+      .catch((err) => {
+        throw err;
+      });
   }
 
   @Get('/me')
@@ -38,9 +40,7 @@ export default class RequestsController {
         return results;
       })
       .catch((err) => {
-        if (err) {
-          console.error(err);
-        }
+        throw err;
       });
   }
 
@@ -52,9 +52,7 @@ export default class RequestsController {
         return results;
       })
       .catch((err) => {
-        if (err) {
-          console.error(err);
-        }
+        throw err;
       });
   }
 
@@ -71,22 +69,24 @@ export default class RequestsController {
 
   @Get('/:id')
   getOneById(@Param('id') id: string) {
-    return Request.findById(id).exec((err, result) => {
-      if (err) {
-        console.error(err);
-      }
-      return result;
-    });
+    return Request.findById(id)
+      .then((result) => {
+        return result;
+      })
+      .catch((err) => {
+        throw err;
+      });
   }
 
   @Put('/:id')
   updateOneById(@Param('id') id: string, @Body() body: IRequest) {
-    return Request.findOneAndUpdate({ _id: id }, body, (err, result) => {
-      if (err) {
-        console.error(err);
-      }
-      return result;
-    });
+    return Request.findOneAndUpdate({ _id: id }, body)
+      .then((result) => {
+        return result;
+      })
+      .catch((err) => {
+        throw err;
+      });
   }
 
   sortRequestsByCreateDate(requests: IRequest[]) {
