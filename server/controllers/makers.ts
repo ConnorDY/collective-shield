@@ -46,6 +46,7 @@ export default class MakersController {
   }
 
   @Put('/:id')
+  @OnUndefined(403)
   updateOneById(
     @Req() req: express.Request,
     @Param('id') id: string,
