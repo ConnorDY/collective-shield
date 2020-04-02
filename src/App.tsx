@@ -63,7 +63,7 @@ const App: React.FC = () => {
                 <WorkView user={user} />
               </Route>
 
-              <Route path="/requests/all">
+              <Route path="/admin/requests">
                 <RequestListView user={user} />
               </Route>
             </>
