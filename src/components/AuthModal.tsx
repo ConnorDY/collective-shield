@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Container, Modal, Row, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
 
 const HomeView: React.FC<{}> = ({}) => {
-  const [modalType, setModalType] = useState<"register" | "login">('register');
+  const [modalType, setModalType] = useState<"register" | "login">('login');
   const [userType, setUserType] = useState<"printer" | "provider" | null>(null);
 
   const isRegister = modalType === 'register';
@@ -33,6 +33,7 @@ const HomeView: React.FC<{}> = ({}) => {
         <Modal.Body>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</Modal.Body>
         <Modal.Footer>
           {
+            /*
             modalType === 'register' &&
             <Container>
               <Row className="justify-content-md-center p-2">
@@ -45,6 +46,7 @@ const HomeView: React.FC<{}> = ({}) => {
                 </ToggleButtonGroup>
               </Row>
             </Container>
+            */
           }
           <Container>
             <Row className="justify-content-md-center p-2">
@@ -52,11 +54,13 @@ const HomeView: React.FC<{}> = ({}) => {
               <Button disabled={registerDisabled} variant="primary" href="/login/google">{buttonPreText} with Google</Button>{' '}
             </Row>
           </Container>
-          <Container>
-            <Row className="justify-content-md-center p-2">
-              {actionMessage} <Button variant="link" onClick={() => setModalType(modalType === 'login' ? 'register' : 'login')} className="p-0 ml-1 font-weight-bold">{actionPreText} Now</Button>
-            </Row>
-          </Container>
+          {/*
+            <Container>
+              <Row className="justify-content-md-center p-2">
+                {actionMessage} <Button variant="link" onClick={() => setModalType(modalType === 'login' ? 'register' : 'login')} className="p-0 ml-1 font-weight-bold">{actionPreText} Now</Button>
+              </Row>
+            </Container>
+          */}
         </Modal.Footer>
       </div>
     </Modal>
