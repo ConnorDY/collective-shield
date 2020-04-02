@@ -46,7 +46,17 @@ export default class MakersController {
   }
 
   @Put('/:id')
-  updateOneById(@Param('id') id: string, @Body() body: IMaker) {
+  updateOneById(
+    @Req() req: express.Request,
+    @Param('id') id: string,
+    @Body() body: IMaker
+  ) {
+    // only admins should be able to update a user
+    const user = getUser(req);
+    if (!user || !user.isSuperAdmin) {
+      return undefined;
+    }
+
     return Maker.findOneAndUpdate({ _id: id }, body)
       .then((result) => {
         return result;
