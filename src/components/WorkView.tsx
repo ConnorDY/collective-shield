@@ -75,7 +75,6 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
 
                 <tbody>
                   {work.map((w, index) => {
-                    console.log(w)
                     return (
                       <tr key={index}>
                         <td className="count">{w.count}</td>

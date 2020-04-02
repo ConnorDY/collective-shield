@@ -6,11 +6,11 @@ import User from '../models/User';
 const HomeView: React.FC<{ user: User }> = ({ user }) => {
   const history = useHistory();
 
-  // useEffect(() => {
-  //   if (user && user.maker) {
-  //     history.push('/work');
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (user && user.maker) {
+      history.push('/work');
+    }
+  }, []);
 
   return null;
 };

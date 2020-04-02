@@ -14,7 +14,6 @@ class RequestView extends Component {
 
   componentDidMount() {
     axios.get(buildEndpointUrl('requests')).then((res) => {
-      console.log(res);
       this.setState({
         requests: res.data
       });
@@ -22,7 +21,6 @@ class RequestView extends Component {
   }
 
   render() {
-    console.log(this.state);
     return (
       <div>
         <div className="container">

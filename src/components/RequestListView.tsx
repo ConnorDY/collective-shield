@@ -26,7 +26,6 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
 
   function getAllRequests() {
     axios.get(buildEndpointUrl(`requests/`)).then((res) => {
-      console.log(res);
       setAllRequests(res.data);
     });
   }
