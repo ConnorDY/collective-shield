@@ -48,29 +48,35 @@ class MyRequestsView extends Component {
           <Button variant="primary" onClick={this._createNewRequest}>New Request</Button>
         </Col>
       </Row>
-
           {(this.state.makers == null || this.state.makers.length === 0) && (
-            <div className="panel empty">
-              You have not made a request. <Button variant="link" onClick={this._createNewRequest}>Create A New Request Now.</Button>
-              </div>
+              <Col className="no-work panel empty">You have not made a request. <Button variant="link" onClick={this._createNewRequest}>Create A New Request Now.</Button></Col>
           )}
           {this.state.makers != null && this.state.makers.length > 0 && (
-            <div className="c-list__items">
-              <div className="c-list__item -header">
-                <div>Name</div>
-                <div>Email</div>
-                <div>Total Prints</div>
-              </div>
-              {this.state.makers.map((maker, key) => {
-                return (
-                  <div key={key} className="c-list__item">
-                    <div>{maker.name}</div>
-                    <div>{maker.email}</div>
-                    <div>{maker.prints}</div>
-                  </div>
-                );
-              })}
+            <Col>
+            <div className="table-wrapper">
+              <table className="my-work-table">
+                <thead>
+                  <tr>
+                    <th className="name">Name</th>
+                    <th className="email">Email</th>
+                    <th className="prints">Total Prints</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {this.state.makers.map((maker, key) => {
+                    return (
+                      <tr key={key}>
+                          <td className="name">{maker.name}</td>
+                          <td className="email">{maker.email}</td>
+                          <td className="prints">{maker.prints}</td>
+                          </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
+          </Col>
           )}
         <Modal
           contentLabel="Add A Request"
