@@ -1,3 +1,40 @@
+.all-requests-view-header {
+    margin-bottom: 2em;
+    .toggleFilter {
+        color: black;
+    }
+
+    .searchInput {
+        padding: 6px;
+        text-align: right;
+        input {
+            height: 3rem;
+            width: 19rem;
+            padding-left: 1rem;
+            border: 2px solid #c2c2ca;
+            text-align: left;
+            border-radius: 0.25rem;
+            color: black;
+        }
+    }
+
+    #status-dropdown-1 {
+        text-align: left;
+        height: 3rem;
+        width: 14rem;
+        border: 2px solid #c2c2ca;
+    }
+
+    .statusFilter {
+        // width: 18rem;
+        padding: 6px 15px;
+        text-align: right;
+        span {
+            padding-right: 2.5rem;
+        }
+    }
+}
+
 .requested-list-table {
     .requestedDate {
         width: 20%;
@@ -12,30 +49,5 @@
         .requestedDate {
             padding: 1.8rem;
         }
-    }
-}
-
-.all-requests-view-header {
-    margin-bottom: 2em;
-    .toggleFilter {
-        color: black;
-    }
-
-    .searchInput {
-        padding: 6px;
-        input {
-            height: 3rem;
-        }
-    }
-
-    #status-dropdown-1 {
-        height: 3rem;
-        width: 14rem;
-        border: 1px solid #c2c2ca;
-    }
-
-    .statusFilter {
-        padding: 6px 15px;
-        text-align: right;
     }
 }

@@ -13,10 +13,10 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
 
   const [allRequests, setAllRequests] = useState<any[]>([]);
   const [maker, setMaker] = useState<Maker>();
-  const [work, setWork] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchStatusTerm, setSearchStatusTerm] = useState("");
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+
+  let searchResults: any[] = [];
 
   function getMaker() {
     axios.get(buildEndpointUrl(`makers/${user.makerId}`)).then((res) => {
@@ -40,19 +40,19 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
     getAllRequests();
   }, []);
 
-  useEffect(() => {
-    {/* temporarily using 'mockData'. It needs to be replaced by 'allRequests' */}
+  if (!maker) {
+    return null;
+  }
+
+  if(allRequests) {
+    // temporarily using 'MockData'. It needs to be replaced by 'allRequests'
     const results = MockData.filter(m => 
       (m.address.line1.toLowerCase().includes(searchTerm) || m.address.line2.toLowerCase().includes(searchTerm) ||
        m.address.city.toLowerCase().includes(searchTerm) || m.address.state.toLowerCase().includes(searchTerm) ||
        m.address.zip.toLowerCase().includes(searchTerm) || m.name.toLowerCase().includes(searchTerm) ||
        m.printer.toLowerCase().includes(searchTerm)) && m.status.includes(searchStatusTerm)
     );
-    setSearchResults(results);
-  }, [searchTerm, searchStatusTerm]);
-
-  if (!maker) {
-    return null;
+    searchResults = results;
   }
 
   var options = { weekday: 'long', month: 'long', day: 'numeric' };
@@ -70,7 +70,7 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
         <Col className="searchInput">
           <input
             type="text"
-            placeholder="Search"
+            placeholder="Search by Name of Address"
             value={searchTerm}
             onChange={handleChange}
           />
