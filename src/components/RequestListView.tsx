@@ -6,141 +6,9 @@ import { buildEndpointUrl } from '../utilities';
 import User from '../models/User';
 import Maker from '../models/Maker';
 import StatusCircle from './StatusCircle';
+import MockData from '../models/MockRequestData';
 
 const RequestListView: React.FC<{ user: User }> = ({ user }) => {
-
-
-  //Mock data
-  const mockData = [
-    {
-      address: {
-        line1: "123 St",
-        line2: "",
-        city: "H",
-        state: "AK",
-        zip: "11111"
-      },
-      coordinates: [],
-      _id: "5e79f69208247907fdbf03c8",
-      details: "",
-      count: 4,
-      createDate: "2020-03-24T12:01:22.949Z",
-      name: "Frederick French",
-      email: "computerbrain25@gmail.com",
-      printer: "Frederick French",
-      status: "Requested"
-    },
-    {
-      address: {
-        line1: "123 St",
-        line2: "",
-        city: "H",
-        state: "AK",
-        zip: "11111"
-      },
-      coordinates: [],
-      _id: "5e79f69208247907fdbf03c8",
-      details: "",
-      count: 4,
-      createDate: "2020-03-24T12:01:22.949Z",
-      name: "Marguerite Hunter",
-      email: "computerbrain25@gmail.com",
-      printer: "Marguerite Hunter",
-      status: "Queued"
-    }, 
-    {
-      address: {
-        line1: "123 St",
-        line2: "",
-        city: "H",
-        state: "AK",
-        zip: "11111"
-      },
-      coordinates: [],
-      _id: "5e79f69208247907fdbf03c8",
-      details: "",
-      count: 4,
-      createDate: "2020-03-24T12:01:22.949Z",
-      name: "Lewis Black",
-      email: "computerbrain25@gmail.com",
-      printer: "Lewis Black",
-      status: "Printing"
-    }, 
-    {
-      address: {
-        line1: "123 St",
-        line2: "",
-        city: "H",
-        state: "AK",
-        zip: "11111"
-      },
-      coordinates: [],
-      _id: "5e79f69208247907fdbf03c8",
-      details: "",
-      count: 4,
-      createDate: "2020-03-24T12:01:22.949Z",
-      name: "Verna McGee",
-      email: "computerbrain25@gmail.com",
-      printer: "Verna McGee",
-      status: "Shipped"
-    }, 
-    {
-      address: {
-        line1: "123 St",
-        line2: "",
-        city: "H",
-        state: "AK",
-        zip: "11111"
-      },
-      coordinates: [],
-      _id: "5e79f69208247907fdbf03c8",
-      details: "",
-      count: 4,
-      createDate: "2020-03-24T12:01:22.949Z",
-      name: "Cole Mack",
-      email: "computerbrain25@gmail.com",
-      printer: "Cole Mack",
-      status: "Completed"
-    },
-    {
-      address: {
-        line1: "123 St",
-        line2: "",
-        city: "H",
-        state: "AK",
-        zip: "11111"
-      },
-      coordinates: [],
-      _id: "5e79f69208247907fdbf03c8",
-      details: "",
-      count: 4,
-      createDate: "2020-03-24T12:01:22.949Z",
-      name: "Irene Cornner",
-      email: "computerbrain25@gmail.com",
-      printer: "Irene Cornner",
-      status: "Queued"
-    },
-    {
-      address: {
-        line1: "123 St",
-        line2: "",
-        city: "H",
-        state: "AK",
-        zip: "11111"
-      },
-      coordinates: [],
-      _id: "5e79f69208247907fdbf03c8",
-      details: "",
-      count: 4,
-      createDate: "2020-03-24T12:01:22.949Z",
-      name: "Irene Cornner",
-      email: "computerbrain25@gmail.com",
-      printer: "Irene Cornner",
-      status: "Delivered"
-    },
-  ]
-
-
   //this.refreshTimer = null;
 
   const [allRequests, setAllRequests] = useState<any[]>([]);
@@ -190,7 +58,7 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
 
   useEffect(() => {
     {/* temporarily using 'mockData'. It needs to be replaced by 'allRequests' */}
-    const results = mockData.filter(m => 
+    const results = MockData.filter(m => 
       (m.address.line1.toLowerCase().includes(searchTerm) || m.address.line2.toLowerCase().includes(searchTerm) ||
        m.address.city.toLowerCase().includes(searchTerm) || m.address.state.toLowerCase().includes(searchTerm) ||
        m.address.zip.toLowerCase().includes(searchTerm) || m.name.toLowerCase().includes(searchTerm) ||

@@ -55,7 +55,7 @@ const App: React.FC = () => {
                 <MakerView />
               </Route>
 
-              <Route path="/requests">
+              <Route path="/requests" exact>
                 <RequestView />
               </Route>
 
@@ -63,7 +63,7 @@ const App: React.FC = () => {
                 <WorkView user={user} />
               </Route>
 
-              <Route path="/allRequests">
+              <Route path="/requests/all">
                 <RequestListView user={user} />
               </Route>
             </>
