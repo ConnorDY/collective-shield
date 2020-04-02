@@ -44,7 +44,7 @@ class MyRequestsView extends Component {
             <h1 className="h1">Your Requests</h1>
           </Col>
 
-          <Col className="button-col">
+          <Col className="right-col">
             <Button variant="primary" onClick={this._createNewRequest}>New Request</Button>
           </Col>
         </Row>

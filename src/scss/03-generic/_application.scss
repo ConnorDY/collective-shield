@@ -4,8 +4,7 @@ body {
 .main {
   font-family: $font-normal;
 
-  .button-col,
-  .download-models {
+  .right-col {
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -15,7 +14,6 @@ body {
     color: $blue-purple;
   }
 
-  .work-view-header,
   .view-header {
     margin-bottom: 2em;
   }
