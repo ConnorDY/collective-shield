@@ -4,6 +4,7 @@ body {
 .main {
   font-family: $font-normal;
 
+  .button-col,
   .download-models {
     display: flex;
     justify-content: flex-end;
