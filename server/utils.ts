@@ -10,6 +10,7 @@ export function getUser(req: express.Request) {
       _id: 'TEST',
       firstName: 'Test',
       lastName: 'Test',
+      email: 'test@email.com',
       makerId: '5e781b3ee7179a17e21a89e1'
     };
   }

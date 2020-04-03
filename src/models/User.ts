@@ -5,4 +5,5 @@ export default interface User {
   maker?: boolean;
   isSuperAdmin?: boolean;
   roles: string[];
+  email: string;
 }

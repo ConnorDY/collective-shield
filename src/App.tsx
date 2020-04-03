@@ -12,11 +12,11 @@ import HomeView from './components/HomeView';
 import LoginView from './components/LoginView';
 import MakerView from './components/MakerView';
 import RequestView from './components/RequestView';
-// import NewRequestView from './components/NewRequestView';
 import WorkView from './components/WorkView';
 
 import './scss/app.scss';
 import Navbar from './components/Navbar';
+import NewRequestView from './components/NewRequestView';
 
 const store = configureStore()
 
@@ -45,7 +45,6 @@ const App: React.FC = () => {
         <Container>
           {user ? (
             <>
-              {/* <Route path="/" exact component={NewRequestView} /> */}
               <Route path="/">
                 <HomeView user={user} />
               </Route>
@@ -61,14 +60,18 @@ const App: React.FC = () => {
               <Route path="/work">
                 <WorkView user={user} />
               </Route>
-            </>
-          ) : (
-            <>
-              <Route path="/login">
-                <LoginView />
+
+              <Route path="/create/request">
+                <NewRequestView user={user} />
               </Route>
             </>
-          )}
+          ) : (
+              <>
+                <Route path="/login">
+                  <LoginView />
+                </Route>
+              </>
+            )}
         </Container>
       </main>
     </Provider>
