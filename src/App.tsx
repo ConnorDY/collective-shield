@@ -8,15 +8,15 @@ import { get } from 'lodash';
 import configureStore from './store';
 import { buildEndpointUrl } from './utilities';
 import User from './models/User';
-import HomeView from './components/HomeView';
+import HomeView from './views/HomeView';
 import LoginView from './components/LoginView';
 import MakerView from './components/MakerView';
-import RequestView from './components/RequestView';
+import RequestListView from './components/RequestListView';
+import NewRequestView from './components/NewRequestView';
 import WorkView from './components/WorkView';
 
-import './scss/app.scss';
+import './assets/scss/app.scss';
 import Navbar from './components/Navbar';
-import NewRequestView from './components/NewRequestView';
 
 const store = configureStore()
 
@@ -45,16 +45,12 @@ const App: React.FC = () => {
         <Container>
           {user ? (
             <>
-              <Route path="/">
+              <Route path="/" exact>
                 <HomeView user={user} />
               </Route>
 
               <Route path="/makers">
                 <MakerView />
-              </Route>
-
-              <Route path="/requests">
-                <RequestView />
               </Route>
 
               <Route path="/work">
@@ -63,6 +59,10 @@ const App: React.FC = () => {
 
               <Route path="/create/request">
                 <NewRequestView user={user} />
+              </Route>
+
+              <Route path="/admin/requests">
+                <RequestListView user={user} />
               </Route>
             </>
           ) : (

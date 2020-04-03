@@ -5,7 +5,7 @@ import axios from 'axios';
 import { buildEndpointUrl } from '../utilities';
 import User from '../models/User';
 import Maker from '../models/Maker';
-import StatusCircle from './StatusCircle';
+import StatusOption from './StatusOption';
 
 const WorkView: React.FC<{ user: User }> = ({ user }) => {
   //this.refreshTimer = null;
@@ -32,14 +32,6 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
     });
   }
 
-  function StatusOption(status: string): JSX.Element {
-    return (
-      <>
-        <StatusCircle status={status} /> {status}
-      </>
-    );
-  }
-
   // on load
   useEffect(() => {
     getMaker();
@@ -52,13 +44,13 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
   }
 
   return (
-    <>
-      <Row className="work-view-header">
+    <div className="my-work">
+      <Row className="view-header">
         <Col>
           <h1>My Work</h1>
         </Col>
 
-        <Col className="download-models">Download Models</Col>
+        <Col className="right-col">Download Models</Col>
       </Row>
 
       <Row>
@@ -132,7 +124,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
         )}
       </Row>
 
-      <Row className="work-view-header">
+      <Row className="view-header">
         <Col>
           <h1>Open Requests</h1>
         </Col>
@@ -177,7 +169,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
           </Col>
         )}
       </Row>
-    </>
+    </div>
   );
 };
 
