@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, ButtonGroup, Col, Dropdown, Row } from 'react-bootstrap';
+import { ButtonGroup, Col, Dropdown, Row } from 'react-bootstrap';
 import axios from 'axios';
 import { get, lowerCase } from 'lodash';
 
@@ -14,8 +14,8 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
 
   const [allRequests, setAllRequests] = useState<any[]>([]);
   const [maker, setMaker] = useState<Maker>();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchStatusTerm, setSearchStatusTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchStatusTerm, setSearchStatusTerm] = useState('');
 
   let searchResults: any[] = [];
 
@@ -46,11 +46,23 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
 
   if (MockData) {
     // temporarily using 'MockData'. It needs to be replaced by 'allRequests'
-    const keys = ['address.line1', 'address.line2', 'address.city', 'address.state', 'address.zip', 'name', 'printer'];
+    const keys = [
+      'address.line1',
+      'address.line2',
+      'address.city',
+      'address.state',
+      'address.zip',
+      'name',
+      'printer'
+    ];
 
-    const results = MockData.filter(m => {
-      return get(m, 'status', '').includes(searchStatusTerm) &&
-        keys.some(k => lowerCase(get(m, k, '')).includes(lowerCase(searchTerm || '')))
+    const results = MockData.filter((m) => {
+      return (
+        get(m, 'status', '').includes(searchStatusTerm) &&
+        keys.some((k) =>
+          lowerCase(get(m, k, '')).includes(lowerCase(searchTerm || ''))
+        )
+      );
     });
     searchResults = results;
   }
@@ -59,7 +71,7 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
 
   const onSelect = (status: any) => {
     setSearchStatusTerm(status);
-  }
+  };
 
   return (
     <div className="all-requests">
@@ -84,11 +96,8 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
               {StatusOption(searchStatusTerm || 'FilterbyStatus')}
             </Dropdown.Toggle>
 
-            <Dropdown.Menu onSelect={onSelect}
-            >
-              <Dropdown.Item eventKey="">
-                {StatusOption('All')}
-              </Dropdown.Item>
+            <Dropdown.Menu onSelect={onSelect}>
+              <Dropdown.Item eventKey="">{StatusOption('All')}</Dropdown.Item>
 
               <Dropdown.Item eventKey="Requested">
                 {StatusOption('Requested')}
@@ -143,11 +152,16 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
                     return (
                       <tr key={key}>
                         <td className="requestedDate">
-                          {new Intl.DateTimeFormat('en-US', options).format(date)}</td>
+                          {new Intl.DateTimeFormat('en-US', options).format(
+                            date
+                          )}
+                        </td>
                         <td className="count">{r.count}</td>
                         <td className="requestor">{r.name}</td>
                         <td className="printer">{r.printer}</td>
-                        <td className="status">{StatusOption(r.status || 'Requested')}</td>
+                        <td className="status">
+                          {StatusOption(r.status || 'Requested')}
+                        </td>
                       </tr>
                     );
                   })}

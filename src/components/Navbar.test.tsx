@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import { shallow } from 'enzyme';
 import Navbar from './Navbar';
 
@@ -7,7 +7,7 @@ describe('Navbar', () => {
     user: {
       firstName: 'Mary'
     }
-  }
+  };
 
   it('is defined', () => {
     const wrapper = shallow(<Navbar />);

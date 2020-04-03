@@ -13,16 +13,18 @@ const Navbar: React.FC<{ user: User | undefined }> = ({ user }) => {
             <div>MaskShield</div>
           </Col>
 
-          {user ?
+          {user ? (
             <Col className="user">
               <Row className="justify-content-end">
-                <Col xs={4} className="my-auto font-weight-bold">{user.firstName}</Col>
+                <Col xs={4} className="my-auto font-weight-bold">
+                  {user.firstName}
+                </Col>
                 <Avatar size="40" user={user} />
               </Row>
             </Col>
-            :
+          ) : (
             <></>
-          }
+          )}
         </Row>
       </Container>
     </nav>

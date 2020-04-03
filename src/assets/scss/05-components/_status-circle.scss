@@ -1,6 +1,6 @@
 .status-circle {
   margin-right: 0.5rem;
-  
+
   &.status-All > circle {
     fill: $grey;
   }
@@ -26,6 +26,6 @@
   }
 
   &.status-Delivered > circle {
-    fill: #86868B
+    fill: #86868b;
   }
 }
