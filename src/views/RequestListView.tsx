@@ -68,7 +68,7 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
         <Col className="searchInput">
           <input
             type="text"
-            placeholder="Search by Name of Address"
+            placeholder="Search by Name or Address"
             value={searchTerm}
             onChange={handleChange}
           />
