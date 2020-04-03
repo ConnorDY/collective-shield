@@ -9,6 +9,7 @@ import configureStore from './store';
 import { buildEndpointUrl } from './utilities';
 import User from './models/User';
 import Navbar from './components/Navbar';
+import Footer from './components/Footers/Footer';
 import HomeView from './views/HomeView';
 import LoginView from './views/LoginView';
 import MakerView from './views/MakerView';
@@ -74,6 +75,7 @@ const App: React.FC = () => {
           )}
         </Container>
       </main>
+      <Footer /> 
     </Provider>
   );
 };
