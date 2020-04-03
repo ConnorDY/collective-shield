@@ -24,14 +24,9 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
 
   // on load
   useEffect(() => {
-    if (!user.maker) return;
     getWork();
     getAvailableWork();
   }, []);
-
-  if (!user.maker) {
-    return null;
-  }
 
   return (
     <div className="my-work">
