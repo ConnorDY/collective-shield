@@ -3,6 +3,8 @@ body {
 }
 .main {
   font-family: $font-normal;
+  min-height: 100vh;
+  padding-bottom: -200px;
 
   .inner {
     padding-bottom: 3em;
