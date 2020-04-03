@@ -29,7 +29,9 @@ export default class RequestsController {
 
   @Get('/me')
   getMine(@CurrentUser() user: IUser) {
-    return Request.find({ requestorID: user._id })
+    return Request.find({
+      $or: [{ requestorID: user._id }, { makerId: user._id }]
+    })
       .then((results) => {
         this.sortRequestsByCreateDate(results);
         return results;
