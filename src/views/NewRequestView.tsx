@@ -7,6 +7,7 @@ import User from '../models/User';
 import Avatar from '../components/Avatar';
 import { buildEndpointUrl, readCookie } from '../utilities';
 import { states } from '../utilities/constants';
+import { toast } from 'react-toastify';
 
 const NewRequestView: React.FC<{ user: User | undefined }> = ({ user }) => {
   const history = useHistory();
@@ -47,17 +48,18 @@ const NewRequestView: React.FC<{ user: User | undefined }> = ({ user }) => {
         addressCity,
         addressState,
         addressZip,
-        status: 'requested',
         requestorID: user?._id
       };
 
       axios
-        .post(buildEndpointUrl('requests/create'), data)
+        .post(buildEndpointUrl('requests'), data)
         .then((res) => {
           setIsCreated(!isCreated);
         })
         .catch((err) => {
-          console.error(err);
+          toast.error(`ERROR: ${err}`, {
+            position: toast.POSITION.TOP_LEFT
+          });
         });
     }
   }
