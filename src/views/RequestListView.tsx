@@ -3,11 +3,11 @@ import { ButtonGroup, Col, Dropdown, Row } from 'react-bootstrap';
 import axios from 'axios';
 import { get, lowerCase } from 'lodash';
 
-import { buildEndpointUrl } from '../utilities';
 import User from '../models/User';
 import Maker from '../models/Maker';
-import StatusOption from './StatusOption';
 import MockData from '../models/MockRequestData';
+import StatusOption from '../components/StatusOption';
+import { buildEndpointUrl } from '../utilities';
 
 const RequestListView: React.FC<{ user: User }> = ({ user }) => {
   //this.refreshTimer = null;

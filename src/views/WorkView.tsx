@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Button, ButtonGroup, Col, Dropdown, Row } from 'react-bootstrap';
 import axios from 'axios';
 
-import { buildEndpointUrl } from '../utilities';
 import User from '../models/User';
-import StatusOption from './StatusOption';
+import StatusOption from '../components/StatusOption';
+import { buildEndpointUrl } from '../utilities';
 
 const WorkView: React.FC<{ user: User }> = ({ user }) => {
   const [availableWork, setAvailableWork] = useState<any[]>([]);

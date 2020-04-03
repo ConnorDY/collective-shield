@@ -4,7 +4,7 @@ import { Form, Button, Row, Col, Card, Alert } from 'react-bootstrap';
 import axios from 'axios';
 
 import User from '../models/User';
-import Avatar from './Avatar';
+import Avatar from '../components/Avatar';
 import { buildEndpointUrl, readCookie } from '../utilities';
 import { states } from '../utilities/constants';
 

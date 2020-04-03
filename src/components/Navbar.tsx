@@ -1,7 +1,7 @@
 import React from 'react';
+import { Col, Container, Row } from 'react-bootstrap';
 
 import User from '../models/User';
-import { Col, Container, Row } from 'react-bootstrap';
 import Avatar from './Avatar';
 
 const Navbar: React.FC<{ user: User | undefined }> = ({ user }) => {

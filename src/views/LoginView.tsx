@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container } from 'react-bootstrap';
-import AuthModal from './AuthModal';
+
+import AuthModal from '../components/AuthModal';
 
 const LoginView: React.FC = () => {
   return (
