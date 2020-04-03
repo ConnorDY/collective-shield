@@ -47,7 +47,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
     <div className="my-work">
       <Row className="view-header">
         <Col>
-          <h1>My Work</h1>
+          <h1 className="h1">My Work</h1>
         </Col>
 
         <Col className="right-col">Download Models</Col>
@@ -55,7 +55,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
 
       <Row>
         {(!work || work.length === 0) && (
-          <Col className="no-work">No work found</Col>
+          <Col className="no-work panel empty">No work found</Col>
         )}
 
         {work && work.length > 0 && (

@@ -65,163 +65,163 @@ const NewRequestView: React.FC<{ user: User | undefined }> = ({ user }) => {
   })
 
   return (
-    <div>
-      <div className="container">
-        <div className="c-intro">
-          <h1>New Request</h1>
-        </div>
-      </div>
-      <div className="container">
-        {isCreated && (
-          <div className="c-requestForm -pad">
-            <Alert variant="success"> Thank you! You will receive an email confirming your request </Alert>
-          </div>
-        )}
+    <div className="new-requests">
+      <Row className="view-header">
+        <Col>
+          <h1 className="h1">New Request</h1>
+        </Col>
+      </Row>
 
-        {!isCreated && (
-          <div>
-            <Container>
-              <Row id="requested-row-1">
-                <Col>
-                  <h4>Request Submitted By</h4>
-                  <Card bg="light" id="requested-by-card">
-                    <Card.Body>
-                      <Row>
-                        <Col sm={3}>
-                          <Avatar size="100" user={user} />
-                        </Col>
+      {isCreated && (
+        <Row>
+          <Col>
+            <div className="c-requestForm -pad">
+              <Alert variant="success"> Thank you! You will receive an email confirming your request </Alert>
+            </div>
+          </Col>
+        </Row>
+      )}
+      {!isCreated && (
+        <>
+          <Row id="requested-row-1">
+            <Col>
+              <h4>Request Submitted By</h4>
+              <Card bg="light" id="requested-by-card">
+                <Card.Body>
+                  <Row>
+                    <Col sm={3}>
+                      <Avatar size="100" user={user} />
+                    </Col>
 
-                        <Col sm={9}>
-                          <Card.Title id="requested-by-name">{user?.firstName} {user?.lastName}</Card.Title>
-                          <Card.Text >
-                            <span id="requested-by-email">{user?.email}</span>
-                          </Card.Text>
-                        </Col>
-                      </Row>
-                    </Card.Body>
-                  </Card>
-                </Col>
+                    <Col sm={9}>
+                      <Card.Title id="requested-by-name">{user?.firstName} {user?.lastName}</Card.Title>
+                      <Card.Text >
+                        <span id="requested-by-email">{user?.email}</span>
+                      </Card.Text>
+                    </Col>
+                  </Row>
+                </Card.Body>
+              </Card>
+            </Col>
 
-                <Col>
-                  <h4>Mask Shields Requested</h4>
-                  <Form>
-                    <Form.Group >
-                      <Form.Control
-                        as="select"
-                        size="lg"
-                        custom id="requested-mask-shields-card"
-                        value={maskRequestCount}
-                        onChange={(e: BaseSyntheticEvent) => setMaskRequestCount(e.target.value)} >
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                      </Form.Control>
-                    </Form.Group>
-                  </Form>
-                </Col>
-              </Row>
+            <Col>
+              <h4>Mask Shields Requested</h4>
+              <Form>
+                <Form.Group >
+                  <Form.Control
+                    as="select"
+                    size="lg"
+                    custom id="requested-mask-shields-card"
+                    value={maskRequestCount}
+                    onChange={(e: BaseSyntheticEvent) => setMaskRequestCount(e.target.value)} >
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                  </Form.Control>
+                </Form.Group>
+              </Form>
+            </Col>
+          </Row>
 
-              <Row id="requested-row-2">
-                <Col>
-                  <h4>Healthcare Facility</h4>
-                  <Form noValidate validated={isValidated} onSubmit={(e: React.BaseSyntheticEvent) => { _handleSubmit(e) }}>
+          <Row id="requested-row-2">
+            <Col>
+              <h4>Healthcare Facility</h4>
+              <Form noValidate validated={isValidated} onSubmit={(e: React.BaseSyntheticEvent) => { _handleSubmit(e) }}>
 
-                    <Form.Group controlId="formBasicJobTitle">
-                      <Form.Label>Role</Form.Label>
-                      <Form.Control
-                        as="select"
-                        required
-                        value={jobTitle}
-                        onChange={(e: BaseSyntheticEvent) => setJobTitle(e.target.value)} >
-                        <option>Select Your Role</option>
-                        {roleOptions.map((role, i) => {
-                          return <option key={i}>{role}</option>
-                        })}
-                      </Form.Control>
-                    </Form.Group>
+                <Form.Group controlId="formBasicJobTitle">
+                  <Form.Label>Role</Form.Label>
+                  <Form.Control
+                    as="select"
+                    required
+                    value={jobTitle}
+                    onChange={(e: BaseSyntheticEvent) => setJobTitle(e.target.value)} >
+                    <option>Select Your Role</option>
+                    {roleOptions.map((role, i) => {
+                      return <option key={i}>{role}</option>
+                    })}
+                  </Form.Control>
+                </Form.Group>
 
-                    <Form.Group controlId="formBasicEmail">
-                      <Form.Label>Preferred Email Address</Form.Label>
-                      <Form.Control
-                        required
-                        type="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e: BaseSyntheticEvent) => setEmail(e.target.value)} />
-                    </Form.Group>
+                <Form.Group controlId="formBasicEmail">
+                  <Form.Label>Preferred Email Address</Form.Label>
+                  <Form.Control
+                    required
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e: BaseSyntheticEvent) => setEmail(e.target.value)} />
+                </Form.Group>
 
-                    <Form.Group controlId="formBasicFacilityName">
-                      <Form.Label>Facility Name</Form.Label>
-                      <Form.Control
-                        required
-                        type="text"
-                        placeholder="Sacred Heart Hospital"
-                        value={facilityName}
-                        onChange={(e: BaseSyntheticEvent) => setFacilityName(e.target.value)} />
-                    </Form.Group>
+                <Form.Group controlId="formBasicFacilityName">
+                  <Form.Label>Facility Name</Form.Label>
+                  <Form.Control
+                    required
+                    type="text"
+                    placeholder="Sacred Heart Hospital"
+                    value={facilityName}
+                    onChange={(e: BaseSyntheticEvent) => setFacilityName(e.target.value)} />
+                </Form.Group>
 
-                    <Form.Row>
-                      <Form.Group as={Col} controlId="formGridCity">
-                        <Form.Label>City</Form.Label>
-                        <Form.Control
-                          required
-                          placeholder="Denver"
-                          value={city}
-                          onChange={(e: BaseSyntheticEvent) => setCity(e.target.value)} />
-                      </Form.Group>
+                <Form.Row>
+                  <Form.Group as={Col} controlId="formGridCity">
+                    <Form.Label>City</Form.Label>
+                    <Form.Control
+                      required
+                      placeholder="Denver"
+                      value={city}
+                      onChange={(e: BaseSyntheticEvent) => setCity(e.target.value)} />
+                  </Form.Group>
 
-                      <Form.Group as={Col} controlId="formGridState">
-                        <Form.Label>State</Form.Label>
-                        <Form.Control
-                          required
-                          as="select"
-                          value={addressState}
-                          onChange={(e: BaseSyntheticEvent) => setAddressState(e.target.value)} >
-                          <option>Choose...</option>
-                          {states.map((state, i) => <option key={i}>{state}</option>)}
-                        </Form.Control>
-                      </Form.Group>
+                  <Form.Group as={Col} controlId="formGridState">
+                    <Form.Label>State</Form.Label>
+                    <Form.Control
+                      required
+                      as="select"
+                      value={addressState}
+                      onChange={(e: BaseSyntheticEvent) => setAddressState(e.target.value)} >
+                      <option>Choose...</option>
+                      {states.map((state, i) => <option key={i}>{state}</option>)}
+                    </Form.Control>
+                  </Form.Group>
 
-                      <Form.Group as={Col} controlId="formGridZip">
-                        <Form.Label>Zip</Form.Label>
-                        <Form.Control required placeholder="80205"
-                          value={zip}
-                          onChange={(e: BaseSyntheticEvent) => setZip(e.target.value)} />
-                      </Form.Group>
-                    </Form.Row>
+                  <Form.Group as={Col} controlId="formGridZip">
+                    <Form.Label>Zip</Form.Label>
+                    <Form.Control required placeholder="80205"
+                      value={zip}
+                      onChange={(e: BaseSyntheticEvent) => setZip(e.target.value)} />
+                  </Form.Group>
+                </Form.Row>
 
-                    <div id="request-button-group">
-                      <Button variant="primary" type="submit">
-                        Submit Request
+                <div id="request-button-group">
+                  <Button variant="primary" type="submit">
+                    Submit Request
                       </Button>
 
-                      <Button variant="light" href="/" id="cancel-request-button">
-                        Cancel Request
+                  <Button variant="light" href="/" id="cancel-request-button">
+                    Cancel Request
                       </Button>
-                    </div>
-                  </Form>
-                </Col>
+                </div>
+              </Form>
+            </Col>
 
-                <Col>
-                  <h4>Request Details</h4>
-                  <Form>
-                    <Form.Group controlId="">
-                      <Form.Control
-                        as="textarea"
-                        rows="13"
-                        placeholder="Add any request details here"
-                        value={requestDetails}
-                        onChange={(e: BaseSyntheticEvent) => setRequestDetails(e.target.value)} />
-                    </Form.Group>
-                  </Form>
-                </Col>
-              </Row>
-            </Container>
-          </div>
-        )}
-      </div>
+            <Col>
+              <h4>Request Details</h4>
+              <Form>
+                <Form.Group controlId="">
+                  <Form.Control
+                    as="textarea"
+                    rows="13"
+                    placeholder="Add any request details here"
+                    value={requestDetails}
+                    onChange={(e: BaseSyntheticEvent) => setRequestDetails(e.target.value)} />
+                </Form.Group>
+              </Form>
+            </Col>
+          </Row>
+        </>
+      )}
     </div >
   )
 }
