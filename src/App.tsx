@@ -49,20 +49,20 @@ const App: React.FC = () => {
                 <HomeView user={user} />
               </Route>
 
-              <Route path="/makers">
-                <MakerView />
-              </Route>
-
-              <Route path="/work">
+              <Route path="/work" exact>
                 <WorkView user={user} />
               </Route>
 
-              <Route path="/create/request">
+              <Route path="/request" exact>
                 <NewRequestView user={user} />
               </Route>
 
-              <Route path="/admin/requests">
+              <Route path="/requests" exact>
                 <RequestListView user={user} />
+              </Route>
+
+              <Route path="/makers" exact>
+                <MakerView />
               </Route>
             </>
           ) : (

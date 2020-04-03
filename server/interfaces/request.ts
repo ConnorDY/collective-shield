@@ -10,6 +10,7 @@ export default interface Request extends Document {
   coordinates: number[];
   name: string;
   email: string;
+  status: string;
   position: string;
   makerId: string;
 }

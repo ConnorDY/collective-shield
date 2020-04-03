@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import Modal from 'react-modal';
+import { useHistory } from 'react-router-dom';
 import { Button, Col, Row } from 'react-bootstrap';
+import axios from 'axios';
 
 import User from '../models/User';
+import Request from '../models/Request';
 import { buildEndpointUrl } from '../utilities';
 
 const customStyles = {
@@ -18,22 +19,11 @@ const customStyles = {
 };
 
 const MyRequestsView: React.FC<{ user: User }> = ({ user }) => {
-  const [requests, setRequests] = useState([]);
-  const [newRequest, setNewRequest] = useState<any>(null);
+  const history = useHistory();
+  const [requests, setRequests] = useState<Request[] | null>(null);
 
-  const makers: any[] = [];
-
-  function createNewRequest(e: React.MouseEvent) {
-    e.preventDefault();
-
-    setNewRequest({
-      createDate: new Date(),
-      userId: user._id
-    });
-  }
-
-  function handleModalClose() {
-    setNewRequest(null);
+  function createNewRequest() {
+    history.push('/request');
   }
 
   useEffect(() => {
@@ -57,7 +47,7 @@ const MyRequestsView: React.FC<{ user: User }> = ({ user }) => {
       </Row>
 
       <Row>
-        {!makers || !makers.length ? (
+        {!requests || !requests.length ? (
           <Col className="no-work panel empty">
             You have not made a request.{' '}
             <Button variant="link" onClick={createNewRequest}>
@@ -70,19 +60,21 @@ const MyRequestsView: React.FC<{ user: User }> = ({ user }) => {
               <table className="my-work-table">
                 <thead>
                   <tr>
-                    <th className="name">Name</th>
-                    <th className="email">Email</th>
-                    <th className="prints">Total Prints</th>
+                    <th className="date">Date Requested</th>
+                    <th className="count">Count</th>
+                    <th className="details">Details</th>
+                    <th className="status">Status</th>
                   </tr>
                 </thead>
 
                 <tbody>
-                  {makers.map((maker, key) => {
+                  {requests.map((request, key) => {
                     return (
                       <tr key={key}>
-                        <td className="name">{maker.name}</td>
-                        <td className="email">{maker.email}</td>
-                        <td className="prints">{maker.prints}</td>
+                        <td className="date">{request.createDate}</td>
+                        <td className="count">{request.count}</td>
+                        <td className="details">{request.details}</td>
+                        <td className="status">{request.status}</td>
                       </tr>
                     );
                   })}
@@ -92,15 +84,6 @@ const MyRequestsView: React.FC<{ user: User }> = ({ user }) => {
           </Col>
         )}
       </Row>
-
-      <Modal
-        contentLabel="Add A Request"
-        isOpen={!!newRequest}
-        onRequestClose={handleModalClose}
-        style={customStyles}
-      >
-        Request form goes here.
-      </Modal>
     </div>
   );
 };
