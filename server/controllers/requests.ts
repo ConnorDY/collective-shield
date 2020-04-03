@@ -1,9 +1,9 @@
 import express from 'express';
 import {
   JsonController,
-  // Param,
-  // Body,
+  Body,
   Get,
+  Param,
   Post,
   Put,
   Req
@@ -11,41 +11,36 @@ import {
 
 import config from '../config';
 import { Request } from '../schemas';
+import { IRequest } from '../interfaces';
 import { getUser } from '../utils';
 
 @JsonController(`${config.apiPrefix}/requests`)
 export default class RequestsController {
   @Get()
-  async getAll() {
-    try {
-      return await Request.find();
-    } catch (err) {
-      throw err;
-    }
+  getAll() {
+    Request.find()
+      .then((result) => {
+        return result;
+      })
+      .catch((err) => {
+        throw err;
+      });
   }
 
   @Get('/me')
   getMine(@Req() req: express.Request) {
     const user = getUser(req);
-
-    if (!user || !user.makerId) {
-      return [];
+    if (!user) {
+      return undefined;
     }
 
     return Request.find({ userId: user._id })
       .then((results) => {
-        results.forEach((r) => {
-          r.createDate = new Date(r.createDate);
-        });
-
-        results.sort((a: any, b: any) => a.start - b.start);
-
+        this.sortRequestsByCreateDate(results);
         return results;
       })
       .catch((err) => {
-        if (err) {
-          console.error(err);
-        }
+        throw err;
       });
   }
 
@@ -53,24 +48,17 @@ export default class RequestsController {
   getOpen() {
     return Request.find({ makerId: undefined })
       .then((results) => {
-        results.forEach((r) => {
-          r.createDate = new Date(r.createDate);
-        });
-
-        results.sort((a: any, b: any) => a.start - b.start);
-
+        this.sortRequestsByCreateDate(results);
         return results;
       })
       .catch((err) => {
-        if (err) {
-          console.error(err);
-        }
+        throw err;
       });
   }
 
   @Post()
-  createRequest(@Req() req: express.Request) {
-    return Request.create(req.body)
+  createRequest(@Body() body: IRequest) {
+    return Request.create(body)
       .then((result) => {
         return result;
       })
@@ -80,26 +68,31 @@ export default class RequestsController {
   }
 
   @Get('/:id')
-  getOneById(@Req() req: express.Request) {
-    return Request.findById(req.params.id).exec((err, result) => {
-      if (err) {
-        console.error(err);
-      }
-      return result;
-    });
+  getOneById(@Param('id') id: string) {
+    return Request.findById(id)
+      .then((result) => {
+        return result;
+      })
+      .catch((err) => {
+        throw err;
+      });
   }
 
   @Put('/:id')
-  updateOneById(@Req() req: express.Request) {
-    return Request.findOneAndUpdate(
-      { _id: req.params.id },
-      req.body,
-      (err, result) => {
-        if (err) {
-          console.error(err);
-        }
+  updateOneById(@Param('id') id: string, @Body() body: IRequest) {
+    return Request.findOneAndUpdate({ _id: id }, body)
+      .then((result) => {
         return result;
-      }
-    );
+      })
+      .catch((err) => {
+        throw err;
+      });
+  }
+
+  sortRequestsByCreateDate(requests: IRequest[]) {
+    requests.forEach((r) => {
+      r.createDate = new Date(r.createDate);
+    });
+    requests.sort((a, b) => a.createDate.getTime() - b.createDate.getTime());
   }
 }
