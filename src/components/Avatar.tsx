@@ -1,7 +1,7 @@
 import React from 'react';
-import { Container, Row } from 'react-bootstrap';
 import Avatar from 'react-avatar';
 import { get, omit } from 'lodash';
+
 import User from '../models/User';
 
 interface Props {

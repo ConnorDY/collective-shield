@@ -1,29 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   Container,
   Modal,
-  Row,
-  ToggleButton,
-  ToggleButtonGroup
+  Row
+  // ToggleButton,
+  // ToggleButtonGroup
 } from 'react-bootstrap';
 
-const HomeView: React.FC<{}> = ({}) => {
-  const [modalType, setModalType] = useState<'register' | 'login'>('login');
-  const [userType, setUserType] = useState<'printer' | 'provider' | null>(null);
+const HomeView: React.FC<{}> = () => {
+  const [modalType /*, setModalType*/] = useState<'register' | 'login'>(
+    'login'
+  );
+  const [userType /*, setUserType*/] = useState<'printer' | 'provider' | null>(
+    null
+  );
 
-  const isRegister = modalType === 'register';
-  const isLogin = modalType === 'login';
+  // const isRegister = modalType === 'register';
+  // const isLogin = modalType === 'login';
   const registerDisabled = modalType === 'register' && !userType;
+  const buttonPreText = modalType === 'login' ? 'Sign In' : 'Sign Up';
 
-  let buttonPreText = 'Sign Up';
-  let actionPreText = 'Sign In';
-  let actionMessage = 'Already signed up?';
-  if (modalType === 'login') {
-    buttonPreText = 'Sign In';
-    actionPreText = 'Sign Up';
-    actionMessage = 'Not a member?';
-  }
   return (
     <Modal show size="lg" backdrop>
       <div className="p-5">

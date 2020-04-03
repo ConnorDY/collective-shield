@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Modal from 'react-modal';
-import { Button, ButtonGroup, Col, Dropdown, Row } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import { buildEndpointUrl } from '../utilities';
 
 const customStyles = {

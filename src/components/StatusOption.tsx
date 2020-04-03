@@ -5,7 +5,7 @@ const StatusOption = (status: string) => {
   return (
     <>
       <StatusCircle status={status} />{' '}
-      {status == 'FilterbyStatus' ? (
+      {status === 'FilterbyStatus' ? (
         <span className="toggleFilter">Filter by Status</span>
       ) : (
         status

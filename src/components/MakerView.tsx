@@ -1,40 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import Modal from 'react-modal';
 import axios from 'axios';
 
 import { buildEndpointUrl } from '../utilities';
 import Maker from '../models/Maker';
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)'
-  }
-};
-
 export default function MakerView() {
   const history = useHistory();
-
   const [makers, setMakers] = useState<Maker[]>([]);
-  const [eventStudent, setEventStudent] = useState<any>(null);
-  const [selectedEvent, setSelectedEvent] = useState<any>(null);
-
-  function getMaker() {
-    if (selectedEvent == null || selectedEvent.meetingId == null) {
-      return;
-    }
-
-    axios
-      .get(buildEndpointUrl(`makers/${selectedEvent.meetingId}`))
-      .then((res) => {
-        setEventStudent(res.data);
-      });
-  }
 
   function getMakers() {
     axios
@@ -50,21 +23,11 @@ export default function MakerView() {
       });
   }
 
-  // function handleJoinClassClick(event, e) {
-  //     e.preventDefault();
-
-  //     setSelectedEvent(event);
-  // }
-
-  function handleModalClose() {
-    setSelectedEvent(null);
-  }
-
   useEffect(() => {
     getMakers();
   }, []);
 
-  if (makers === null || makers.length === 0) {
+  if (!makers || !makers.length) {
     return null;
   }
 
@@ -97,32 +60,6 @@ export default function MakerView() {
           </div>
         )}
       </div>
-
-      <Modal
-        contentLabel="Add a maker"
-        isOpen={selectedEvent !== null}
-        onRequestClose={handleModalClose}
-        style={customStyles}
-      >
-        <div className="c-modal">
-          {selectedEvent !== null && (
-            <div>
-              <h2>{selectedEvent.course.name}</h2>
-              <p>{selectedEvent.course.description}</p>
-              {eventStudent !== null && eventStudent.joinUrl !== null && (
-                <a
-                  className="c-button"
-                  href={eventStudent.joinUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Join Now
-                </a>
-              )}
-            </div>
-          )}
-        </div>
-      </Modal>
     </div>
   );
 }
