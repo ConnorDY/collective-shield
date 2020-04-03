@@ -23,14 +23,14 @@ phases:
     #commands:
       # - command
       # - command
-  #pre_build:
-    #commands:
-      # - command
-      # - command
+  pre_build:
+    commands:
+      - echo Installing source NPM dependencies...
+      - npm install
   build:
     commands:
-      # - command
-      # - command
+      - echo Build started on `date`
+      - npm run build
   #post_build:
     #commands:
       # - command
@@ -43,10 +43,10 @@ phases:
     #base-directory: location
     #discard-paths: yes
     #file-format: JunitXml | CucumberJson
-#artifacts:
-  #files:
-    # - location
-    # - location
+artifacts:
+  files:
+    - '**/*'
+  base-directory: build
   #name: $(date +%Y-%m-%d)
   #discard-paths: yes
   #base-directory: location
