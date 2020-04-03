@@ -9,7 +9,7 @@ import Avatar from '../components/Avatar';
 import { buildEndpointUrl, readCookie } from '../utilities';
 import { states } from '../utilities/constants';
 
-const NewRequestView: React.FC<{ user: User | undefined }> = ({ user }) => {
+const NewRequestView: React.FC<{ user: User }> = ({ user }) => {
   const history = useHistory();
 
   const [isCreated, setIsCreated] = useState(false);
@@ -47,14 +47,13 @@ const NewRequestView: React.FC<{ user: User | undefined }> = ({ user }) => {
         facilityName,
         addressCity,
         addressState,
-        addressZip,
-        requestorID: user?._id
+        addressZip
       };
 
       axios
         .post(buildEndpointUrl('requests'), data)
-        .then((res) => {
-          setIsCreated(!isCreated);
+        .then(() => {
+          setIsCreated(true);
         })
         .catch((err) => {
           toast.error(`ERROR: ${err}`, {
