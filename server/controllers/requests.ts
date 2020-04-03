@@ -6,12 +6,15 @@ import {
   Post,
   Put,
   CurrentUser,
-  Authorized
+  Authorized,
+  UseBefore
 } from 'routing-controllers';
+import { celebrate, Segments } from 'celebrate';
 
 import config from '../config';
 import { Request } from '../schemas';
 import { IRequest, IUser } from '../interfaces';
+import requestValidator from '../validators/request';
 
 @Authorized()
 @JsonController(`${config.apiPrefix}/requests`)
@@ -54,6 +57,7 @@ export default class RequestsController {
   }
 
   @Post()
+  @UseBefore(celebrate({ [Segments.BODY]: requestValidator }))
   createRequest(@CurrentUser() user: IUser, @Body() body: IRequest) {
     return Request.create({
       ...body,
