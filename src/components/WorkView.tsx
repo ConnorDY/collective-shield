@@ -4,24 +4,14 @@ import axios from 'axios';
 
 import { buildEndpointUrl } from '../utilities';
 import User from '../models/User';
-import Maker from '../models/Maker';
 import StatusOption from './StatusOption';
 
 const WorkView: React.FC<{ user: User }> = ({ user }) => {
-  //this.refreshTimer = null;
-
   const [availableWork, setAvailableWork] = useState<any[]>([]);
-  const [maker, setMaker] = useState<Maker>();
   const [work, setWork] = useState<any[]>([]);
 
-  function getMaker() {
-    axios.get(buildEndpointUrl(`makers/${user.makerId}`)).then((res) => {
-      setMaker(res.data);
-    });
-  }
-
   function getWork() {
-    axios.get(buildEndpointUrl(`makers/${user.makerId}/work`)).then((res) => {
+    axios.get(buildEndpointUrl('requests/me')).then((res) => {
       setWork(res.data);
     });
   }
@@ -34,12 +24,12 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
 
   // on load
   useEffect(() => {
-    getMaker();
+    if (!user.maker) return;
     getWork();
     getAvailableWork();
   }, []);
 
-  if (!maker) {
+  if (!user.maker) {
     return null;
   }
 
@@ -54,11 +44,9 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
       </Row>
 
       <Row>
-        {(!work || work.length === 0) && (
+        {!work || !work.length ? (
           <Col className="no-work panel empty">No work found</Col>
-        )}
-
-        {work && work.length > 0 && (
+        ) : (
           <Col>
             <div className="table-wrapper">
               <table className="my-work-table">

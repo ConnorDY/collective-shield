@@ -14,7 +14,7 @@ const HomeView: React.FC<{ user: User }> = ({ user }) => {
   }, []);
 
   if (!user.maker) {
-    return <MyRequestsView />;
+    return <MyRequestsView user={user} />;
   }
   return null;
 };

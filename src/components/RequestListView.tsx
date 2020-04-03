@@ -20,7 +20,7 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
   let searchResults: any[] = [];
 
   function getMaker() {
-    axios.get(buildEndpointUrl(`makers/${user.makerId}`)).then((res) => {
+    axios.get(buildEndpointUrl(`makers/${user._id}`)).then((res) => {
       setMaker(res.data);
     });
   }

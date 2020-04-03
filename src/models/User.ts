@@ -1,5 +1,5 @@
 export default interface User {
-  makerId: string;
+  _id: string;
   firstName: string;
   lastName: string;
   maker?: boolean;
