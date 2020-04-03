@@ -1,15 +1,15 @@
 import React, { useEffect, useState, BaseSyntheticEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Form, Button, Row, Col, Card, Alert } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 
 import User from '../models/User';
 import Avatar from '../components/Avatar';
 import { buildEndpointUrl, readCookie } from '../utilities';
 import { states } from '../utilities/constants';
-import { toast } from 'react-toastify';
 
-const NewRequestView: React.FC<{ user: User | undefined }> = ({ user }) => {
+const NewRequestView: React.FC<{ user: User }> = ({ user }) => {
   const history = useHistory();
 
   const [isCreated, setIsCreated] = useState(false);
@@ -47,14 +47,13 @@ const NewRequestView: React.FC<{ user: User | undefined }> = ({ user }) => {
         facilityName,
         addressCity,
         addressState,
-        addressZip,
-        requestorID: user?._id
+        addressZip
       };
 
       axios
         .post(buildEndpointUrl('requests'), data)
-        .then((res) => {
-          setIsCreated(!isCreated);
+        .then(() => {
+          setIsCreated(true);
         })
         .catch((err) => {
           toast.error(`ERROR: ${err}`, {
@@ -81,7 +80,7 @@ const NewRequestView: React.FC<{ user: User | undefined }> = ({ user }) => {
         </Col>
       </Row>
 
-      {isCreated && (
+      {isCreated ? (
         <Row>
           <Col>
             <div className="c-requestForm -pad">
@@ -92,8 +91,7 @@ const NewRequestView: React.FC<{ user: User | undefined }> = ({ user }) => {
             </div>
           </Col>
         </Row>
-      )}
-      {!isCreated && (
+      ) : (
         <>
           <Row id="requested-row-1">
             <Col>

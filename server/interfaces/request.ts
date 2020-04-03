@@ -8,10 +8,10 @@ export default interface Request extends Document {
   addressCity: string;
   addressState: string;
   addressZip: string;
-  details: string;
+  details?: string;
+  status?: string;
   createDate?: Date;
-  makerID?: string;
-  status: string;
   updateDate?: Date;
+  makerID?: string;
   requestorID: string;
 }

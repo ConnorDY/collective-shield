@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button, Col, Row } from 'react-bootstrap';
+import moment from 'moment';
 import axios from 'axios';
 
 import User from '../models/User';
@@ -60,8 +61,10 @@ const MyRequestsView: React.FC<{ user: User }> = ({ user }) => {
                   {requests.map((request, key) => {
                     return (
                       <tr key={key}>
-                        <td className="date">{request.createDate}</td>
-                        <td className="count">{request.count}</td>
+                        <td className="date">
+                          {moment(request.createDate).format('dddd, MMMM Do')}
+                        </td>
+                        <td className="count">{request.maskShieldCount}</td>
                         <td className="details">{request.details}</td>
                         <td className="status">{request.status}</td>
                       </tr>

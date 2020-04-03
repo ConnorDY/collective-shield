@@ -1,10 +1,16 @@
 export default interface Request {
   _id: string;
+  maskShieldCount: number;
+  jobRole: string;
+  email: string;
+  facilityName: string;
+  addressCity: string;
+  addressState: string;
+  addressZip: string;
   details: string;
-  count: number;
-  createDate?: Date;
-  name: string;
-  position: string;
   status: string;
-  makerId: string;
+  createDate?: Date;
+  updateDate?: Date;
+  makerID?: string;
+  requestorID: string;
 }

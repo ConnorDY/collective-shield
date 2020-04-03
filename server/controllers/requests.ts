@@ -6,12 +6,15 @@ import {
   Post,
   Put,
   CurrentUser,
-  Authorized
+  Authorized,
+  UseBefore
 } from 'routing-controllers';
+import { celebrate, Segments } from 'celebrate';
 
 import config from '../config';
 import { Request } from '../schemas';
 import { IRequest, IUser } from '../interfaces';
+import requestValidator from '../validators/request';
 
 @Authorized()
 @JsonController(`${config.apiPrefix}/requests`)
@@ -29,7 +32,9 @@ export default class RequestsController {
 
   @Get('/me')
   getMine(@CurrentUser() user: IUser) {
-    return Request.find({ userId: user._id })
+    return Request.find({
+      $or: [{ requestorID: user._id }, { makerId: user._id }]
+    })
       .then((results) => {
         this.sortRequestsByCreateDate(results);
         return results;
@@ -52,11 +57,13 @@ export default class RequestsController {
   }
 
   @Post()
-  createRequest(@Body() body: IRequest) {
+  @UseBefore(celebrate({ [Segments.BODY]: requestValidator }))
+  createRequest(@CurrentUser() user: IUser, @Body() body: IRequest) {
     return Request.create({
       ...body,
+      status: 'Requested',
       createDate: new Date(),
-      status: 'Requested'
+      requestorID: user._id
     })
       .then((result) => {
         return result;
