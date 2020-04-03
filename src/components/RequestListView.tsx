@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, ButtonGroup, Col, Dropdown, Row } from 'react-bootstrap';
 import axios from 'axios';
+import { get, lowerCase } from 'lodash';
 
 import { buildEndpointUrl } from '../utilities';
 import User from '../models/User';
@@ -43,19 +44,26 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
     return null;
   }
 
-  if (allRequests) {
+  if (MockData) {
     // temporarily using 'MockData'. It needs to be replaced by 'allRequests'
-    const results = MockData.filter(
-      (m) =>
-        (m.address.line1.toLowerCase().includes(searchTerm) ||
-          m.address.line2.toLowerCase().includes(searchTerm) ||
-          m.address.city.toLowerCase().includes(searchTerm) ||
-          m.address.state.toLowerCase().includes(searchTerm) ||
-          m.address.zip.toLowerCase().includes(searchTerm) ||
-          m.name.toLowerCase().includes(searchTerm) ||
-          m.printer.toLowerCase().includes(searchTerm)) &&
-        m.status.includes(searchStatusTerm)
-    );
+    const keys = [
+      'address.line1',
+      'address.line2',
+      'address.city',
+      'address.state',
+      'address.zip',
+      'name',
+      'printer'
+    ];
+
+    const results = MockData.filter((m) => {
+      return (
+        get(m, 'status', '').includes(searchStatusTerm) &&
+        keys.some((k) =>
+          lowerCase(get(m, k, '')).includes(lowerCase(searchTerm || ''))
+        )
+      );
+    });
     searchResults = results;
   }
 
