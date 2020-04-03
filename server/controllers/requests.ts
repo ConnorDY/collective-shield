@@ -57,7 +57,7 @@ export default class RequestsController {
 
   @Post()
   createRequest(@Body() body: IRequest) {
-    return Request.create(body)
+    return Request.create({ ...body, createDate: new Date() })
       .then((result) => {
         return result;
       })
@@ -90,8 +90,8 @@ export default class RequestsController {
 
   sortRequestsByCreateDate(requests: IRequest[]) {
     requests.forEach((r) => {
-      r.createDate = new Date(r.createDate);
+      r.createDate = new Date(r.createDate!);
     });
-    requests.sort((a, b) => a.createDate.getTime() - b.createDate.getTime());
+    requests.sort((a, b) => a.createDate!.getTime() - b.createDate!.getTime());
   }
 }

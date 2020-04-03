@@ -6,7 +6,7 @@ export default interface Request extends Document {
   address: IAddress;
   details: string;
   count: number;
-  createDate: Date;
+  createDate?: Date;
   coordinates: number[];
   name: string;
   email: string;
