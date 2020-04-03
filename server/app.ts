@@ -21,7 +21,6 @@ import {
   RequestsController,
   LoginController
 } from './controllers';
-import { ensureAuthenticated } from './utils';
 
 const portNumber = process.env.PORT || 3050;
 const cookieSession: SessionOptions = {
@@ -30,15 +29,6 @@ const cookieSession: SessionOptions = {
 };
 const parseForm = bodyParser.urlencoded({ extended: false });
 
-// const csrfProtection = csurf({
-//   cookie: {
-//     key: 'XSRF-TOKEN',
-//     path: '/',
-//     httpOnly: true,
-//     secure: process.env.NODE_ENV === 'production',
-//     maxAge: 3600 // 1-hour
-//   }
-// });
 // const sparkpostClient = new SparkPost(config.sparkpostKey);
 
 connect(
@@ -104,16 +94,6 @@ useExpressServer(app, {
 app.listen(portNumber, () => {
   console.log(`Express web server started: http://localhost:${portNumber}`);
 });
-
-// app.all("*", csrfProtection, (req, res, next) => {
-//   res.cookie('XSRF-TOKEN', req.csrfToken())
-//   next()
-// })
-
-if (process.env.NODE_ENV != null && process.env.NODE_ENV !== 'development') {
-  app.all('/api/*', ensureAuthenticated);
-  // app.use(sslRedirect());
-}
 
 app.get('/api/me', (req: express.Request, res: express.Response) => {
   const user = req.user as IUser;

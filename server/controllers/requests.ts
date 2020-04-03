@@ -5,18 +5,20 @@ import {
   Param,
   Post,
   Put,
-  CurrentUser
+  CurrentUser,
+  Authorized
 } from 'routing-controllers';
 
 import config from '../config';
 import { Request } from '../schemas';
 import { IRequest, IUser } from '../interfaces';
 
+@Authorized()
 @JsonController(`${config.apiPrefix}/requests`)
 export default class RequestsController {
   @Get()
   getAll() {
-    Request.find()
+    return Request.find()
       .then((result) => {
         return result;
       })
