@@ -2,22 +2,22 @@ require('dotenv').config();
 import 'reflect-metadata';
 import bodyParser from 'body-parser';
 import express from 'express';
-import { createExpressServer } from 'routing-controllers';
-import csurf from 'csurf';
+import { useExpressServer, Action } from 'routing-controllers';
+// import csurf from 'csurf';
 import cookieParser from 'cookie-parser';
 import session, { SessionOptions } from 'express-session';
 import { connect } from 'mongoose';
 import path from 'path';
-import SparkPost from 'sparkpost';
+// import SparkPost from 'sparkpost';
 import passport from 'passport';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 
 import './passport';
 import config from './config';
 import { Maker } from './schemas';
-import { IMaker } from './interfaces';
+import { IMaker, IUser } from './interfaces';
 import { MakersController, RequestsController } from './controllers';
-import { ensureAuthenticated, getUser } from './utils';
+import { ensureAuthenticated } from './utils';
 
 const portNumber = process.env.PORT || 3050;
 const cookieSession: SessionOptions = {
@@ -50,10 +50,7 @@ connect(
   }
 );
 
-const app: express.Application = createExpressServer({
-  controllers: [MakersController, RequestsController],
-  classTransformer: false
-});
+const app = express();
 
 // apply middleware
 if (process.env.NODE_ENV === 'development') {
@@ -85,6 +82,20 @@ app.use(bodyParser.json());
 app.use(parseForm);
 app.use(express.static(path.join(__dirname, 'build'), { index: false }));
 
+// setup routing-controllers
+useExpressServer(app, {
+  controllers: [MakersController, RequestsController],
+  classTransformer: false,
+  currentUserChecker: async (action: Action) => {
+    return action.request.user;
+  },
+  authorizationChecker: async (action: Action, roles: string[]) => {
+    if (!action.request.user) return false;
+    if (roles.includes('admin')) return action.request.user.isSuperAdmin;
+    return true;
+  }
+});
+
 // start listening
 app.listen(portNumber, () => {
   console.log(`Express web server started: http://localhost:${portNumber}`);
@@ -97,7 +108,6 @@ app.listen(portNumber, () => {
 
 if (process.env.NODE_ENV != null && process.env.NODE_ENV !== 'development') {
   app.all('/api/*', ensureAuthenticated);
-
   // app.use(sslRedirect());
 }
 
@@ -136,13 +146,12 @@ app.get(
 );
 
 app.get('/api/me', (req: express.Request, res: express.Response) => {
-  const user = getUser(req);
-
-  if (!user || !user.makerId) {
+  const user = req.user as IUser;
+  if (!user || !user._id) {
     return res.send(user);
   }
 
-  Maker.findById(user.makerId)
+  Maker.findById(user._id)
     .then((result) => {
       user.maker = result as IMaker;
       return res.send(user);

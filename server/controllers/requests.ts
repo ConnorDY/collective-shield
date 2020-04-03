@@ -1,4 +1,3 @@
-import express from 'express';
 import {
   JsonController,
   Body,
@@ -6,13 +5,12 @@ import {
   Param,
   Post,
   Put,
-  Req
+  CurrentUser
 } from 'routing-controllers';
 
 import config from '../config';
 import { Request } from '../schemas';
-import { IRequest } from '../interfaces';
-import { getUser } from '../utils';
+import { IRequest, IUser } from '../interfaces';
 
 @JsonController(`${config.apiPrefix}/requests`)
 export default class RequestsController {
@@ -28,8 +26,7 @@ export default class RequestsController {
   }
 
   @Get('/me')
-  getMine(@Req() req: express.Request) {
-    const user = getUser(req);
+  getMine(@CurrentUser() user: IUser) {
     if (!user) {
       return undefined;
     }
