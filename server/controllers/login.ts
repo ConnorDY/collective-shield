@@ -14,10 +14,7 @@ export default class LoginController {
       failureRedirect: '/login'
     })
   )
-  facebookCallback() {
-    console.log('facebook logged in');
-    return 'Logged In.';
-  }
+  facebookCallback() {}
 
   @Get('/google')
   @UseBefore(passport.authenticate('google', { scope: ['profile', 'email'] }))
@@ -30,8 +27,5 @@ export default class LoginController {
       failureRedirect: '/login'
     })
   )
-  googleCallback() {
-    console.log('google logged in');
-    return 'Logged In.';
-  }
+  googleCallback() {}
 }
