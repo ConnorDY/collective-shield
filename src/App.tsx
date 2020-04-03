@@ -12,7 +12,7 @@ import HomeView from './views/HomeView';
 import LoginView from './components/LoginView';
 import MakerView from './components/MakerView';
 import RequestListView from './components/RequestListView';
-// import NewRequestView from './components/NewRequestView';
+import NewRequestView from './components/NewRequestView';
 import WorkView from './components/WorkView';
 
 import './assets/scss/app.scss';
@@ -45,7 +45,6 @@ const App: React.FC = () => {
         <Container>
           {user ? (
             <>
-              {/* <Route path="/" exact component={NewRequestView} /> */}
               <Route path="/" exact>
                 <HomeView user={user} />
               </Route>
@@ -58,17 +57,21 @@ const App: React.FC = () => {
                 <WorkView user={user} />
               </Route>
 
+              <Route path="/create/request">
+                <NewRequestView user={user} />
+              </Route>
+
               <Route path="/admin/requests">
                 <RequestListView user={user} />
               </Route>
             </>
           ) : (
-            <>
-              <Route path="/login">
-                <LoginView />
-              </Route>
-            </>
-          )}
+              <>
+                <Route path="/login">
+                  <LoginView />
+                </Route>
+              </>
+            )}
         </Container>
       </main>
     </Provider>
