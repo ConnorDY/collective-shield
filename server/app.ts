@@ -16,7 +16,11 @@ import './passport';
 import config from './config';
 import { Maker } from './schemas';
 import { IMaker, IUser } from './interfaces';
-import { MakersController, RequestsController } from './controllers';
+import {
+  MakersController,
+  RequestsController,
+  LoginController
+} from './controllers';
 import { ensureAuthenticated } from './utils';
 
 const portNumber = process.env.PORT || 3050;
@@ -84,7 +88,7 @@ app.use(express.static(path.join(__dirname, 'build'), { index: false }));
 
 // setup routing-controllers
 useExpressServer(app, {
-  controllers: [MakersController, RequestsController],
+  controllers: [LoginController, MakersController, RequestsController],
   classTransformer: false,
   currentUserChecker: async (action: Action) => {
     return action.request.user;
@@ -110,40 +114,6 @@ if (process.env.NODE_ENV != null && process.env.NODE_ENV !== 'development') {
   app.all('/api/*', ensureAuthenticated);
   // app.use(sslRedirect());
 }
-
-app.get(
-  '/login/facebook',
-  passport.authenticate('facebook', { scope: 'email' })
-);
-
-app.get(
-  '/login/facebook/callback',
-  passport.authenticate('facebook', {
-    successRedirect: '/',
-    failureRedirect: '/login'
-  }),
-  (req, res) => {
-    console.log('facebook logged in');
-    res.send('Logged In.');
-  }
-);
-
-app.get(
-  '/login/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
-);
-
-app.get(
-  '/login/google/callback',
-  passport.authenticate('google', {
-    successRedirect: '/',
-    failureRedirect: '/login'
-  }),
-  (req, res) => {
-    console.log('google logged in');
-    res.send('Logged In.');
-  }
-);
 
 app.get('/api/me', (req: express.Request, res: express.Response) => {
   const user = req.user as IUser;
