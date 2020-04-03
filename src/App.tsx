@@ -42,7 +42,7 @@ const App: React.FC = () => {
     <Provider store={store}>
       <Navbar user={user} />
       <main className="main">
-        <Container>
+        <Container className="inner">
           {user ? (
             <>
               <Route path="/" exact>

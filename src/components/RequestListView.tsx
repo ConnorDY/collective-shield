@@ -74,10 +74,10 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
   };
 
   return (
-    <>
-      <Row className="all-requests-view-header">
+    <div className="all-requests">
+      <Row className="view-header">
         <Col>
-          <h1>Requests</h1>
+          <h1 className="h1">Requests</h1>
         </Col>
         <Col className="searchInput">
           <input
@@ -171,7 +171,7 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
           </Col>
         )}
       </Row>
-    </>
+    </div>
   );
 };
 

@@ -1,53 +1,56 @@
-.all-requests-view-header {
-  margin-bottom: 2em;
-  .toggleFilter {
-    color: black;
-  }
+.all-requests {
+  .view-header {
+    margin-bottom: 2em;
 
-  .searchInput {
-    padding: 6px;
-    text-align: right;
-    input {
-      height: 3rem;
-      width: 19rem;
-      padding-left: 1rem;
-      border: 2px solid #c2c2ca;
-      text-align: left;
-      border-radius: 0.25rem;
+    .toggleFilter {
       color: black;
     }
-  }
 
-  #status-dropdown-1 {
-    text-align: left;
-    height: 3rem;
-    width: 14rem;
-    border: 2px solid #c2c2ca;
-  }
+    .searchInput {
+      padding: 6px;
+      text-align: right;
+      input {
+        height: 3rem;
+        width: 19rem;
+        padding-left: 1rem;
+        border: 2px solid #c2c2ca;
+        text-align: left;
+        border-radius: 0.25rem;
+        color: black;
+      }
+    }
 
-  .statusFilter {
-    // width: 18rem;
-    padding: 6px 15px;
-    text-align: right;
-    span {
-      padding-right: 2.5rem;
+    #status-dropdown-1 {
+      text-align: left;
+      height: 3rem;
+      width: 14rem;
+      border: 2px solid #c2c2ca;
+    }
+
+    .statusFilter {
+      // width: 18rem;
+      padding: 6px 15px;
+      text-align: right;
+      span {
+        padding-right: 2.5rem;
+      }
     }
   }
-}
 
-.requested-list-table {
-  .requestedDate {
-    width: 20%;
-    padding: 0 1.8rem 0 1.8rem;
-  }
-
-  .count {
-    width: 10%;
-  }
-
-  tbody > tr {
+  .requested-list-table {
     .requestedDate {
-      padding: 1.8rem;
+      width: 20%;
+      padding: 0 1.8rem 0 1.8rem;
+    }
+
+    .count {
+      width: 10%;
+    }
+
+    tbody > tr {
+      .requestedDate {
+        padding: 1.8rem;
+      }
     }
   }
 }
