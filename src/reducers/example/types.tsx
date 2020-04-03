@@ -1,12 +1,12 @@
-export const GET_EXAMPLE_SUCCESS = 'GET_EXAMPLE_SUCCESS'
+export const GET_EXAMPLE_SUCCESS = 'GET_EXAMPLE_SUCCESS';
 
 export interface SystemState {
-  example: boolean
+  example: boolean;
 }
 
 interface GetExampleSuccessAction {
-  type: typeof GET_EXAMPLE_SUCCESS
-  payload: SystemState
+  type: typeof GET_EXAMPLE_SUCCESS;
+  payload: SystemState;
 }
 
-export type SystemActionTypes = GetExampleSuccessAction
+export type SystemActionTypes = GetExampleSuccessAction;

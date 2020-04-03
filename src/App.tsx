@@ -18,7 +18,7 @@ import WorkView from './components/WorkView';
 import './assets/scss/app.scss';
 import Navbar from './components/Navbar';
 
-const store = configureStore()
+const store = configureStore();
 
 const App: React.FC = () => {
   const history = useHistory();
@@ -66,12 +66,12 @@ const App: React.FC = () => {
               </Route>
             </>
           ) : (
-              <>
-                <Route path="/login">
-                  <LoginView />
-                </Route>
-              </>
-            )}
+            <>
+              <Route path="/login">
+                <LoginView />
+              </Route>
+            </>
+          )}
         </Container>
       </main>
     </Provider>

@@ -1,6 +1,6 @@
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 
-import rootReducer from './reducers'
+import rootReducer from './reducers';
 
 export default function configureAppStore(preloadedState: any = {}) {
   const store = configureStore({
@@ -8,7 +8,7 @@ export default function configureAppStore(preloadedState: any = {}) {
     middleware: [...getDefaultMiddleware()],
     preloadedState,
     enhancers: []
-  })
+  });
 
-  return store
+  return store;
 }

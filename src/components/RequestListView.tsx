@@ -13,8 +13,8 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
 
   const [allRequests, setAllRequests] = useState<any[]>([]);
   const [maker, setMaker] = useState<Maker>();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchStatusTerm, setSearchStatusTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchStatusTerm, setSearchStatusTerm] = useState('');
 
   let searchResults: any[] = [];
 
@@ -43,13 +43,18 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
     return null;
   }
 
-  if(allRequests) {
+  if (allRequests) {
     // temporarily using 'MockData'. It needs to be replaced by 'allRequests'
-    const results = MockData.filter(m => 
-      (m.address.line1.toLowerCase().includes(searchTerm) || m.address.line2.toLowerCase().includes(searchTerm) ||
-       m.address.city.toLowerCase().includes(searchTerm) || m.address.state.toLowerCase().includes(searchTerm) ||
-       m.address.zip.toLowerCase().includes(searchTerm) || m.name.toLowerCase().includes(searchTerm) ||
-       m.printer.toLowerCase().includes(searchTerm)) && m.status.includes(searchStatusTerm)
+    const results = MockData.filter(
+      (m) =>
+        (m.address.line1.toLowerCase().includes(searchTerm) ||
+          m.address.line2.toLowerCase().includes(searchTerm) ||
+          m.address.city.toLowerCase().includes(searchTerm) ||
+          m.address.state.toLowerCase().includes(searchTerm) ||
+          m.address.zip.toLowerCase().includes(searchTerm) ||
+          m.name.toLowerCase().includes(searchTerm) ||
+          m.printer.toLowerCase().includes(searchTerm)) &&
+        m.status.includes(searchStatusTerm)
     );
     searchResults = results;
   }
@@ -58,7 +63,7 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
 
   const onSelect = (status: any) => {
     setSearchStatusTerm(status);
-  }
+  };
 
   return (
     <>
@@ -83,17 +88,14 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
               {StatusOption(searchStatusTerm || 'FilterbyStatus')}
             </Dropdown.Toggle>
 
-            <Dropdown.Menu onSelect={onSelect}
-            >
-              <Dropdown.Item eventKey="">
-                {StatusOption('All')}
-              </Dropdown.Item>
+            <Dropdown.Menu onSelect={onSelect}>
+              <Dropdown.Item eventKey="">{StatusOption('All')}</Dropdown.Item>
 
               <Dropdown.Item eventKey="Requested">
                 {StatusOption('Requested')}
               </Dropdown.Item>
 
-              <Dropdown.Item eventKey="Queued"> 
+              <Dropdown.Item eventKey="Queued">
                 {StatusOption('Queued')}
               </Dropdown.Item>
 
@@ -142,11 +144,16 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
                     return (
                       <tr key={key}>
                         <td className="requestedDate">
-                          {new Intl.DateTimeFormat('en-US', options).format(date)}</td>
+                          {new Intl.DateTimeFormat('en-US', options).format(
+                            date
+                          )}
+                        </td>
                         <td className="count">{r.count}</td>
                         <td className="requestor">{r.name}</td>
                         <td className="printer">{r.printer}</td>
-                        <td className="status">{StatusOption(r.status || 'Requested')}</td>
+                        <td className="status">
+                          {StatusOption(r.status || 'Requested')}
+                        </td>
                       </tr>
                     );
                   })}

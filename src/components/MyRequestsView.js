@@ -45,11 +45,18 @@ class MyRequestsView extends Component {
           </Col>
 
           <Col className="right-col">
-            <Button variant="primary" onClick={this._createNewRequest}>New Request</Button>
+            <Button variant="primary" onClick={this._createNewRequest}>
+              New Request
+            </Button>
           </Col>
         </Row>
         {(this.state.makers == null || this.state.makers.length === 0) && (
-          <Col className="no-work panel empty">You have not made a request. <Button variant="link" onClick={this._createNewRequest}>Create A New Request Now.</Button></Col>
+          <Col className="no-work panel empty">
+            You have not made a request.{' '}
+            <Button variant="link" onClick={this._createNewRequest}>
+              Create A New Request Now.
+            </Button>
+          </Col>
         )}
         {this.state.makers != null && this.state.makers.length > 0 && (
           <Col>
@@ -89,7 +96,6 @@ class MyRequestsView extends Component {
           </div>
         </Modal>
       </div>
-
     );
   }
 

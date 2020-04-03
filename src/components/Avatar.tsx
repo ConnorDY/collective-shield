@@ -12,8 +12,14 @@ interface Props {
   googleId?: string;
 }
 
-const AvatarProfile: React.FC<{ user: User | undefined, size: string }> = ({ user, size }) => {
-  const name = user && user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : undefined;
+const AvatarProfile: React.FC<{ user: User | undefined; size: string }> = ({
+  user,
+  size
+}) => {
+  const name =
+    user && user.firstName && user.lastName
+      ? `${user.firstName} ${user.lastName}`
+      : undefined;
   const round = true;
   const facebookId = get(user, 'providers.facebook');
   const googleId = get(user, 'providers.google');
@@ -21,25 +27,23 @@ const AvatarProfile: React.FC<{ user: User | undefined, size: string }> = ({ use
   let props: Props = {
     name,
     size,
-    round,
-  }
+    round
+  };
 
   if (facebookId) {
-    console.log(facebookId)
+    console.log(facebookId);
     props = {
       ...omit(props, ['name']),
-      facebookId,
-    }
+      facebookId
+    };
   } else if (googleId) {
     props = {
       ...omit(props, ['name']),
-      googleId,
-    }
+      googleId
+    };
   }
 
-  return (
-    <Avatar {...props} />
-  )
+  return <Avatar {...props} />;
 };
 
 export default AvatarProfile;
