@@ -9,7 +9,7 @@ import { buildEndpointUrl } from '../utilities';
 
 const WorkView: React.FC<{ user: User }> = ({ user }) => {
   const [availableWork, setAvailableWork] = useState<Request[]>([]);
-  const [work, setWork] = useState<any[]>([]);
+  const [work, setWork] = useState<Request[]>([]);
 
   function getWork() {
     axios.get(buildEndpointUrl('requests/me')).then((res) => {
@@ -61,8 +61,8 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                   {work.map((w, index) => {
                     return (
                       <tr key={index}>
-                        <td className="count">{w.count}</td>
-                        <td className="requestor">{w.name}</td>
+                        <td className="count">{w.maskShieldCount}</td>
+                        <td className="requestor">{w.facilityName}</td>
                         <td className="status">
                           <Dropdown as={ButtonGroup}>
                             <Dropdown.Toggle
@@ -135,12 +135,12 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                 </thead>
 
                 <tbody>
-                  {availableWork.map((work, key) => {
+                  {availableWork.map((w, key) => {
                     return (
                       <tr key={key}>
-                        <td className="count">{work.maskShieldCount}</td>
+                        <td className="count">{w.maskShieldCount}</td>
                         <td className="distance">X miles</td>
-                        <td className="requestor">{work.facilityName}</td>
+                        <td className="requestor">{w.facilityName}</td>
                         <td className="claim">
                           <Button variant="primary">Claim</Button>
                         </td>
