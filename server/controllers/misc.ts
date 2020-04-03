@@ -29,6 +29,6 @@ export default class MiscController {
 
   @Get('/ping')
   ping() {
-    return { 'message': 'Ping Successful.' }
+    return { message: 'Ping Successful.' };
   }
 }
