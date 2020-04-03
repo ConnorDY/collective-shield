@@ -26,4 +26,9 @@ export default class MiscController {
         throw err;
       });
   }
+
+  @Get('/ping')
+  ping() {
+    return { 'message': 'Ping Successful.' }
+  }
 }

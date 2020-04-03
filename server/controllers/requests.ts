@@ -53,7 +53,11 @@ export default class RequestsController {
 
   @Post()
   createRequest(@Body() body: IRequest) {
-    return Request.create({ ...body, createDate: new Date() })
+    return Request.create({
+      ...body,
+      createDate: new Date(),
+      status: 'Requested'
+    })
       .then((result) => {
         return result;
       })

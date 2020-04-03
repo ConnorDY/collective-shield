@@ -1,16 +1,17 @@
 import { Document } from 'mongoose';
 
-import { IAddress } from '.';
-
 export default interface Request extends Document {
-  address: IAddress;
-  details: string;
-  count: number;
-  createDate?: Date;
-  coordinates: number[];
-  name: string;
+  maskShieldCount: number;
+  jobRole: string;
   email: string;
+  facilityName: string;
+  addressCity: string;
+  addressState: string;
+  addressZip: string;
+  details: string;
+  createDate?: Date;
+  makerID?: string;
   status: string;
-  position: string;
-  makerId: string;
+  updateDate?: Date;
+  requestorID: string;
 }
