@@ -1,18 +1,21 @@
 import { Schema, model } from 'mongoose';
 
-import address from './address';
 import { IRequest } from '../interfaces';
 
 export const RequestSchema = new Schema({
-  address,
-  details: String,
-  count: Number,
-  createDate: Date,
-  coordinates: [Number],
-  name: String,
+  maskShieldCount: Number,
+  jobRole: String,
   email: String,
-  position: String,
-  makerId: String
+  facilityName: String,
+  addressCity: String,
+  addressState: String,
+  addressZip: String,
+  details: String,
+  createDate: Date,
+  makerID: String,
+  status: String,
+  updateDate: Date,
+  requestorID: String
 });
 
 const Request = model<IRequest>('request', RequestSchema);

@@ -13,14 +13,14 @@ const NewRequestView: React.FC<{ user: User | undefined }> = ({ user }) => {
 
   const [isCreated, setIsCreated] = useState(false);
   const [isValidated, setIsValidated] = useState(false);
-  const [maskRequestCount, setMaskRequestCount] = useState(1);
-  const [requestDetails, setRequestDetails] = useState('');
-  const [jobTitle, setJobTitle] = useState('');
+  const [maskShieldCount, setMaskShieldCount] = useState(1);
+  const [details, setDetails] = useState('');
+  const [jobRole, setJobRole] = useState('');
   const [email, setEmail] = useState('');
   const [facilityName, setFacilityName] = useState('');
-  const [city, setCity] = useState('');
+  const [addressCity, setAddressCity] = useState('');
   const [addressState, setAddressState] = useState('');
-  const [zip, setZip] = useState('');
+  const [addressZip, setAddressZip] = useState('');
 
   const roleOptions = [
     'Doctor',
@@ -38,27 +38,27 @@ const NewRequestView: React.FC<{ user: User | undefined }> = ({ user }) => {
       event.preventDefault();
       setIsValidated(!isValidated);
 
-      if (isValidated) {
-        const data = {
-          maskRequestCount,
-          requestDetails,
-          jobTitle,
-          email,
-          facilityName,
-          city,
-          addressState,
-          zip
-        };
+      const data = {
+        maskShieldCount,
+        details,
+        jobRole,
+        email,
+        facilityName,
+        addressCity,
+        addressState,
+        addressZip,
+        status: 'requested',
+        requestorID: user?._id
+      };
 
-        axios
-          .post(buildEndpointUrl('request', '/public'), data)
-          .then((res) => {
-            setIsCreated(!isCreated);
-          })
-          .catch((err) => {
-            console.error(err);
-          });
-      }
+      axios
+        .post(buildEndpointUrl('requests/create'), data)
+        .then((res) => {
+          setIsCreated(!isCreated);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     }
   }
 
@@ -125,9 +125,9 @@ const NewRequestView: React.FC<{ user: User | undefined }> = ({ user }) => {
                     size="lg"
                     custom
                     id="requested-mask-shields-card"
-                    value={maskRequestCount}
+                    value={maskShieldCount}
                     onChange={(e: BaseSyntheticEvent) =>
-                      setMaskRequestCount(e.target.value)
+                      setMaskShieldCount(e.target.value)
                     }
                   >
                     <option>1</option>
@@ -156,9 +156,9 @@ const NewRequestView: React.FC<{ user: User | undefined }> = ({ user }) => {
                   <Form.Control
                     as="select"
                     required
-                    value={jobTitle}
+                    value={jobRole}
                     onChange={(e: BaseSyntheticEvent) =>
-                      setJobTitle(e.target.value)
+                      setJobRole(e.target.value)
                     }
                   >
                     <option>Select Your Role</option>
@@ -200,9 +200,9 @@ const NewRequestView: React.FC<{ user: User | undefined }> = ({ user }) => {
                     <Form.Control
                       required
                       placeholder="Denver"
-                      value={city}
+                      value={addressCity}
                       onChange={(e: BaseSyntheticEvent) =>
-                        setCity(e.target.value)
+                        setAddressCity(e.target.value)
                       }
                     />
                   </Form.Group>
@@ -229,9 +229,9 @@ const NewRequestView: React.FC<{ user: User | undefined }> = ({ user }) => {
                     <Form.Control
                       required
                       placeholder="80205"
-                      value={zip}
+                      value={addressZip}
                       onChange={(e: BaseSyntheticEvent) =>
-                        setZip(e.target.value)
+                        setAddressZip(e.target.value)
                       }
                     />
                   </Form.Group>
@@ -261,9 +261,9 @@ const NewRequestView: React.FC<{ user: User | undefined }> = ({ user }) => {
                     as="textarea"
                     rows="13"
                     placeholder="Add any request details here"
-                    value={requestDetails}
+                    value={details}
                     onChange={(e: BaseSyntheticEvent) =>
-                      setRequestDetails(e.target.value)
+                      setDetails(e.target.value)
                     }
                   />
                 </Form.Group>
