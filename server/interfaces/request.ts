@@ -9,9 +9,9 @@ export default interface Request extends Document {
   addressState: string;
   addressZip: string;
   details: string;
-  createDate?: Date;
-  makerID?: string;
   status: string;
+  createDate?: Date;
   updateDate?: Date;
+  makerID?: string;
   requestorID: string;
 }

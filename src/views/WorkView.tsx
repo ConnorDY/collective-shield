@@ -3,11 +3,12 @@ import { Button, ButtonGroup, Col, Dropdown, Row } from 'react-bootstrap';
 import axios from 'axios';
 
 import User from '../models/User';
+import Request from '../models/Request';
 import StatusOption from '../components/StatusOption';
 import { buildEndpointUrl } from '../utilities';
 
 const WorkView: React.FC<{ user: User }> = ({ user }) => {
-  const [availableWork, setAvailableWork] = useState<any[]>([]);
+  const [availableWork, setAvailableWork] = useState<Request[]>([]);
   const [work, setWork] = useState<any[]>([]);
 
   function getWork() {
@@ -134,12 +135,12 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                 </thead>
 
                 <tbody>
-                  {availableWork.map((w, key) => {
+                  {availableWork.map((work, key) => {
                     return (
                       <tr key={key}>
-                        <td className="count">{w.count}</td>
+                        <td className="count">{work.maskShieldCount}</td>
                         <td className="distance">X miles</td>
-                        <td className="requestor">{w.name}</td>
+                        <td className="requestor">{work.facilityName}</td>
                         <td className="claim">
                           <Button variant="primary">Claim</Button>
                         </td>

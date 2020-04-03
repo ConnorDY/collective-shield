@@ -1,13 +1,13 @@
 import React, { useEffect, useState, BaseSyntheticEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Form, Button, Row, Col, Card, Alert } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 
 import User from '../models/User';
 import Avatar from '../components/Avatar';
 import { buildEndpointUrl, readCookie } from '../utilities';
 import { states } from '../utilities/constants';
-import { toast } from 'react-toastify';
 
 const NewRequestView: React.FC<{ user: User | undefined }> = ({ user }) => {
   const history = useHistory();
@@ -81,7 +81,7 @@ const NewRequestView: React.FC<{ user: User | undefined }> = ({ user }) => {
         </Col>
       </Row>
 
-      {isCreated && (
+      {isCreated ? (
         <Row>
           <Col>
             <div className="c-requestForm -pad">
@@ -92,8 +92,7 @@ const NewRequestView: React.FC<{ user: User | undefined }> = ({ user }) => {
             </div>
           </Col>
         </Row>
-      )}
-      {!isCreated && (
+      ) : (
         <>
           <Row id="requested-row-1">
             <Col>

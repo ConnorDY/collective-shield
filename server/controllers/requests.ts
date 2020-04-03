@@ -29,7 +29,7 @@ export default class RequestsController {
 
   @Get('/me')
   getMine(@CurrentUser() user: IUser) {
-    return Request.find({ userId: user._id })
+    return Request.find({ requestorID: user._id })
       .then((results) => {
         this.sortRequestsByCreateDate(results);
         return results;
