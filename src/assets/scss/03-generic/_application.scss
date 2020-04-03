@@ -1,0 +1,38 @@
+body {
+  font-size: $font-base;
+}
+.main {
+  font-family: $font-normal;
+
+  .right-col {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    font-size: 16px;
+    font-weight: 700;
+    color: $blue-purple;
+  }
+
+  .view-header {
+    margin-bottom: 2em;
+  }
+
+  .h1 {
+    font-weight: 700;
+  }
+
+  // My Requests View
+  .my-requests {
+
+    .view-header {
+      margin-bottom: 3em;
+    }
+    .panel.empty {
+      padding: 5em;
+      text-align: center;
+      background-color: lighten($grey, 15%);
+      border-radius: 5px;
+    }
+  }
+}
