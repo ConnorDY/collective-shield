@@ -13,12 +13,11 @@ import { createProxyMiddleware } from 'http-proxy-middleware';
 
 import './passport';
 import config from './config';
-import { Maker } from './schemas';
-import { IMaker, IUser } from './interfaces';
 import {
+  LoginController,
   MakersController,
-  RequestsController,
-  LoginController
+  MiscController,
+  RequestsController
 } from './controllers';
 
 const portNumber = process.env.PORT || 3050;
@@ -27,7 +26,6 @@ const cookieSession: SessionOptions = {
   cookie: {}
 };
 const parseForm = bodyParser.urlencoded({ extended: false });
-
 // const sparkpostClient = new SparkPost(config.sparkpostKey);
 
 connect(
@@ -77,7 +75,12 @@ app.use(express.static(path.join(__dirname, 'build'), { index: false }));
 
 // setup routing-controllers
 useExpressServer(app, {
-  controllers: [LoginController, MakersController, RequestsController],
+  controllers: [
+    LoginController,
+    MakersController,
+    MiscController,
+    RequestsController
+  ],
   classTransformer: false,
   currentUserChecker: async (action: Action) => {
     return action.request.user;
@@ -92,23 +95,6 @@ useExpressServer(app, {
 // start listening
 app.listen(portNumber, () => {
   console.log(`Express web server started: http://localhost:${portNumber}`);
-});
-
-app.get('/api/me', (req: express.Request, res: express.Response) => {
-  const user = req.user as IUser;
-  if (!user || !user._id) {
-    return res.send(user);
-  }
-
-  Maker.findById(user._id)
-    .then((result) => {
-      user.maker = result as IMaker;
-      return res.send(user);
-    })
-    .catch((err) => {
-      console.error(err);
-      throw err;
-    });
 });
 
 // The "catchall" handler: for any request that doesn't
