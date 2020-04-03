@@ -29,10 +29,6 @@ export default class RequestsController {
 
   @Get('/me')
   getMine(@CurrentUser() user: IUser) {
-    if (!user) {
-      return undefined;
-    }
-
     return Request.find({ userId: user._id })
       .then((results) => {
         this.sortRequestsByCreateDate(results);
