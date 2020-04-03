@@ -44,13 +44,13 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
     return null;
   }
 
-  if(MockData) {
+  if (MockData) {
     // temporarily using 'MockData'. It needs to be replaced by 'allRequests'
     const keys = ['address.line1', 'address.line2', 'address.city', 'address.state', 'address.zip', 'name', 'printer'];
 
     const results = MockData.filter(m => {
       return get(m, 'status', '').includes(searchStatusTerm) &&
-      keys.some(k => lowerCase(get(m, k, '')).includes(lowerCase(searchTerm || '')))
+        keys.some(k => lowerCase(get(m, k, '')).includes(lowerCase(searchTerm || '')))
     });
     searchResults = results;
   }
@@ -62,10 +62,10 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
   }
 
   return (
-    <>
-      <Row className="all-requests-view-header">
+    <div className="all-requests">
+      <Row className="view-header">
         <Col>
-          <h1>Requests</h1>
+          <h1 className="h1">Requests</h1>
         </Col>
         <Col className="searchInput">
           <input
@@ -157,7 +157,7 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
           </Col>
         )}
       </Row>
-    </>
+    </div>
   );
 };
 

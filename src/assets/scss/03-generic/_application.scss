@@ -4,6 +4,10 @@ body {
 .main {
   font-family: $font-normal;
 
+  .inner {
+    padding-bottom: 3em;
+  }
+
   .right-col {
     display: flex;
     justify-content: flex-end;
@@ -19,7 +23,15 @@ body {
   }
 
   .h1 {
-    font-weight: 700;
+    font-weight: 600;
+  }
+
+  .panel.empty {
+    padding: 5em;
+    text-align: center;
+    background-color: lighten($grey, 15%);
+    border-radius: 5px;
+    margin-bottom: 2em;
   }
 
   // My Requests View
@@ -27,12 +39,6 @@ body {
 
     .view-header {
       margin-bottom: 3em;
-    }
-    .panel.empty {
-      padding: 5em;
-      text-align: center;
-      background-color: lighten($grey, 15%);
-      border-radius: 5px;
     }
   }
 }
