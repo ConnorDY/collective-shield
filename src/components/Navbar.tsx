@@ -1,7 +1,7 @@
 import React from 'react';
+import { Col, Container, Row } from 'react-bootstrap';
 
 import User from '../models/User';
-import { Col, Container, Row } from 'react-bootstrap';
 import Avatar from './Avatar';
 import navLogo from '../assets/img/navlogo.png';
 
@@ -11,11 +11,7 @@ const Navbar: React.FC<{ user: User | undefined }> = ({ user }) => {
       <Container>
         <Row>
           <Col className="branding">
-            <img
-              alt="Logo"
-              className="logo"
-              src={navLogo}
-            ></img>
+            <img alt="Logo" className="logo" src={navLogo}></img>
             <div>MaskShield</div>
           </Col>
 

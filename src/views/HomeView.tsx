@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import User from '../models/User';
-import MyRequestsView from '../components/MyRequestsView';
+import MyRequestsView from './MyRequestsView';
 
 const HomeView: React.FC<{ user: User }> = ({ user }) => {
   const history = useHistory();
@@ -14,7 +14,7 @@ const HomeView: React.FC<{ user: User }> = ({ user }) => {
   }, []);
 
   if (!user.maker) {
-    return <MyRequestsView />;
+    return <MyRequestsView user={user} />;
   }
   return null;
 };

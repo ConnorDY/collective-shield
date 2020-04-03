@@ -1,4 +1,3 @@
-import express from 'express';
 import {
   JsonController,
   Body,
@@ -6,19 +5,20 @@ import {
   Param,
   Post,
   Put,
-  Req
+  CurrentUser,
+  Authorized
 } from 'routing-controllers';
 
 import config from '../config';
 import { Request } from '../schemas';
-import { IRequest } from '../interfaces';
-import { getUser } from '../utils';
+import { IRequest, IUser } from '../interfaces';
 
+@Authorized()
 @JsonController(`${config.apiPrefix}/requests`)
 export default class RequestsController {
   @Get()
   getAll() {
-    Request.find()
+    return Request.find()
       .then((result) => {
         return result;
       })
@@ -28,12 +28,7 @@ export default class RequestsController {
   }
 
   @Get('/me')
-  getMine(@Req() req: express.Request) {
-    const user = getUser(req);
-    if (!user) {
-      return undefined;
-    }
-
+  getMine(@CurrentUser() user: IUser) {
     return Request.find({ userId: user._id })
       .then((results) => {
         this.sortRequestsByCreateDate(results);
@@ -58,7 +53,7 @@ export default class RequestsController {
 
   @Post()
   createRequest(@Body() body: IRequest) {
-    return Request.create(body)
+    return Request.create({ ...body, createDate: new Date() })
       .then((result) => {
         return result;
       })
@@ -91,8 +86,8 @@ export default class RequestsController {
 
   sortRequestsByCreateDate(requests: IRequest[]) {
     requests.forEach((r) => {
-      r.createDate = new Date(r.createDate);
+      r.createDate = new Date(r.createDate!);
     });
-    requests.sort((a, b) => a.createDate.getTime() - b.createDate.getTime());
+    requests.sort((a, b) => a.createDate!.getTime() - b.createDate!.getTime());
   }
 }

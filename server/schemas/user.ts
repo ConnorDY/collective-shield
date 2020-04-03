@@ -14,7 +14,6 @@ export const UserSchema = new Schema({
   lastName: String,
   email: String,
   providers: oauthProviders,
-  makerId: String,
   maker: MakerSchema,
   isSuperAdmin: Boolean,
   login: UserLoginSchema,

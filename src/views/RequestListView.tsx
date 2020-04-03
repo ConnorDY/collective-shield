@@ -3,27 +3,18 @@ import { ButtonGroup, Col, Dropdown, Row } from 'react-bootstrap';
 import axios from 'axios';
 import { get, lowerCase } from 'lodash';
 
-import { buildEndpointUrl } from '../utilities';
 import User from '../models/User';
-import Maker from '../models/Maker';
-import StatusOption from './StatusOption';
+import Request from '../models/Request';
 import MockData from '../models/MockRequestData';
+import StatusOption from '../components/StatusOption';
+import { buildEndpointUrl } from '../utilities';
 
 const RequestListView: React.FC<{ user: User }> = ({ user }) => {
-  //this.refreshTimer = null;
-
-  const [allRequests, setAllRequests] = useState<any[]>([]);
-  const [maker, setMaker] = useState<Maker>();
+  const [allRequests, setAllRequests] = useState<Request[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchStatusTerm, setSearchStatusTerm] = useState('');
 
   let searchResults: any[] = [];
-
-  function getMaker() {
-    axios.get(buildEndpointUrl(`makers/${user.makerId}`)).then((res) => {
-      setMaker(res.data);
-    });
-  }
 
   function getAllRequests() {
     axios.get(buildEndpointUrl(`requests/`)).then((res) => {
@@ -36,13 +27,8 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
 
   // on load
   useEffect(() => {
-    getMaker();
     getAllRequests();
   }, []);
-
-  if (!maker) {
-    return null;
-  }
 
   if (MockData) {
     // temporarily using 'MockData'. It needs to be replaced by 'allRequests'
@@ -82,7 +68,7 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
         <Col className="searchInput">
           <input
             type="text"
-            placeholder="Search by Name of Address"
+            placeholder="Search by Name or Address"
             value={searchTerm}
             onChange={handleChange}
           />

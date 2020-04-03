@@ -1,20 +1,16 @@
 import React, { useEffect, useState, BaseSyntheticEvent } from 'react';
-import {
-  Form,
-  Button,
-  Container,
-  Row,
-  Col,
-  Card,
-  Alert
-} from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
+import { Form, Button, Row, Col, Card, Alert } from 'react-bootstrap';
+import axios from 'axios';
+
+import User from '../models/User';
+import Avatar from '../components/Avatar';
 import { buildEndpointUrl, readCookie } from '../utilities';
 import { states } from '../utilities/constants';
-import User from '../models/User';
-import axios from 'axios';
-import Avatar from './Avatar';
 
 const NewRequestView: React.FC<{ user: User | undefined }> = ({ user }) => {
+  const history = useHistory();
+
   const [isCreated, setIsCreated] = useState(false);
   const [isValidated, setIsValidated] = useState(false);
   const [maskRequestCount, setMaskRequestCount] = useState(1);
@@ -33,7 +29,7 @@ const NewRequestView: React.FC<{ user: User | undefined }> = ({ user }) => {
     'Medical Support Staff'
   ];
 
-  const _handleSubmit = (event: React.BaseSyntheticEvent) => {
+  function handleSubmit(event: React.BaseSyntheticEvent) {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
@@ -64,7 +60,11 @@ const NewRequestView: React.FC<{ user: User | undefined }> = ({ user }) => {
           });
       }
     }
-  };
+  }
+
+  function cancel() {
+    history.push('/');
+  }
 
   // on load
   useEffect(() => {
@@ -148,7 +148,7 @@ const NewRequestView: React.FC<{ user: User | undefined }> = ({ user }) => {
                 noValidate
                 validated={isValidated}
                 onSubmit={(e: React.BaseSyntheticEvent) => {
-                  _handleSubmit(e);
+                  handleSubmit(e);
                 }}
               >
                 <Form.Group controlId="formBasicJobTitle">
@@ -242,7 +242,11 @@ const NewRequestView: React.FC<{ user: User | undefined }> = ({ user }) => {
                     Submit Request
                   </Button>
 
-                  <Button variant="light" href="/" id="cancel-request-button">
+                  <Button
+                    variant="light"
+                    id="cancel-request-button"
+                    onClick={cancel}
+                  >
                     Cancel Request
                   </Button>
                 </div>

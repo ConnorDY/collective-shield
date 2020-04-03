@@ -1,30 +1,21 @@
-import express from 'express';
 import {
   JsonController,
   Get,
-  Req,
   Put,
   Param,
   Body,
-  OnUndefined
+  Authorized
 } from 'routing-controllers';
 
 import config from '../config';
 import { Maker } from '../schemas';
-import { getUser } from '../utils';
 import { IMaker } from '../interfaces';
 
 @JsonController(`${config.apiPrefix}/makers`)
 export default class MakersController {
   @Get()
-  @OnUndefined(403)
-  getAll(@Req() req: express.Request) {
-    // only admins should be able to view the full list of makers
-    const user = getUser(req);
-    if (!user || !user.isSuperAdmin) {
-      return undefined;
-    }
-
+  @Authorized('admin')
+  getAll() {
     return Maker.find({})
       .then((results) => {
         return results;
@@ -46,18 +37,8 @@ export default class MakersController {
   }
 
   @Put('/:id')
-  @OnUndefined(403)
-  updateOneById(
-    @Req() req: express.Request,
-    @Param('id') id: string,
-    @Body() body: IMaker
-  ) {
-    // only admins should be able to update a user
-    const user = getUser(req);
-    if (!user || !user.isSuperAdmin) {
-      return undefined;
-    }
-
+  @Authorized('admin')
+  updateOneById(@Param('id') id: string, @Body() body: IMaker) {
     return Maker.findOneAndUpdate({ _id: id }, body)
       .then((result) => {
         return result;

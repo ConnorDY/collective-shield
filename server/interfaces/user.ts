@@ -7,7 +7,6 @@ export default interface IUser extends Document {
   lastName: string;
   email: string;
   providers: IOauthProviders;
-  makerId: string;
   maker?: IMaker;
   isSuperAdmin: boolean;
   login?: IUserLogin;
