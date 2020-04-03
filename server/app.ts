@@ -3,7 +3,6 @@ import 'reflect-metadata';
 import bodyParser from 'body-parser';
 import express from 'express';
 import { useExpressServer, Action } from 'routing-controllers';
-// import csurf from 'csurf';
 import cookieParser from 'cookie-parser';
 import session, { SessionOptions } from 'express-session';
 import { connect } from 'mongoose';
