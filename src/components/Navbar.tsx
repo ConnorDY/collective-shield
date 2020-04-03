@@ -3,6 +3,7 @@ import React from 'react';
 import User from '../models/User';
 import { Col, Container, Row } from 'react-bootstrap';
 import Avatar from './Avatar';
+import navLogo from '../assets/img/navlogo.png';
 
 const Navbar: React.FC<{ user: User | undefined }> = ({ user }) => {
   return (
@@ -10,10 +11,10 @@ const Navbar: React.FC<{ user: User | undefined }> = ({ user }) => {
       <Container>
         <Row>
           <Col className="branding">
-            <img 
+            <img
               alt="Logo"
-              className="logo" 
-              src={require("../assets/img/navlogo.png")}
+              className="logo"
+              src={navLogo}
             ></img>
             <div>MaskShield</div>
           </Col>
