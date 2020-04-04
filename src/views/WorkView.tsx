@@ -14,7 +14,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
   const [work, setWork] = useState<Request[]>([]);
 
   function getWork() {
-    axios.get(buildEndpointUrl('requests/me')).then((res) => {
+    axios.get(buildEndpointUrl('requests/assigned')).then((res) => {
       setWork(res.data);
     });
   }
@@ -55,7 +55,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
 
   function assignWork(id: string) {
     axios
-      .put(buildEndpointUrl(`requests/${id}`))
+      .put(buildEndpointUrl(`requests/assign/${id}`))
       .then((res) => {
         refreshAll();
       })
@@ -68,7 +68,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
 
   function removeWork(id: string) {
     axios
-      .delete(buildEndpointUrl(`requests/${id}`))
+      .put(buildEndpointUrl(`requests/unassign/${id}`))
       .then((res) => {
         refreshAll();
       })

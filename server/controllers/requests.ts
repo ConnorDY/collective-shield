@@ -16,7 +16,7 @@ import { celebrate, Segments } from 'celebrate';
 import config from '../config';
 import { Request } from '../schemas';
 import { IRequest, IUser } from '../interfaces';
-import requestValidator from '../validators/request';
+import { requestValidator, statusValidator } from '../validators';
 
 @Authorized()
 @JsonController(`${config.apiPrefix}/requests`)
@@ -32,9 +32,21 @@ export default class RequestsController {
       });
   }
 
-  @Get('/me')
-  getMine(@CurrentUser() user: IUser) {
+  @Get('/assigned')
+  getMyAssigned(@CurrentUser() user: IUser) {
     return Request.find({ makerID: user._id })
+      .then((results) => {
+        this.sortRequestsByCreateDate(results);
+        return results;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  }
+
+  @Get('/me')
+  getMyCreated(@CurrentUser() user: IUser) {
+    return Request.find({ requestorID: user._id })
       .then((results) => {
         this.sortRequestsByCreateDate(results);
         return results;
@@ -84,7 +96,7 @@ export default class RequestsController {
       });
   }
 
-  @Put('/:id')
+  @Put('/assign/:id')
   assignMe(@Param('id') id: string, @CurrentUser() user: IUser) {
     // Require no printer to already be assigned to request
     return Request.findOneAndUpdate({ _id: id, makerID: undefined }, { $set: { makerID: user._id } })
@@ -96,7 +108,7 @@ export default class RequestsController {
       });
   }
 
-  @Delete('/:id')
+  @Put('/unassign/:id')
   unassignMe(@Param('id') id: string, @CurrentUser() user: IUser) {
     // Require printer to already be assigned to request
     return Request.findOneAndUpdate({ _id: id, makerID: user._id }, { $set: { makerID: undefined, status: 'Requested' } })
@@ -121,6 +133,7 @@ export default class RequestsController {
   }
 
   @Patch('/:id/:status')
+  @UseBefore(celebrate({ [Segments.PARAMS]: statusValidator }))
   patchStatusById(@Param('id') id: string, @Param('status') status: string, @CurrentUser() user: IUser) {
     // Printer assigned to a request can update only the status
     // TODO/HELP - Need validation on status?
