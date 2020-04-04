@@ -62,7 +62,8 @@ if (process.env.NODE_ENV === 'development') {
     }
   );
 } else {
-  cookieSession.cookie!.secure = true;
+  // TODO: re-enable this when we're using HTTPS
+  // cookieSession.cookie!.secure = true;
 }
 
 app.use(cookieParser());
