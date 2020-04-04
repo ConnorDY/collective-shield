@@ -12,6 +12,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footers/Footer';
 import HomeView from './views/HomeView';
 import LoginView from './views/LoginView';
+import LogoutView from './views/LogoutView';
 import MakerView from './views/MakerView';
 import RequestListView from './views/RequestListView';
 import NewRequestView from './views/NewRequestView';
@@ -65,6 +66,10 @@ const App: React.FC = () => {
               <Route path="/makers" exact>
                 <MakerView />
               </Route>
+
+              <Route path="/logout" exact>
+                <LogoutView />
+              </Route>
             </>
           ) : (
             <>
@@ -75,7 +80,7 @@ const App: React.FC = () => {
           )}
         </Container>
       </main>
-      <Footer /> 
+      <Footer />
     </Provider>
   );
 };

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
+import { Link } from "react-router-dom";
 
 import User from '../models/User';
 import Avatar from './Avatar';
@@ -22,6 +23,9 @@ const Navbar: React.FC<{ user: User | undefined }> = ({ user }) => {
                   {user.firstName}
                 </Col>
                 <Avatar size="40" user={user} />
+                <Col xs={1} className="my-auto ml-3 font-weight-bold">
+                  <Link to="/logout">Logout</Link>
+                </Col>
               </Row>
             </Col>
           ) : (

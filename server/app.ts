@@ -15,6 +15,7 @@ import './passport';
 import config from './config';
 import {
   LoginController,
+  LogoutController,
   MakersController,
   MiscController,
   RequestsController
@@ -77,6 +78,7 @@ app.use(express.static(path.join(__dirname, 'build'), { index: false }));
 useExpressServer(app, {
   controllers: [
     LoginController,
+    LogoutController,
     MakersController,
     MiscController,
     RequestsController
