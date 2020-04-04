@@ -3,6 +3,7 @@ import { Button, ButtonGroup, Col, Dropdown, Row } from 'react-bootstrap';
 import axios from 'axios';
 import { find, indexOf } from 'lodash';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 import User from '../models/User';
 import Request from '../models/Request';
@@ -118,7 +119,9 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                     return (
                       <tr key={index}>
                         <td className="count">{w.maskShieldCount}</td>
-                        <td className="requestor">{w.facilityName}</td>
+                        <td className="requestor">
+                          <Link to={`/request/${w._id}`}>{w.facilityName}</Link>
+                        </td>
                         <td className="status">
                           <Dropdown as={ButtonGroup}>
                             <Dropdown.Toggle
