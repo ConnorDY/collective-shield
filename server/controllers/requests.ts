@@ -21,17 +21,6 @@ import { requestValidator, statusValidator } from '../validators';
 @Authorized()
 @JsonController(`${config.apiPrefix}/requests`)
 export default class RequestsController {
-  @Get()
-  getAll() {
-    return Request.find()
-      .then((result) => {
-        return result;
-      })
-      .catch((err) => {
-        throw err;
-      });
-  }
-
   @Get('/assigned')
   getMyAssigned(@CurrentUser() user: IUser) {
     return Request.find({ makerID: user._id })
@@ -70,7 +59,7 @@ export default class RequestsController {
 
   @Get('/all')
   @Authorized('admin')
-  getAll(@CurrentUser() user: IUser) {
+  getAll() {
     return Request.find()
       .then((results) => {
         this.sortRequestsByCreateDate(results);
@@ -101,7 +90,10 @@ export default class RequestsController {
   @Get('/:id')
   getOneById(@Param('id') id: string, @CurrentUser() user: IUser) {
     // Can only view details if requestor or assigned
-    return Request.findOne({ _id: id, $or: [ { requestorID: user._id }, { makerID: user._id } ] })
+    return Request.findOne({
+      _id: id,
+      $or: [{ requestorID: user._id }, { makerID: user._id }]
+    })
       .then((result) => {
         return result;
       })

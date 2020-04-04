@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { Button, Col, Row } from 'react-bootstrap';
 import moment from 'moment';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import { get } from 'lodash';
 
 import User from '../models/User';
@@ -63,7 +64,9 @@ const MyRequestsView: React.FC<{ user: User }> = ({ user }) => {
                     return (
                       <tr key={key}>
                         <td className="date">
-                          {moment(request.createDate).format('dddd, MMMM Do')}
+                          <Link to={`/request/${request._id}`}>
+                            {moment(request.createDate).format('dddd, MMMM Do')}
+                          </Link>
                         </td>
                         <td className="count">{request.maskShieldCount}</td>
                         <td className="details">
