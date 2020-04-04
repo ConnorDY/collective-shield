@@ -38,7 +38,7 @@ phases:
       - cp package.json output
       - mv build output/ui
       - mv server/build output/api
-      - cp -r node_nodules output
+      - mv node_nodules output
 #reports:
 #report-name-or-arn:
 #files:
