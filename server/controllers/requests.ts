@@ -68,6 +68,19 @@ export default class RequestsController {
       });
   }
 
+  @Get('/all')
+  @Authorized('admin')
+  getAll(@CurrentUser() user: IUser) {
+    return Request.find()
+      .then((results) => {
+        this.sortRequestsByCreateDate(results);
+        return results;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  }
+
   @Post()
   @UseBefore(celebrate({ [Segments.BODY]: requestValidator }))
   createRequest(@CurrentUser() user: IUser, @Body() body: IRequest) {
@@ -86,8 +99,9 @@ export default class RequestsController {
   }
 
   @Get('/:id')
-  getOneById(@Param('id') id: string) {
-    return Request.findById(id)
+  getOneById(@Param('id') id: string, @CurrentUser() user: IUser) {
+    // Can only view details if requestor or assigned
+    return Request.findOne({ _id: id, $or: [ { requestorID: user._id }, { makerID: user._id } ] })
       .then((result) => {
         return result;
       })
