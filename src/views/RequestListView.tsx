@@ -5,7 +5,6 @@ import { get, lowerCase } from 'lodash';
 
 import User from '../models/User';
 import Request from '../models/Request';
-import MockData from '../models/MockRequestData';
 import StatusOption from '../components/StatusOption';
 import { buildEndpointUrl } from '../utilities';
 
@@ -17,7 +16,7 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
   let searchResults: any[] = [];
 
   function getAllRequests() {
-    axios.get(buildEndpointUrl(`requests/`)).then((res) => {
+    axios.get(buildEndpointUrl(`requests/all`)).then((res) => {
       setAllRequests(res.data);
     });
   }
@@ -30,8 +29,7 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
     getAllRequests();
   }, []);
 
-  if (MockData) {
-    // temporarily using 'MockData'. It needs to be replaced by 'allRequests'
+  if (allRequests.length) {
     const keys = [
       'address.line1',
       'address.line2',
@@ -42,7 +40,7 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
       'printer'
     ];
 
-    const results = MockData.filter((m) => {
+    const results = allRequests.filter((m) => {
       return (
         get(m, 'status', '').includes(searchStatusTerm) &&
         keys.some((k) =>
@@ -142,9 +140,9 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
                             date
                           )}
                         </td>
-                        <td className="count">{r.count}</td>
-                        <td className="requestor">{r.name}</td>
-                        <td className="printer">{r.printer}</td>
+                        <td className="count">{r.maskShieldCount}</td>
+                        <td className="requestor">{r.requestorID}</td>
+                        <td className="printer">{r.makerID}</td>
                         <td className="status">
                           {StatusOption(r.status || 'Requested')}
                         </td>
