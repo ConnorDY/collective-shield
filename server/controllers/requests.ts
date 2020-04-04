@@ -1,8 +1,10 @@
 import {
   JsonController,
   Body,
+  Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   CurrentUser,
@@ -32,9 +34,7 @@ export default class RequestsController {
 
   @Get('/me')
   getMine(@CurrentUser() user: IUser) {
-    return Request.find({
-      $or: [{ requestorID: user._id }, { makerId: user._id }]
-    })
+    return Request.find({ makerID: user._id })
       .then((results) => {
         this.sortRequestsByCreateDate(results);
         return results;
@@ -46,7 +46,7 @@ export default class RequestsController {
 
   @Get('/open')
   getOpen() {
-    return Request.find({ makerId: undefined })
+    return Request.find({ makerID: undefined })
       .then((results) => {
         this.sortRequestsByCreateDate(results);
         return results;
@@ -85,8 +85,46 @@ export default class RequestsController {
   }
 
   @Put('/:id')
-  updateOneById(@Param('id') id: string, @Body() body: IRequest) {
-    return Request.findOneAndUpdate({ _id: id }, body)
+  assignMe(@Param('id') id: string, @CurrentUser() user: IUser) {
+    // Require no printer to already be assigned to request
+    return Request.findOneAndUpdate({ _id: id, makerID: undefined }, { $set: { makerID: user._id } })
+      .then((result) => {
+        return result;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  }
+
+  @Delete('/:id')
+  unassignMe(@Param('id') id: string, @CurrentUser() user: IUser) {
+    // Require printer to already be assigned to request
+    return Request.findOneAndUpdate({ _id: id, makerID: user._id }, { $set: { makerID: undefined, status: 'Requested' } })
+      .then((result) => {
+        return result;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  }
+
+  @Patch('/:id')
+  patchOneById(@Param('id') id: string, @CurrentUser() user: IUser, @Body() body: IRequest) {
+    // Requestor can update any field
+    return Request.findOneAndUpdate({ _id: id, requestorID: user._id }, { $set: body })
+      .then((result) => {
+        return result;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  }
+
+  @Patch('/:id/:status')
+  patchStatusById(@Param('id') id: string, @Param('status') status: string, @CurrentUser() user: IUser) {
+    // Printer assigned to a request can update only the status
+    // TODO/HELP - Need validation on status?
+    return Request.findOneAndUpdate({ _id: id, makerID: user._id }, { $set: { status } })
       .then((result) => {
         return result;
       })

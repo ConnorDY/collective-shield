@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Button, ButtonGroup, Col, Dropdown, Row } from 'react-bootstrap';
 import axios from 'axios';
+import { find, indexOf } from 'lodash';
+import { toast } from 'react-toastify';
 
 import User from '../models/User';
 import Request from '../models/Request';
@@ -23,10 +25,63 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
     });
   }
 
-  // on load
-  useEffect(() => {
+  function refreshAll() {
     getWork();
     getAvailableWork();
+  }
+
+  function setStatus(id: string, status: string) {
+    axios
+      .patch(buildEndpointUrl(`requests/${id}/${status}`))
+      .then((res) => {
+        const work$ = [ ...work ];
+        const updated = find(work, f => f._id === id);
+        if (updated) {
+          const index = indexOf(work, updated)
+          work[index].status = status;
+          setWork(work$);
+        } else {
+          toast.error('ERROR', {
+            position: toast.POSITION.TOP_LEFT
+          });
+        }
+      })
+      .catch((err) => {
+        toast.error(`ERROR: ${err}`, {
+          position: toast.POSITION.TOP_LEFT
+        });
+      });
+  }
+
+  function assignWork(id: string) {
+    axios
+      .put(buildEndpointUrl(`requests/${id}`))
+      .then((res) => {
+        refreshAll();
+      })
+      .catch((err) => {
+        toast.error(`ERROR: ${err}`, {
+          position: toast.POSITION.TOP_LEFT
+        });
+      });
+  }
+
+  function removeWork(id: string) {
+    axios
+      .delete(buildEndpointUrl(`requests/${id}`))
+      .then((res) => {
+        refreshAll();
+      })
+      .catch((err) => {
+        toast.error(`ERROR: ${err}`, {
+          position: toast.POSITION.TOP_LEFT
+        });
+      });
+  }
+
+  // on load
+  useEffect(() => {
+    refreshAll();
   }, []);
 
   return (
@@ -73,30 +128,30 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>
-                              <Dropdown.Item>
+                              <Dropdown.Item onClick={() => setStatus(w._id, 'Requested')}>
                                 {StatusOption('Requested')}
                               </Dropdown.Item>
 
-                              <Dropdown.Item>
+                              <Dropdown.Item onClick={() => setStatus(w._id, 'Queued')}>
                                 {StatusOption('Queued')}
                               </Dropdown.Item>
 
-                              <Dropdown.Item>
+                              <Dropdown.Item onClick={() => setStatus(w._id, 'Printing')}>
                                 {StatusOption('Printing')}
                               </Dropdown.Item>
 
-                              <Dropdown.Item>
+                              <Dropdown.Item onClick={() => setStatus(w._id, 'Completed')}>
                                 {StatusOption('Completed')}
                               </Dropdown.Item>
 
-                              <Dropdown.Item>
+                              <Dropdown.Item onClick={() => setStatus(w._id, 'Shipped')}>
                                 {StatusOption('Shipped')}
                               </Dropdown.Item>
                             </Dropdown.Menu>
                           </Dropdown>
                         </td>
                         <td className="action">
-                          <Button variant="primary">{'{Action}'}</Button>
+                          <Button variant="primary" onClick={() => removeWork(w._id)}>Unassign</Button>
                         </td>
                       </tr>
                     );
@@ -142,7 +197,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                         <td className="distance">X miles</td>
                         <td className="requestor">{w.facilityName}</td>
                         <td className="claim">
-                          <Button variant="primary">Claim</Button>
+                          <Button variant="primary" onClick={() => assignWork(w._id)}>Claim</Button>
                         </td>
                       </tr>
                     );
