@@ -69,19 +69,16 @@ export default class RequestsController {
   }
 
   @Get('/all')
+  @Authorized('admin')
   getAll(@CurrentUser() user: IUser) {
-    if (user.isSuperAdmin) {
-      return Request.find()
-        .then((results) => {
-          this.sortRequestsByCreateDate(results);
-          return results;
-        })
-        .catch((err) => {
-          throw err;
-        });
-    } else {
-      throw new Error();
-    }
+    return Request.find()
+      .then((results) => {
+        this.sortRequestsByCreateDate(results);
+        return results;
+      })
+      .catch((err) => {
+        throw err;
+      });
   }
 
   @Post()
