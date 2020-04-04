@@ -8,6 +8,7 @@ import User from '../models/User';
 import Request from '../models/Request';
 import StatusOption from '../components/StatusOption';
 import { buildEndpointUrl } from '../utilities';
+import { statuses } from '../utilities/constants';
 
 const WorkView: React.FC<{ user: User }> = ({ user }) => {
   const [availableWork, setAvailableWork] = useState<Request[]>([]);
@@ -128,25 +129,11 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>
-                              <Dropdown.Item onClick={() => setStatus(w._id, 'Requested')}>
-                                {StatusOption('Requested')}
-                              </Dropdown.Item>
-
-                              <Dropdown.Item onClick={() => setStatus(w._id, 'Queued')}>
-                                {StatusOption('Queued')}
-                              </Dropdown.Item>
-
-                              <Dropdown.Item onClick={() => setStatus(w._id, 'Printing')}>
-                                {StatusOption('Printing')}
-                              </Dropdown.Item>
-
-                              <Dropdown.Item onClick={() => setStatus(w._id, 'Completed')}>
-                                {StatusOption('Completed')}
-                              </Dropdown.Item>
-
-                              <Dropdown.Item onClick={() => setStatus(w._id, 'Shipped')}>
-                                {StatusOption('Shipped')}
-                              </Dropdown.Item>
+                              {statuses.map(status => (
+                                <Dropdown.Item onClick={() => setStatus(w._id, status)}>
+                                  {StatusOption(status)}
+                                </Dropdown.Item>
+                              ))}
                             </Dropdown.Menu>
                           </Dropdown>
                         </td>
