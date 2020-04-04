@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
-import { Link } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { get } from 'lodash';
 
 import User from '../models/User';
@@ -13,7 +13,7 @@ const Navbar: React.FC<{ user: User | undefined }> = ({ user }) => {
     <nav className="nav">
       <Container>
         <Row>
-          <Col xs={3} className="branding">
+          <Col className="branding">
             <Link to="/">
               <>
                 <img alt="Logo" className="logo" src={navLogo}></img>
@@ -24,26 +24,22 @@ const Navbar: React.FC<{ user: User | undefined }> = ({ user }) => {
 
           {
             user &&
-            <Col xs={5}>
-              <Row className="justify-content-left">
-                <Col xs={4} className="my-auto font-weight-bold">
-                  <Link to="/">Request shields</Link>
-                </Col>
-                <Col xs={4} className="my-auto font-weight-bold">
-                  <Link to="/work">Print shields</Link>
-                </Col>
+            <Col xs={6}>
+              <Row className="justify-content-between">
+                <Col className="my-auto font-weight-bold text-center">
+                  <NavLink to="/" activeClassName="active" className="nav-link">Request Shields</NavLink>
+                  <NavLink to="/work" activeClassName="active" className="nav-link">Print Shields</NavLink>
                 {
                   showAdmin &&
-                    <Col xs={4} className="my-auto font-weight-bold">
-                      <Link to="/requests">Admin</Link>
-                    </Col>
+                    <NavLink to="/requests" activeClassName="active" className="nav-link">Admin</NavLink>
                 }
+                </Col>
               </Row>
             </Col>
           }
 
           {user ? (
-            <Col xs={4} className="user">
+            <Col className="user">
               <Row className="justify-content-end">
                 <Col xs={4} className="my-auto font-weight-bold">
                   {user.firstName}
