@@ -36,6 +36,7 @@ phases:
     commands:
       - mkdir output
       - cp package.json output
+      - cp package-lock.json output
       - mv build output/ui
       - mv server/build output/api
       # - mv node_nodules output
