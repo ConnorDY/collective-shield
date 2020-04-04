@@ -18,7 +18,7 @@ const MakerDetailsView: React.FC<{ user: User }> = ({ user }) => {
     'Printing',
     'Completed',
     'Shipped',
-    'Delevered',
+    'Delivered',
   ];
 
   // on load

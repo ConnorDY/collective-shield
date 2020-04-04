@@ -67,7 +67,7 @@ const App: React.FC = () => {
                 <MakerView />
               </Route>
 
-              <Route path="/maker/details" exact>
+              <Route path="/request/:id" exact>
                 <MakerDetailsView user={user} />
               </Route>
             </>
