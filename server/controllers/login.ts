@@ -10,7 +10,7 @@ export default class LoginController {
   @Get('/facebook/callback')
   @UseBefore(
     passport.authenticate('facebook', {
-      successRedirect: '/',
+      successRedirect: '/home',
       failureRedirect: '/login'
     })
   )
@@ -23,7 +23,7 @@ export default class LoginController {
   @Get('/google/callback')
   @UseBefore(
     passport.authenticate('google', {
-      successRedirect: '/',
+      successRedirect: '/home',
       failureRedirect: '/login'
     })
   )
