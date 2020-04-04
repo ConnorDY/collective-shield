@@ -1,3 +1,5 @@
+export const statuses = ['Requested', 'Queued', 'Printing', 'Completed', 'Shipped'];
+
 export const states = [
   'AL',
   'AK',
