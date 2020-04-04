@@ -18,6 +18,7 @@ import NewRequestView from './views/NewRequestView';
 import WorkView from './views/WorkView';
 
 import './assets/scss/app.scss';
+import MyRequestsView from './views/MyRequestsView';
 
 const store = configureStore();
 
@@ -47,6 +48,10 @@ const App: React.FC = () => {
           {user ? (
             <>
               <Route path="/" exact>
+                <HomeView user={user} />
+              </Route>
+
+              <Route path="/home">
                 <HomeView user={user} />
               </Route>
 

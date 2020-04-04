@@ -26,7 +26,7 @@ const MyRequestsView: React.FC<{ user: User }> = ({ user }) => {
     <div className="my-requests">
       <Row className="view-header">
         <Col>
-          <h1 className="h1">Your Requests</h1>
+          <h1 className="h1">My Requests</h1>
         </Col>
 
         <Col className="right-col">
