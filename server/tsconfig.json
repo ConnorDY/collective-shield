@@ -1,9 +1,11 @@
 {
-  "extends": "../tsconfig.json",
   "compilerOptions": {
+    "outDir": "./build",
     "module": "CommonJS",
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "isolatedModules": false
   },
-  "include": ["./**/*"]
+  "include": ["./**/*", "./*"]
 }

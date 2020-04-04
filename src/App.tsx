@@ -75,7 +75,7 @@ const App: React.FC = () => {
           )}
         </Container>
       </main>
-      <Footer /> 
+      <Footer />
     </Provider>
   );
 };

@@ -110,6 +110,6 @@ if (process.env.NODE_ENV === 'development') {
   );
 } else {
   app.get('*', (req: express.Request, res: express.Response) => {
-    res.sendFile(path.join(__dirname + '/build/index.html'));
+    res.sendFile(path.join(__dirname, '../ui/index.html'));
   });
 }

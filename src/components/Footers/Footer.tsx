@@ -6,14 +6,14 @@ const Footer: React.FC<{}> = () => {
     <footer className="footer footer-default">
       <Container>
         <Row>
-            <Col className="footer">
-              <div className="copyright" >
-                © {new Date().getFullYear()} Collective Shield
-              </div>
-            </Col>
+          <Col className="footer">
+            <div className="copyright">
+              © {new Date().getFullYear()} Collective Shield
+            </div>
+          </Col>
         </Row>
       </Container>
-    </footer>  
+    </footer>
   );
 };
 
