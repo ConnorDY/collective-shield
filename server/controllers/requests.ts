@@ -21,17 +21,6 @@ import { requestValidator, statusValidator } from '../validators';
 @Authorized()
 @JsonController(`${config.apiPrefix}/requests`)
 export default class RequestsController {
-  @Get()
-  getAll() {
-    return Request.find()
-      .then((result) => {
-        return result;
-      })
-      .catch((err) => {
-        throw err;
-      });
-  }
-
   @Get('/assigned')
   getMyAssigned(@CurrentUser() user: IUser) {
     return Request.find({ makerID: user._id })
@@ -68,6 +57,19 @@ export default class RequestsController {
       });
   }
 
+  @Get('/all')
+  @Authorized('admin')
+  getAll() {
+    return Request.find()
+      .then((results) => {
+        this.sortRequestsByCreateDate(results);
+        return results;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  }
+
   @Post()
   @UseBefore(celebrate({ [Segments.BODY]: requestValidator }))
   createRequest(@CurrentUser() user: IUser, @Body() body: IRequest) {
@@ -86,8 +88,12 @@ export default class RequestsController {
   }
 
   @Get('/:id')
-  getOneById(@Param('id') id: string) {
-    return Request.findById(id)
+  getOneById(@Param('id') id: string, @CurrentUser() user: IUser) {
+    // Can only view details if requestor or assigned
+    return Request.findOne({
+      _id: id,
+      $or: [{ requestorID: user._id }, { makerID: user._id }]
+    })
       .then((result) => {
         return result;
       })
@@ -99,7 +105,10 @@ export default class RequestsController {
   @Put('/assign/:id')
   assignMe(@Param('id') id: string, @CurrentUser() user: IUser) {
     // Require no printer to already be assigned to request
-    return Request.findOneAndUpdate({ _id: id, makerID: undefined }, { $set: { makerID: user._id } })
+    return Request.findOneAndUpdate(
+      { _id: id, makerID: undefined },
+      { $set: { makerID: user._id } }
+    )
       .then((result) => {
         return result;
       })
@@ -111,7 +120,10 @@ export default class RequestsController {
   @Put('/unassign/:id')
   unassignMe(@Param('id') id: string, @CurrentUser() user: IUser) {
     // Require printer to already be assigned to request
-    return Request.findOneAndUpdate({ _id: id, makerID: user._id }, { $set: { makerID: undefined, status: 'Requested' } })
+    return Request.findOneAndUpdate(
+      { _id: id, makerID: user._id },
+      { $set: { makerID: undefined, status: 'Requested' } }
+    )
       .then((result) => {
         return result;
       })
@@ -121,9 +133,16 @@ export default class RequestsController {
   }
 
   @Patch('/:id')
-  patchOneById(@Param('id') id: string, @CurrentUser() user: IUser, @Body() body: IRequest) {
+  patchOneById(
+    @Param('id') id: string,
+    @CurrentUser() user: IUser,
+    @Body() body: IRequest
+  ) {
     // Requestor can update any field
-    return Request.findOneAndUpdate({ _id: id, requestorID: user._id }, { $set: body })
+    return Request.findOneAndUpdate(
+      { _id: id, requestorID: user._id },
+      { $set: body }
+    )
       .then((result) => {
         return result;
       })
@@ -134,10 +153,17 @@ export default class RequestsController {
 
   @Patch('/:id/:status')
   @UseBefore(celebrate({ [Segments.PARAMS]: statusValidator }))
-  patchStatusById(@Param('id') id: string, @Param('status') status: string, @CurrentUser() user: IUser) {
+  patchStatusById(
+    @Param('id') id: string,
+    @Param('status') status: string,
+    @CurrentUser() user: IUser
+  ) {
     // Printer assigned to a request can update only the status
     // TODO/HELP - Need validation on status?
-    return Request.findOneAndUpdate({ _id: id, makerID: user._id }, { $set: { status } })
+    return Request.findOneAndUpdate(
+      { _id: id, makerID: user._id },
+      { $set: { status } }
+    )
       .then((result) => {
         return result;
       })

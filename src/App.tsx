@@ -16,6 +16,7 @@ import MakerView from './views/MakerView';
 import RequestListView from './views/RequestListView';
 import NewRequestView from './views/NewRequestView';
 import WorkView from './views/WorkView';
+import MakerDetailsView from './views/MakerDetailsView';
 
 import './assets/scss/app.scss';
 
@@ -65,6 +66,10 @@ const App: React.FC = () => {
               <Route path="/makers" exact>
                 <MakerView />
               </Route>
+
+              <Route path="/request/:id" exact>
+                <MakerDetailsView user={user} />
+              </Route>
             </>
           ) : (
             <>
@@ -75,7 +80,7 @@ const App: React.FC = () => {
           )}
         </Container>
       </main>
-      <Footer /> 
+      <Footer />
     </Provider>
   );
 };

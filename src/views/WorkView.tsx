@@ -36,10 +36,10 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
     axios
       .patch(buildEndpointUrl(`requests/${id}/${status}`))
       .then((res) => {
-        const work$ = [ ...work ];
-        const updated = find(work, f => f._id === id);
+        const work$ = [...work];
+        const updated = find(work, (f) => f._id === id);
         if (updated) {
-          const index = indexOf(work, updated)
+          const index = indexOf(work, updated);
           work[index].status = status;
           setWork(work$);
         } else {
@@ -132,8 +132,10 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>
-                              {statuses.map(status => (
-                                <Dropdown.Item onClick={() => setStatus(w._id, status)}>
+                              {statuses.map((status) => (
+                                <Dropdown.Item
+                                  onClick={() => setStatus(w._id, status)}
+                                >
                                   {StatusOption(status)}
                                 </Dropdown.Item>
                               ))}
@@ -141,7 +143,12 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                           </Dropdown>
                         </td>
                         <td className="action">
-                          <Button variant="primary" onClick={() => removeWork(w._id)}>Unassign</Button>
+                          <Button
+                            variant="primary"
+                            onClick={() => removeWork(w._id)}
+                          >
+                            Unassign
+                          </Button>
                         </td>
                       </tr>
                     );
@@ -187,7 +194,12 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                         <td className="distance">X miles</td>
                         <td className="requestor">{w.facilityName}</td>
                         <td className="claim">
-                          <Button variant="primary" onClick={() => assignWork(w._id)}>Claim</Button>
+                          <Button
+                            variant="primary"
+                            onClick={() => assignWork(w._id)}
+                          >
+                            Claim
+                          </Button>
                         </td>
                       </tr>
                     );
