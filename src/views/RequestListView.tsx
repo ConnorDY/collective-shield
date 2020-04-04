@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ButtonGroup, Col, Dropdown, Row } from 'react-bootstrap';
 import axios from 'axios';
 import { get, lowerCase } from 'lodash';
+import { Link } from 'react-router-dom';
 
 import User from '../models/User';
 import Request from '../models/Request';
@@ -138,9 +139,11 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
                     return (
                       <tr key={key}>
                         <td className="requestedDate">
-                          {new Intl.DateTimeFormat('en-US', options).format(
-                            date
-                          )}
+                          <Link to={`/request/${r._id}`}>
+                            {new Intl.DateTimeFormat('en-US', options).format(
+                              date
+                            )}
+                          </Link>
                         </td>
                         <td className="count">{r.count}</td>
                         <td className="requestor">{r.name}</td>
