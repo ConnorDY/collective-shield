@@ -1,16 +1,17 @@
 import React, { useEffect, useState, BaseSyntheticEvent } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Form, Button, Row, Col, Card } from 'react-bootstrap';
+import { Form, Button, Row, Col, Card, ButtonGroup, Dropdown } from 'react-bootstrap';
 import axios from 'axios';
 
 import User from '../models/User';
 import Avatar from '../components/Avatar';
 import { readCookie } from '../utilities';
+import StatusOption from '../components/StatusOption';
 
 const MakerDetailsView: React.FC<{ user: User }> = ({ user }) => {
 
   const [maskRequestCount, setMaskRequestCount] = useState(1);
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState<any[]>([]);
 
   const statusOptions = [
     'Requested',
@@ -33,24 +34,28 @@ const MakerDetailsView: React.FC<{ user: User }> = ({ user }) => {
           <h1 className="h1">Request Details</h1>
         </Col>
         <Col sm={6} className="right-col">
-          <Form.Group className="status-options">
-            <Form.Control
-              as="select"
-              required
-              value={status}
-              onChange={(e: BaseSyntheticEvent) =>
-                setStatus(e.target.value)
-              }
-            >
-              <option>Status</option>
-              {statusOptions.map((role, i) => {
-                return <option key={i}>{role}</option>;
-              })}
-            </Form.Control>
-          </Form.Group>
-          <Button variant="primary" type="submit">
-            Complete
-          </Button>
+          <Dropdown>
+            <Dropdown.Toggle variant="success" id="dropdown-basic">
+              Status
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item>
+                {StatusOption('Requested')}
+              </Dropdown.Item>
+              <Dropdown.Item>
+                {StatusOption('Queued')}
+              </Dropdown.Item>
+              <Dropdown.Item>
+                {StatusOption('Printing')}
+              </Dropdown.Item>
+              <Dropdown.Item>
+                {StatusOption('Completed')}
+              </Dropdown.Item>
+              <Dropdown.Item>
+                {StatusOption('Shipped')}
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </Col>
       </Row>
       <Row id="requested-row-1">
@@ -80,6 +85,7 @@ const MakerDetailsView: React.FC<{ user: User }> = ({ user }) => {
           <Form>
             <Form.Group>
               <Form.Control
+                disabled
                 as="select"
                 size="lg"
                 custom
@@ -105,18 +111,21 @@ const MakerDetailsView: React.FC<{ user: User }> = ({ user }) => {
           <Form>
             <Form.Group controlId="formBasicFacilityName">
               <Form.Control
+                disabled
                 type="text"
                 defaultValue="Sacred Heart Hospital"
               />
             </Form.Group>
             <Form.Group controlId="formBasicFacilityAddressLine1">
               <Form.Control
+                disabled
                 type="text"
                 defaultValue="ICU, Floor 3"
               />
             </Form.Group>
             <Form.Group controlId="formBasicFacilityAddressLine2">
               <Form.Control
+                disabled
                 type="text"
                 defaultValue="1234 Hospital Drive"
               />
@@ -125,6 +134,7 @@ const MakerDetailsView: React.FC<{ user: User }> = ({ user }) => {
               <Form.Group as={Col} controlId="formGridCity">
                 <Form.Label>City</Form.Label>
                 <Form.Control
+                  disabled
                   defaultValue="Denver"
                 />
               </Form.Group>
@@ -132,7 +142,7 @@ const MakerDetailsView: React.FC<{ user: User }> = ({ user }) => {
               <Form.Group as={Col} controlId="formGridState">
                 <Form.Label>State</Form.Label>
                 <Form.Control
-                  required
+                  disabled
                   defaultValue="CO"
                 >
                 </Form.Control>
@@ -141,6 +151,7 @@ const MakerDetailsView: React.FC<{ user: User }> = ({ user }) => {
               <Form.Group as={Col} controlId="formGridZip">
                 <Form.Label>Zip</Form.Label>
                 <Form.Control
+                  disabled
                   defaultValue="80205"
                 />
               </Form.Group>
@@ -153,6 +164,7 @@ const MakerDetailsView: React.FC<{ user: User }> = ({ user }) => {
           <Form>
             <Form.Group controlId="">
               <Form.Control
+                disabled
                 as="textarea"
                 rows="9"
                 defaultValue="Add any request details here"
