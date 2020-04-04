@@ -17,22 +17,13 @@ import { readCookie } from '../utilities';
 import StatusOption from '../components/StatusOption';
 
 const MakerDetailsView: React.FC<{ user: User }> = ({ user }) => {
+  const [request, setRequest] = useState<Request[]>([]);
   const [maskRequestCount, setMaskRequestCount] = useState(1);
-  const [status, setStatus] = useState<any[]>([]);
+  const [searchStatusTerm, setSearchStatusTerm] = useState('');
 
-  const statusOptions = [
-    'Requested',
-    'Queued',
-    'Printing',
-    'Completed',
-    'Shipped',
-    'Delivered'
-  ];
-
-  // on load
-  useEffect(() => {
-    axios.defaults.headers.post['CSRF-Token'] = readCookie('XSRF-TOKEN');
-  });
+  const onSelect = (status: any) => {
+    setSearchStatusTerm(status);
+  };
 
   return (
     <div className="new-requests">
@@ -40,17 +31,39 @@ const MakerDetailsView: React.FC<{ user: User }> = ({ user }) => {
         <Col sm={6}>
           <h1 className="h1">Request Details</h1>
         </Col>
-        <Col sm={6} className="right-col">
-          <Dropdown>
-            <Dropdown.Toggle variant="success" id="dropdown-basic">
-              Status
+        <Col sm={6} className="statusFilter right-col">
+          <Dropdown as={ButtonGroup} onSelect={onSelect}>
+            <Dropdown.Toggle
+              id={`status-dropdown-2`}
+              variant="outline-secondary"
+            >
+              {StatusOption(searchStatusTerm || 'FilterbyStatus')}
             </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item>{StatusOption('Requested')}</Dropdown.Item>
-              <Dropdown.Item>{StatusOption('Queued')}</Dropdown.Item>
-              <Dropdown.Item>{StatusOption('Printing')}</Dropdown.Item>
-              <Dropdown.Item>{StatusOption('Completed')}</Dropdown.Item>
-              <Dropdown.Item>{StatusOption('Shipped')}</Dropdown.Item>
+            <Dropdown.Menu onSelect={onSelect}>
+              <Dropdown.Item eventKey="">{StatusOption('All')}</Dropdown.Item>
+              <Dropdown.Item eventKey="Requested">
+                {StatusOption('Requested')}
+              </Dropdown.Item>
+
+              <Dropdown.Item eventKey="Queued">
+                {StatusOption('Queued')}
+              </Dropdown.Item>
+
+              <Dropdown.Item eventKey="Printing">
+                {StatusOption('Printing')}
+              </Dropdown.Item>
+
+              <Dropdown.Item eventKey="Completed">
+                {StatusOption('Completed')}
+              </Dropdown.Item>
+
+              <Dropdown.Item eventKey="Shipped">
+                {StatusOption('Shipped')}
+              </Dropdown.Item>
+
+              <Dropdown.Item eventKey="Delivered">
+                {StatusOption('Delivered')}
+              </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </Col>
@@ -152,6 +165,34 @@ const MakerDetailsView: React.FC<{ user: User }> = ({ user }) => {
               />
             </Form.Group>
           </Form>
+        </Col>
+      </Row>
+      <Row className="view-header mt-5">
+        <Col>
+          <h2>Activity</h2>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <div className="table-wrapper">
+            <table className="activity-table">
+              <thead>
+                <tr>
+                  <th className="date">Date</th>
+                  <th className="evemt">Event</th>
+                  <th className="status">Status</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <td className="date">...</td>
+                  <td className="event">...</td>
+                  <td className="status">...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </Col>
       </Row>
     </div>
