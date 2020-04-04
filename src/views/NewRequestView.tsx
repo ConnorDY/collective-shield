@@ -86,7 +86,8 @@ const NewRequestView: React.FC<{ user: User }> = ({ user }) => {
             <div className="c-requestForm -pad">
               <Alert variant="success">
                 {' '}
-                Thank you! You will receive an email confirming your request.{' '} <Link to="/">View Your Requests.</Link>
+                Thank you! You will receive an email confirming your request.{' '}
+                <Link to="/">View Your Requests.</Link>
               </Alert>
             </div>
           </Col>
