@@ -9,6 +9,7 @@
     "start-dev": "env BROWSER=false run-p start-server start-client",
     "start-client": "react-scripts start",
     "start-server": "ts-node-dev --project server/tsconfig.json server/app.ts",
+    "prod": "node ./api/app.js",
     "build": "react-scripts build",
     "build:api": "tsc --project server/tsconfig.json",
     "test": "react-scripts test",
