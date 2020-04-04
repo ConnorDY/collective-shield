@@ -33,10 +33,7 @@ const App: React.FC = () => {
         setUser(res.data);
       })
       .catch((err) => {
-        if (get(err, 'response.status') === 401) {
-          history.push('/login');
-          return null;
-        }
+        history.push('/login');
       });
   }, []);
 
