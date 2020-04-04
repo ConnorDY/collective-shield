@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { Button, Col, Row } from 'react-bootstrap';
 import moment from 'moment';
 import axios from 'axios';
+import { get } from 'lodash';
 
 import User from '../models/User';
 import Request from '../models/Request';
@@ -65,7 +66,10 @@ const MyRequestsView: React.FC<{ user: User }> = ({ user }) => {
                           {moment(request.createDate).format('dddd, MMMM Do')}
                         </td>
                         <td className="count">{request.maskShieldCount}</td>
-                        <td className="details">{request.details}</td>
+                        <td className="details">
+                          {request.details.substring(0, 21)}
+                          {get(request, 'details', '').length > 20 ? '...' : ''}
+                        </td>
                         <td className="status">{request.status}</td>
                       </tr>
                     );
