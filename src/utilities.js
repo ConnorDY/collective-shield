@@ -37,4 +37,8 @@ const deleteCookie = (name) => {
   createCookie(name, '', -1);
 };
 
-export { buildEndpointUrl, createCookie, readCookie, deleteCookie };
+const scrollToTop = () => {
+  window.scrollTo(0, 0);
+}
+
+export { buildEndpointUrl, createCookie, readCookie, deleteCookie, scrollToTop };
