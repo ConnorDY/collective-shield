@@ -23,8 +23,11 @@ const RoleModal: React.FC<{
       </Modal.Header>
 
       <Modal.Body>
-        Do you have a 3D Printer and want to print mask shields or do you work
-        at a healthcare facility and want to request mask shields?
+        <p>Do you have a 3D printer and want to print mask shields?</p>
+        <p>
+          Or, do you work at a healthcare facility and want to request mask
+          shields?
+        </p>
       </Modal.Body>
 
       <Modal.Footer>
