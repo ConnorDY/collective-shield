@@ -1,22 +1,20 @@
-import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import React from 'react';
 
 import User from '../models/User';
 import MyRequestsView from './MyRequestsView';
+import WorkView from './WorkView';
 
-const HomeView: React.FC<{ user: User }> = ({ user }) => {
-  const history = useHistory();
+const HomeView: React.FC<{ user: User; role: string | null }> = ({
+  user,
+  role
+}) => {
+  if (!role) return <></>;
 
-  useEffect(() => {
-    if (user && user.maker) {
-      history.push('/work');
-    }
-  }, []);
-
-  if (!user.maker) {
-    return <MyRequestsView user={user} />;
-  }
-  return null;
+  return role === 'requestor' ? (
+    <MyRequestsView user={user} />
+  ) : (
+    <WorkView user={user} />
+  );
 };
 
 export default HomeView;

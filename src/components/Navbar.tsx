@@ -12,7 +12,7 @@ const Navbar: React.FC<{ user: User | undefined }> = ({ user }) => {
         <Row>
           <Col className="branding">
             <img alt="Logo" className="logo" src={navLogo}></img>
-            <div>MaskShield</div>
+            <div>Collective Shield</div>
           </Col>
 
           {user ? (

@@ -14,18 +14,23 @@ import LoginView from './views/LoginView';
 import MakerView from './views/MakerView';
 import RequestListView from './views/RequestListView';
 import NewRequestView from './views/NewRequestView';
-import WorkView from './views/WorkView';
 import MakerDetailsView from './views/MakerDetailsView';
 
 import './assets/scss/app.scss';
+import RoleModal from './components/RoleModal';
 
 const store = configureStore();
 
 const App: React.FC = () => {
   const history = useHistory();
   const [user, setUser] = useState<User>();
+  const [role, setRole] = useState<string | null>(
+    sessionStorage.getItem('role')
+  );
 
+  // on app load
   useEffect(() => {
+    // get user profile
     axios
       .get(buildEndpointUrl('me'))
       .then((res) => {
@@ -44,11 +49,7 @@ const App: React.FC = () => {
           {user ? (
             <>
               <Route path="/" exact>
-                <HomeView user={user} />
-              </Route>
-
-              <Route path="/work" exact>
-                <WorkView user={user} />
+                <HomeView user={user} role={role!} />
               </Route>
 
               <Route path="/request" exact>
@@ -66,6 +67,8 @@ const App: React.FC = () => {
               <Route path="/request/:id" exact>
                 <MakerDetailsView user={user} />
               </Route>
+
+              {!role && <RoleModal setRole={setRole} />}
             </>
           ) : (
             <>

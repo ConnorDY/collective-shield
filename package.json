@@ -1,5 +1,5 @@
 {
-  "name": "maskshield",
+  "name": "collective-shield",
   "version": "0.1.0",
   "proxy": "http://localhost:3050",
   "private": true,
