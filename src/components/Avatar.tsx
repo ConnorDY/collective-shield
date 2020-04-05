@@ -9,7 +9,6 @@ interface Props {
   size: string;
   round?: boolean;
   facebookId?: string;
-  googleId?: string;
 }
 
 const AvatarProfile: React.FC<{ user: User | undefined; size: string }> = ({
@@ -22,7 +21,6 @@ const AvatarProfile: React.FC<{ user: User | undefined; size: string }> = ({
       : undefined;
   const round = true;
   const facebookId = get(user, 'providers.facebook');
-  const googleId = get(user, 'providers.google');
 
   let props: Props = {
     name,
@@ -35,11 +33,6 @@ const AvatarProfile: React.FC<{ user: User | undefined; size: string }> = ({
     props = {
       ...omit(props, ['name']),
       facebookId
-    };
-  } else if (googleId) {
-    props = {
-      ...omit(props, ['name']),
-      googleId
     };
   }
 
