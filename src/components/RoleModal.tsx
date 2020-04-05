@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Button,
-  Container,
-  Modal,
-  Row
-  // ToggleButton,
-  // ToggleButtonGroup
-} from 'react-bootstrap';
+import { Button, Container, Modal, Row } from 'react-bootstrap';
 
 const RoleModal: React.FC<{
   setRole: React.Dispatch<React.SetStateAction<string | null>>;
