@@ -56,7 +56,7 @@ const NewRequestView: React.FC<{ user: User }> = ({ user }) => {
           setIsCreated(true);
         })
         .catch((err) => {
-          toast.error(`ERROR: ${err}`, {
+          toast.error(err.toString(), {
             position: toast.POSITION.TOP_LEFT
           });
         });

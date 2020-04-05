@@ -17,7 +17,7 @@ const Navbar: React.FC<{ user: User | undefined }> = ({ user }) => {
             <Link to="/">
               <>
                 <img alt="Logo" className="logo" src={navLogo}></img>
-                <div>MaskShield</div>
+                <div>Collective Shield</div>
               </>
             </Link>
           </Col>
@@ -25,10 +25,8 @@ const Navbar: React.FC<{ user: User | undefined }> = ({ user }) => {
           {
             user &&
             <Col xs={6}>
-              <Row className="justify-content-between">
+              <Row>
                 <Col className="my-auto font-weight-bold text-center">
-                  <NavLink to="/" exact activeClassName="active" className="nav-link">Request Shields</NavLink>
-                  <NavLink to="/work" activeClassName="active" className="nav-link">Print Shields</NavLink>
                 {
                   showAdmin &&
                     <NavLink to="/requests" activeClassName="active" className="nav-link">Admin</NavLink>

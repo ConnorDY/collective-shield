@@ -1,10 +1,11 @@
 {
-  "name": "maskshield",
+  "name": "collective-shield",
   "version": "0.1.0",
   "proxy": "http://localhost:3050",
   "private": true,
   "scripts": {
     "start": "ts-node --project server/tsconfig.json server/app.ts",
+    "start:eb": "npm install && npm run prod",
     "heroku-postbuild": "npm run build",
     "start-dev": "env BROWSER=false run-p start-server start-client",
     "start-client": "react-scripts start",

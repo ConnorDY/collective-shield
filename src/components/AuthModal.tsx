@@ -23,7 +23,7 @@ const HomeView: React.FC<{}> = () => {
 
   return (
     <Modal show size="lg" backdrop>
-      <div className="p-5">
+      <div className="p-3">
         <Modal.Header>
           <Modal.Title>
             {modalType === 'login' && 'Sign In'}
