@@ -21,7 +21,7 @@ import StatusOption from '../components/StatusOption';
 import { buildEndpointUrl, readCookie } from '../utilities';
 import { states, statuses } from '../utilities/constants';
 
-const NewRequestView: React.FC<{ user: User }> = ({ user }) => {
+const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
   const history = useHistory();
   let { id } = useParams();
 
@@ -137,7 +137,7 @@ const NewRequestView: React.FC<{ user: User }> = ({ user }) => {
         </Col>
           <Col sm={6} className="right-col">
             {
-              dropdownEnabled ?
+              dropdownEnabled &&
                 <Dropdown as={ButtonGroup}>
                   <Dropdown.Toggle
                     id="details-status-dropdown"
@@ -156,8 +156,9 @@ const NewRequestView: React.FC<{ user: User }> = ({ user }) => {
                     ))}
                   </Dropdown.Menu>
                 </Dropdown>
-              :
-              StatusOption(detailsReq.status)
+            }
+            {
+              isExisting && !dropdownEnabled && StatusOption(detailsReq.status)
             }
           </Col>
       </Row>
@@ -381,4 +382,4 @@ const NewRequestView: React.FC<{ user: User }> = ({ user }) => {
   );
 };
 
-export default NewRequestView;
+export default RequestFormView;

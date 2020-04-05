@@ -13,7 +13,7 @@ import HomeView from './views/HomeView';
 import LoginView from './views/LoginView';
 import MakerView from './views/MakerView';
 import RequestListView from './views/RequestListView';
-import NewRequestView from './views/NewRequestView';
+import RequestFormView from './views/RequestFormView';
 import WorkView from './views/WorkView';
 
 import './assets/scss/app.scss';
@@ -53,7 +53,7 @@ const App: React.FC = () => {
               </Route>
 
               <Route path="/request" exact>
-                <NewRequestView user={user} />
+                <RequestFormView user={user} />
               </Route>
 
               <Route path="/requests" exact>
@@ -65,7 +65,7 @@ const App: React.FC = () => {
               </Route>
 
               <Route path="/request/:id" exact>
-                <NewRequestView user={user} />
+                <RequestFormView user={user} />
               </Route>
 
               {!role && <RoleModal setRole={setRole} />}
