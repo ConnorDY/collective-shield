@@ -18,6 +18,7 @@ import { pick } from 'lodash';
 import User from '../models/User';
 import Avatar from '../components/Avatar';
 import StatusOption from '../components/StatusOption';
+import ShippingModal from '../components/ShippingModal';
 import { buildEndpointUrl, readCookie } from '../utilities';
 import { states, statuses } from '../utilities/constants';
 
@@ -46,7 +47,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
     requestorID: '',
   })
 
-  const dropdownEnabled = isExisting && !isCreated && detailsReq.makerID === user._id;
+  const isMakerView = isExisting && !isCreated && detailsReq.makerID === user._id;
 
   const updateDetailsReq = (data: object) => {
     setDetailsReq({
@@ -137,28 +138,35 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
         </Col>
           <Col sm={6} className="right-col">
             {
-              dropdownEnabled &&
-                <Dropdown as={ButtonGroup}>
-                  <Dropdown.Toggle
-                    id="details-status-dropdown"
-                    variant="outline-secondary"
-                  >
-                    {StatusOption(detailsReq.status || 'Requested')}
-                  </Dropdown.Toggle>
-
-                  <Dropdown.Menu>
-                    {statuses.map((status) => (
-                      <Dropdown.Item
-                        onClick={() => setStatus(status)}
+              isMakerView &&
+                <Row className="justify-content-md-center">
+                  <Col>
+                    <ShippingModal />
+                  </Col>
+                  <Col>
+                    <Dropdown as={ButtonGroup}>
+                      <Dropdown.Toggle
+                        id="details-status-dropdown"
+                        variant="outline-secondary"
                       >
-                        {StatusOption(status)}
-                      </Dropdown.Item>
-                    ))}
-                  </Dropdown.Menu>
-                </Dropdown>
+                        {StatusOption(detailsReq.status || 'Requested')}
+                      </Dropdown.Toggle>
+
+                      <Dropdown.Menu>
+                        {statuses.map((status) => (
+                          <Dropdown.Item
+                            onClick={() => setStatus(status)}
+                          >
+                            {StatusOption(status)}
+                          </Dropdown.Item>
+                        ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Col>
+                </Row>
             }
             {
-              isExisting && !dropdownEnabled && StatusOption(detailsReq.status)
+              isExisting && !isMakerView && StatusOption(detailsReq.status)
             }
           </Col>
       </Row>
