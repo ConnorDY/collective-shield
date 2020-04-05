@@ -95,7 +95,6 @@ useExpressServer(app, {
 });
 
 app.get('/api/logout', (req, res) => {
-  console.log(req.session);
   req.logout();
   req.session.destroy((err) => {
     res.clearCookie('connect.sid');
