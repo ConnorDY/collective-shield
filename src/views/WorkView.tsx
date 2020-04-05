@@ -11,6 +11,9 @@ import StatusOption from '../components/StatusOption';
 import { buildEndpointUrl } from '../utilities';
 import { statuses } from '../utilities/constants';
 
+const googleDriveLink =
+  'https://drive.google.com/drive/folders/1-7AqfcKaGstJ0goRNiYks1Y732DsCLHn?fbclid=IwAR201HiuLkO-IfymI_jZg23gccLgJ0tLUFUPtvm7SjPjhAaEpaa9EFlROsU';
+
 const WorkView: React.FC<{ user: User }> = ({ user }) => {
   const [availableWork, setAvailableWork] = useState<Request[]>([]);
   const [work, setWork] = useState<Request[]>([]);
@@ -35,7 +38,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
   function setStatus(id: string, status: string) {
     axios
       .patch(buildEndpointUrl(`requests/${id}/${status}`))
-      .then((res) => {
+      .then(() => {
         const work$ = [...work];
         const updated = find(work, (f) => f._id === id);
         if (updated) {
@@ -58,7 +61,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
   function assignWork(id: string) {
     axios
       .put(buildEndpointUrl(`requests/assign/${id}`))
-      .then((res) => {
+      .then(() => {
         refreshAll();
       })
       .catch((err) => {
@@ -71,7 +74,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
   function removeWork(id: string) {
     axios
       .put(buildEndpointUrl(`requests/unassign/${id}`))
-      .then((res) => {
+      .then(() => {
         refreshAll();
       })
       .catch((err) => {
@@ -93,7 +96,9 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
           <h1 className="h1">My Work</h1>
         </Col>
 
-        <Col className="right-col">Download Models</Col>
+        <Col className="right-col">
+          <Link to={googleDriveLink}>Download Models</Link>
+        </Col>
       </Row>
 
       <Row>

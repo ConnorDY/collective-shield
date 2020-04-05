@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Route, useHistory } from 'react-router-dom';
-import { Container } from 'react-bootstrap';
-import axios from 'axios';
 import { Provider } from 'react-redux';
+import { Container } from 'react-bootstrap';
+import { ToastContainer } from 'react-toastify';
+import axios from 'axios';
 
 import configureStore from './store';
 import { buildEndpointUrl } from './utilities';
@@ -44,6 +45,7 @@ const App: React.FC = () => {
   return (
     <Provider store={store}>
       <Navbar user={user} />
+
       <main className="main">
         <Container className="inner">
           {user ? (
@@ -79,7 +81,10 @@ const App: React.FC = () => {
           )}
         </Container>
       </main>
+
       <Footer />
+
+      <ToastContainer />
     </Provider>
   );
 };
