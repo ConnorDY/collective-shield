@@ -10,6 +10,7 @@ import { buildEndpointUrl } from './utilities';
 import User from './models/User';
 import Navbar from './components/Navbar';
 import Footer from './components/Footers/Footer';
+import ScrollToTop from './components/ScrollToTop';
 import HomeView from './views/HomeView';
 import LoginView from './views/LoginView';
 import MakerView from './views/MakerView';
@@ -46,41 +47,43 @@ const App: React.FC = () => {
     <Provider store={store}>
       <Navbar user={user} />
 
-      <main className="main">
-        <Container className="inner">
-          {user ? (
-            <>
-              <Route path="/" exact>
-                <HomeView user={user} role={role!} />
-              </Route>
+      <ScrollToTop>
+        <main className="main">
+          <Container className="inner">
+            {user ? (
+              <>
+                <Route path="/" exact>
+                  <HomeView user={user} role={role!} />
+                </Route>
 
-              <Route path="/request" exact>
-                <RequestFormView user={user} />
-              </Route>
+                <Route path="/request" exact>
+                  <RequestFormView user={user} />
+                </Route>
 
-              <Route path="/requests" exact>
-                <RequestListView user={user} />
-              </Route>
+                <Route path="/requests" exact>
+                  <RequestListView user={user} />
+                </Route>
 
-              <Route path="/makers" exact>
-                <MakerView />
-              </Route>
+                <Route path="/makers" exact>
+                  <MakerView />
+                </Route>
 
-              <Route path="/request/:id" exact>
-                <RequestFormView user={user} />
-              </Route>
+                <Route path="/request/:id" exact>
+                  <RequestFormView user={user} />
+                </Route>
 
-              {!role && <RoleModal setRole={setRole} />}
-            </>
-          ) : (
-            <>
-              <Route path="/login">
-                <LoginView />
-              </Route>
-            </>
-          )}
-        </Container>
-      </main>
+                {!role && <RoleModal setRole={setRole} />}
+              </>
+            ) : (
+              <>
+                <Route path="/login">
+                  <LoginView />
+                </Route>
+              </>
+            )}
+          </Container>
+        </main>
+      </ScrollToTop>
 
       <Footer />
 
