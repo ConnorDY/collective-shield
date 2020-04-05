@@ -97,7 +97,9 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
         </Col>
 
         <Col className="right-col">
-          <Link to={googleDriveLink}>Download Models</Link>
+          <a href={googleDriveLink} target="_blank">
+            Download Models
+          </a>
         </Col>
       </Row>
 
