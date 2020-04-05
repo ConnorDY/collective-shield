@@ -19,7 +19,7 @@ import User from '../models/User';
 import Avatar from '../components/Avatar';
 import StatusOption from '../components/StatusOption';
 import ShippingModal from '../components/ShippingModal';
-import { buildEndpointUrl, readCookie } from '../utilities';
+import { buildEndpointUrl, readCookie, scrollToTop } from '../utilities';
 import { states, statuses } from '../utilities/constants';
 
 const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
@@ -110,6 +110,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
         .post(buildEndpointUrl('requests'), data)
         .then(() => {
           setIsCreated(true);
+          scrollToTop();
         })
         .catch((err) => {
           toast.error(err.toString(), {
