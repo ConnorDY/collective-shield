@@ -94,6 +94,15 @@ useExpressServer(app, {
   }
 });
 
+app.get('/api/logout', (req, res) => {
+  console.log(req.session);
+  req.logout();
+  req.session.destroy((err) => {
+    res.clearCookie('connect.sid');
+    res.send('You have successfully logged out');
+  });
+})
+
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
 if (process.env.NODE_ENV === 'development') {

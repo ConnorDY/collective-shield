@@ -5,7 +5,10 @@ import { buildEndpointUrl } from '../utilities';
 const HomeView: React.FC<{}> = () => {
 
   useEffect(() => {
-    window.location.href='/logout'
+    axios.get(buildEndpointUrl('logout'))
+      .then(() => {
+        window.location.href = 'https://www.collectiveshield.org';
+      });
   }, []);
 
   return null;
