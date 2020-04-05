@@ -14,7 +14,6 @@ import LoginView from './views/LoginView';
 import MakerView from './views/MakerView';
 import RequestListView from './views/RequestListView';
 import NewRequestView from './views/NewRequestView';
-import WorkView from './views/WorkView';
 import MakerDetailsView from './views/MakerDetailsView';
 
 import './assets/scss/app.scss';
