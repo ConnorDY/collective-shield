@@ -1,27 +1,59 @@
 import React, { useEffect, useState, BaseSyntheticEvent } from 'react';
 import { useHistory, Link } from 'react-router-dom';
-import { Form, Button, Row, Col, Card, Alert } from 'react-bootstrap';
+import { useParams } from "react-router";
+import {
+  Alert,
+  Button,
+  ButtonGroup,
+  Card,
+  Col,
+  Dropdown,
+  Form,
+  Row,
+} from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import { pick } from 'lodash';
 
 import User from '../models/User';
 import Avatar from '../components/Avatar';
+import StatusOption from '../components/StatusOption';
 import { buildEndpointUrl, readCookie } from '../utilities';
-import { states } from '../utilities/constants';
+import { states, statuses } from '../utilities/constants';
 
-const NewRequestView: React.FC<{ user: User }> = ({ user }) => {
+const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
   const history = useHistory();
+  let { id } = useParams();
+
+  const isExisting = id;
+  const disabled = !!isExisting;
 
   const [isCreated, setIsCreated] = useState(false);
   const [isValidated, setIsValidated] = useState(false);
-  const [maskShieldCount, setMaskShieldCount] = useState(1);
-  const [details, setDetails] = useState('');
-  const [jobRole, setJobRole] = useState('');
-  const [email, setEmail] = useState('');
-  const [facilityName, setFacilityName] = useState('');
-  const [addressCity, setAddressCity] = useState('');
-  const [addressState, setAddressState] = useState('');
-  const [addressZip, setAddressZip] = useState('');
+
+  // Request Details
+  const [detailsReq, setDetailsReq] = useState({
+    maskShieldCount: 1,
+    details: '',
+    jobRole: '',
+    email: '',
+    facilityName: '',
+    addressCity: '',
+    addressState: '',
+    addressZip: '',
+    status: '',
+    makerID: '',
+    requestorID: '',
+  })
+
+  const dropdownEnabled = isExisting && !isCreated && detailsReq.makerID === user._id;
+
+  const updateDetailsReq = (data: object) => {
+    setDetailsReq({
+      ...detailsReq,
+      ...data,
+    });
+  }
 
   const roleOptions = [
     'Doctor',
@@ -29,6 +61,29 @@ const NewRequestView: React.FC<{ user: User }> = ({ user }) => {
     'First Responder',
     'Medical Support Staff'
   ];
+
+  const getDetails = () => {
+    axios.get(buildEndpointUrl(`requests/${id}`)).then((res) => {
+      updateDetailsReq(res.data);
+    });
+  }
+
+  const getPlaceHolder = (text: string) => {
+    return disabled ? '' : text;
+  }
+
+  function setStatus(status: string) {
+    axios
+      .patch(buildEndpointUrl(`requests/${id}/${status}`))
+      .then((res) => {
+        updateDetailsReq({ status });
+      })
+      .catch((err) => {
+        toast.error(err.toString(), {
+          position: toast.POSITION.TOP_LEFT
+        });
+      });
+  }
 
   function handleSubmit(event: React.BaseSyntheticEvent) {
     const form = event.currentTarget;
@@ -39,16 +94,16 @@ const NewRequestView: React.FC<{ user: User }> = ({ user }) => {
       event.preventDefault();
       setIsValidated(!isValidated);
 
-      const data = {
-        maskShieldCount,
-        details,
-        jobRole,
-        email,
-        facilityName,
-        addressCity,
-        addressState,
-        addressZip
-      };
+      const data = pick(detailsReq, [
+        'maskShieldCount',
+        'details',
+        'jobRole',
+        'email',
+        'facilityName',
+        'addressCity',
+        'addressState',
+        'addressZip',
+      ])
 
       axios
         .post(buildEndpointUrl('requests'), data)
@@ -70,14 +125,42 @@ const NewRequestView: React.FC<{ user: User }> = ({ user }) => {
   // on load
   useEffect(() => {
     axios.defaults.headers.post['CSRF-Token'] = readCookie('XSRF-TOKEN');
-  });
+
+    if (id) getDetails();
+  }, []);
 
   return (
     <div className="new-requests">
       <Row className="view-header">
         <Col>
-          <h1 className="h1">New Request</h1>
+          <h1 className="h1">{ isExisting ? 'Request Details' : 'New Request' }</h1>
         </Col>
+          <Col sm={6} className="right-col">
+            {
+              dropdownEnabled &&
+                <Dropdown as={ButtonGroup}>
+                  <Dropdown.Toggle
+                    id="details-status-dropdown"
+                    variant="outline-secondary"
+                  >
+                    {StatusOption(detailsReq.status || 'Requested')}
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu>
+                    {statuses.map((status) => (
+                      <Dropdown.Item
+                        onClick={() => setStatus(status)}
+                      >
+                        {StatusOption(status)}
+                      </Dropdown.Item>
+                    ))}
+                  </Dropdown.Menu>
+                </Dropdown>
+            }
+            {
+              isExisting && !dropdownEnabled && StatusOption(detailsReq.status)
+            }
+          </Col>
       </Row>
 
       {isCreated ? (
@@ -101,15 +184,26 @@ const NewRequestView: React.FC<{ user: User }> = ({ user }) => {
                 <Card.Body>
                   <Row>
                     <Col sm={3}>
-                      <Avatar size="100" user={user} />
+                      {
+                        !isExisting &&
+                          <Avatar size="100" user={user} />
+                      }
                     </Col>
 
                     <Col sm={9}>
                       <Card.Title id="requested-by-name">
-                        {user?.firstName} {user?.lastName}
+                        {
+                          !isExisting ?
+                            `${user?.firstName} ${user?.lastName}`
+                            :
+                            detailsReq.email
+                        }
                       </Card.Title>
                       <Card.Text>
-                        <span id="requested-by-email">{user?.email}</span>
+                      {
+                        !isExisting &&
+                          <span id="requested-by-email">{user?.email}</span>
+                      }
                       </Card.Text>
                     </Col>
                   </Row>
@@ -122,13 +216,14 @@ const NewRequestView: React.FC<{ user: User }> = ({ user }) => {
               <Form>
                 <Form.Group>
                   <Form.Control
+                    disabled={disabled}
                     as="select"
                     size="lg"
                     custom
                     id="requested-mask-shields-card"
-                    value={maskShieldCount}
+                    value={detailsReq.maskShieldCount}
                     onChange={(e: BaseSyntheticEvent) =>
-                      setMaskShieldCount(e.target.value)
+                      updateDetailsReq({ maskShieldCount: e.target.value })
                     }
                   >
                     <option>1</option>
@@ -155,11 +250,12 @@ const NewRequestView: React.FC<{ user: User }> = ({ user }) => {
                 <Form.Group controlId="formBasicJobTitle">
                   <Form.Label>Role</Form.Label>
                   <Form.Control
+                    disabled={disabled}
                     as="select"
                     required
-                    value={jobRole}
+                    value={detailsReq.jobRole}
                     onChange={(e: BaseSyntheticEvent) =>
-                      setJobRole(e.target.value)
+                      updateDetailsReq({ jobRole: e.target.value })
                     }
                   >
                     <option>Select Your Role</option>
@@ -172,12 +268,13 @@ const NewRequestView: React.FC<{ user: User }> = ({ user }) => {
                 <Form.Group controlId="formBasicEmail">
                   <Form.Label>Preferred Email Address</Form.Label>
                   <Form.Control
+                    disabled={disabled}
                     required
                     type="email"
-                    placeholder="Email"
-                    value={email}
+                    placeholder={getPlaceHolder("Email")}
+                    value={detailsReq.email}
                     onChange={(e: BaseSyntheticEvent) =>
-                      setEmail(e.target.value)
+                      updateDetailsReq({ email: e.target.value })
                     }
                   />
                 </Form.Group>
@@ -185,12 +282,13 @@ const NewRequestView: React.FC<{ user: User }> = ({ user }) => {
                 <Form.Group controlId="formBasicFacilityName">
                   <Form.Label>Facility Name</Form.Label>
                   <Form.Control
+                    disabled={disabled}
                     required
                     type="text"
-                    placeholder="Sacred Heart Hospital"
-                    value={facilityName}
+                    placeholder={getPlaceHolder("Sacred Heart Hospital")}
+                    value={detailsReq.facilityName}
                     onChange={(e: BaseSyntheticEvent) =>
-                      setFacilityName(e.target.value)
+                      updateDetailsReq({ facilityName: e.target.value })
                     }
                   />
                 </Form.Group>
@@ -199,11 +297,12 @@ const NewRequestView: React.FC<{ user: User }> = ({ user }) => {
                   <Form.Group as={Col} controlId="formGridCity">
                     <Form.Label>City</Form.Label>
                     <Form.Control
+                      disabled={disabled}
                       required
-                      placeholder="Denver"
-                      value={addressCity}
+                      placeholder={getPlaceHolder("Denver")}
+                      value={detailsReq.addressCity}
                       onChange={(e: BaseSyntheticEvent) =>
-                        setAddressCity(e.target.value)
+                        updateDetailsReq({ addressCity: e.target.value })
                       }
                     />
                   </Form.Group>
@@ -211,11 +310,12 @@ const NewRequestView: React.FC<{ user: User }> = ({ user }) => {
                   <Form.Group as={Col} controlId="formGridState">
                     <Form.Label>State</Form.Label>
                     <Form.Control
+                      disabled={disabled}
                       required
                       as="select"
-                      value={addressState}
+                      value={detailsReq.addressState}
                       onChange={(e: BaseSyntheticEvent) =>
-                        setAddressState(e.target.value)
+                        updateDetailsReq({ addressState: e.target.value })
                       }
                     >
                       <option>Choose...</option>
@@ -228,29 +328,33 @@ const NewRequestView: React.FC<{ user: User }> = ({ user }) => {
                   <Form.Group as={Col} controlId="formGridZip">
                     <Form.Label>Zip</Form.Label>
                     <Form.Control
+                      disabled={disabled}
                       required
-                      placeholder="80205"
-                      value={addressZip}
+                      placeholder={getPlaceHolder("80205")}
+                      value={detailsReq.addressZip}
                       onChange={(e: BaseSyntheticEvent) =>
-                        setAddressZip(e.target.value)
+                        updateDetailsReq({ addressZip: e.target.value })
                       }
                     />
                   </Form.Group>
                 </Form.Row>
 
-                <div id="request-button-group">
-                  <Button variant="primary" type="submit">
-                    Submit Request
-                  </Button>
+                {
+                  !isExisting &&
+                    <div id="request-button-group">
+                      <Button variant="primary" type="submit">
+                        Submit Request
+                      </Button>
 
-                  <Button
-                    variant="light"
-                    id="cancel-request-button"
-                    onClick={cancel}
-                  >
-                    Cancel Request
-                  </Button>
-                </div>
+                      <Button
+                        variant="light"
+                        id="cancel-request-button"
+                        onClick={cancel}
+                      >
+                        Cancel Request
+                      </Button>
+                    </div>
+                }
               </Form>
             </Col>
 
@@ -259,12 +363,13 @@ const NewRequestView: React.FC<{ user: User }> = ({ user }) => {
               <Form>
                 <Form.Group controlId="">
                   <Form.Control
+                    disabled={disabled}
                     as="textarea"
                     rows="13"
-                    placeholder="Add any request details here"
-                    value={details}
+                    placeholder={getPlaceHolder("Add any request details here")}
+                    value={detailsReq.details}
                     onChange={(e: BaseSyntheticEvent) =>
-                      setDetails(e.target.value)
+                      updateDetailsReq({ details: e.target.value })
                     }
                   />
                 </Form.Group>
@@ -277,4 +382,4 @@ const NewRequestView: React.FC<{ user: User }> = ({ user }) => {
   );
 };
 
-export default NewRequestView;
+export default RequestFormView;
