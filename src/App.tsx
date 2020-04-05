@@ -3,7 +3,6 @@ import { Route, useHistory } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import axios from 'axios';
 import { Provider } from 'react-redux';
-import { get } from 'lodash';
 
 import configureStore from './store';
 import { buildEndpointUrl } from './utilities';
