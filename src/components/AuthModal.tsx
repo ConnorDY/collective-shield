@@ -31,9 +31,7 @@ const HomeView: React.FC<{}> = () => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s.
+          Choose one of the authentication methods below.
         </Modal.Body>
         <Modal.Footer>
           {/*
