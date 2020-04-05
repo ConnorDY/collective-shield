@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Route, useHistory } from 'react-router-dom';
-import { Container } from 'react-bootstrap';
-import axios from 'axios';
 import { Provider } from 'react-redux';
-import { get } from 'lodash';
+import { Container } from 'react-bootstrap';
+import { ToastContainer } from 'react-toastify';
+import axios from 'axios';
 
 import configureStore from './store';
 import { buildEndpointUrl } from './utilities';
@@ -16,43 +16,43 @@ import LogoutView from './views/LogoutView';
 import MakerView from './views/MakerView';
 import RequestListView from './views/RequestListView';
 import NewRequestView from './views/NewRequestView';
-import WorkView from './views/WorkView';
+import MakerDetailsView from './views/MakerDetailsView';
 
 import './assets/scss/app.scss';
+import RoleModal from './components/RoleModal';
 
 const store = configureStore();
 
 const App: React.FC = () => {
   const history = useHistory();
   const [user, setUser] = useState<User>();
+  const [role, setRole] = useState<string | null>(
+    sessionStorage.getItem('role')
+  );
 
+  // on app load
   useEffect(() => {
+    // get user profile
     axios
       .get(buildEndpointUrl('me'))
       .then((res) => {
         setUser(res.data);
       })
       .catch((err) => {
-        if (get(err, 'response.status') === 401) {
-          history.push('/login');
-          return null;
-        }
+        history.push('/login');
       });
   }, []);
 
   return (
     <Provider store={store}>
       <Navbar user={user} />
+
       <main className="main">
         <Container className="inner">
           {user ? (
             <>
               <Route path="/" exact>
-                <HomeView user={user} />
-              </Route>
-
-              <Route path="/work" exact>
-                <WorkView user={user} />
+                <HomeView user={user} role={role!} />
               </Route>
 
               <Route path="/request" exact>
@@ -70,6 +70,12 @@ const App: React.FC = () => {
               <Route path="/logout" exact>
                 <LogoutView />
               </Route>
+
+              <Route path="/request/:id" exact>
+                <MakerDetailsView user={user} />
+              </Route>
+
+              {!role && <RoleModal setRole={setRole} />}
             </>
           ) : (
             <>
@@ -81,6 +87,8 @@ const App: React.FC = () => {
         </Container>
       </main>
       <Footer />
+
+      <ToastContainer />
     </Provider>
   );
 };

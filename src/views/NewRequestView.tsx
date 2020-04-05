@@ -1,5 +1,5 @@
 import React, { useEffect, useState, BaseSyntheticEvent } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { Form, Button, Row, Col, Card, Alert } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -56,7 +56,7 @@ const NewRequestView: React.FC<{ user: User }> = ({ user }) => {
           setIsCreated(true);
         })
         .catch((err) => {
-          toast.error(`ERROR: ${err}`, {
+          toast.error(err.toString(), {
             position: toast.POSITION.TOP_LEFT
           });
         });
@@ -86,7 +86,8 @@ const NewRequestView: React.FC<{ user: User }> = ({ user }) => {
             <div className="c-requestForm -pad">
               <Alert variant="success">
                 {' '}
-                Thank you! You will receive an email confirming your request{' '}
+                Thank you! You will receive an email confirming your request.{' '}
+                <Link to="/">View Your Requests.</Link>
               </Alert>
             </div>
           </Col>

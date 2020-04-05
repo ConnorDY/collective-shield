@@ -63,7 +63,8 @@ if (process.env.NODE_ENV === 'development') {
     }
   );
 } else {
-  cookieSession.cookie!.secure = true;
+  // TODO: re-enable this when we're using HTTPS
+  // cookieSession.cookie!.secure = true;
 }
 
 app.use(cookieParser());
@@ -72,7 +73,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.json());
 app.use(parseForm);
-app.use(express.static(path.join(__dirname, 'build'), { index: false }));
 
 // setup routing-controllers
 useExpressServer(app, {
@@ -94,11 +94,6 @@ useExpressServer(app, {
   }
 });
 
-// start listening
-app.listen(portNumber, () => {
-  console.log(`Express web server started: http://localhost:${portNumber}`);
-});
-
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
 if (process.env.NODE_ENV === 'development') {
@@ -111,7 +106,13 @@ if (process.env.NODE_ENV === 'development') {
     })
   );
 } else {
+  app.use(express.static(path.join(__dirname, '../ui'), { index: false }));
   app.get('*', (req: express.Request, res: express.Response) => {
-    res.sendFile(path.join(__dirname + '/build/index.html'));
+    res.sendFile(path.join(__dirname, '../ui/index.html'));
   });
 }
+
+// start listening
+app.listen(portNumber, () => {
+  console.log(`Express web server started: http://localhost:${portNumber}`);
+});

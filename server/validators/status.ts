@@ -4,7 +4,7 @@ const statusValidator = Joi.object().keys({
   id: Joi.string().required(),
   status: Joi.string()
     .valid('Requested', 'Queued', 'Printing', 'Completed', 'Shipped')
-    .required(),
+    .required()
 });
 
 export default statusValidator;

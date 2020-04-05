@@ -3,12 +3,16 @@ import { Button, ButtonGroup, Col, Dropdown, Row } from 'react-bootstrap';
 import axios from 'axios';
 import { find, indexOf } from 'lodash';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 import User from '../models/User';
 import Request from '../models/Request';
 import StatusOption from '../components/StatusOption';
 import { buildEndpointUrl } from '../utilities';
 import { statuses } from '../utilities/constants';
+
+const googleDriveLink =
+  'https://drive.google.com/drive/folders/1-7AqfcKaGstJ0goRNiYks1Y732DsCLHn?fbclid=IwAR201HiuLkO-IfymI_jZg23gccLgJ0tLUFUPtvm7SjPjhAaEpaa9EFlROsU';
 
 const WorkView: React.FC<{ user: User }> = ({ user }) => {
   const [availableWork, setAvailableWork] = useState<Request[]>([]);
@@ -34,11 +38,11 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
   function setStatus(id: string, status: string) {
     axios
       .patch(buildEndpointUrl(`requests/${id}/${status}`))
-      .then((res) => {
-        const work$ = [ ...work ];
-        const updated = find(work, f => f._id === id);
+      .then(() => {
+        const work$ = [...work];
+        const updated = find(work, (f) => f._id === id);
         if (updated) {
-          const index = indexOf(work, updated)
+          const index = indexOf(work, updated);
           work[index].status = status;
           setWork(work$);
         } else {
@@ -48,7 +52,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
         }
       })
       .catch((err) => {
-        toast.error(`ERROR: ${err}`, {
+        toast.error(err.toString(), {
           position: toast.POSITION.TOP_LEFT
         });
       });
@@ -57,11 +61,11 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
   function assignWork(id: string) {
     axios
       .put(buildEndpointUrl(`requests/assign/${id}`))
-      .then((res) => {
+      .then(() => {
         refreshAll();
       })
       .catch((err) => {
-        toast.error(`ERROR: ${err}`, {
+        toast.error(err.toString(), {
           position: toast.POSITION.TOP_LEFT
         });
       });
@@ -70,11 +74,11 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
   function removeWork(id: string) {
     axios
       .put(buildEndpointUrl(`requests/unassign/${id}`))
-      .then((res) => {
+      .then(() => {
         refreshAll();
       })
       .catch((err) => {
-        toast.error(`ERROR: ${err}`, {
+        toast.error(err.toString(), {
           position: toast.POSITION.TOP_LEFT
         });
       });
@@ -92,7 +96,11 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
           <h1 className="h1">My Work</h1>
         </Col>
 
-        <Col className="right-col">Download Models</Col>
+        <Col className="right-col">
+          <a href={googleDriveLink} target="_blank">
+            Download Models
+          </a>
+        </Col>
       </Row>
 
       <Row>
@@ -118,7 +126,9 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                     return (
                       <tr key={index}>
                         <td className="count">{w.maskShieldCount}</td>
-                        <td className="requestor">{w.facilityName}</td>
+                        <td className="requestor">
+                          <Link to={`/request/${w._id}`}>{w.facilityName}</Link>
+                        </td>
                         <td className="status">
                           <Dropdown as={ButtonGroup}>
                             <Dropdown.Toggle
@@ -129,8 +139,11 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>
-                              {statuses.map(status => (
-                                <Dropdown.Item onClick={() => setStatus(w._id, status)}>
+                              {statuses.map((status, index2) => (
+                                <Dropdown.Item
+                                  key={index2}
+                                  onClick={() => setStatus(w._id, status)}
+                                >
                                   {StatusOption(status)}
                                 </Dropdown.Item>
                               ))}
@@ -138,7 +151,12 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                           </Dropdown>
                         </td>
                         <td className="action">
-                          <Button variant="primary" onClick={() => removeWork(w._id)}>Unassign</Button>
+                          <Button
+                            variant="primary"
+                            onClick={() => removeWork(w._id)}
+                          >
+                            Unassign
+                          </Button>
                         </td>
                       </tr>
                     );
@@ -184,7 +202,12 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                         <td className="distance">X miles</td>
                         <td className="requestor">{w.facilityName}</td>
                         <td className="claim">
-                          <Button variant="primary" onClick={() => assignWork(w._id)}>Claim</Button>
+                          <Button
+                            variant="primary"
+                            onClick={() => assignWork(w._id)}
+                          >
+                            Claim
+                          </Button>
                         </td>
                       </tr>
                     );
