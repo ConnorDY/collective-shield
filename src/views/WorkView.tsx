@@ -52,7 +52,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
         }
       })
       .catch((err) => {
-        toast.error(`ERROR: ${err}`, {
+        toast.error(err.toString(), {
           position: toast.POSITION.TOP_LEFT
         });
       });
@@ -65,7 +65,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
         refreshAll();
       })
       .catch((err) => {
-        toast.error(`ERROR: ${err}`, {
+        toast.error(err.toString(), {
           position: toast.POSITION.TOP_LEFT
         });
       });
@@ -78,7 +78,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
         refreshAll();
       })
       .catch((err) => {
-        toast.error(`ERROR: ${err}`, {
+        toast.error(err.toString(), {
           position: toast.POSITION.TOP_LEFT
         });
       });
@@ -137,8 +137,9 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>
-                              {statuses.map((status) => (
+                              {statuses.map((status, index2) => (
                                 <Dropdown.Item
+                                  key={index2}
                                   onClick={() => setStatus(w._id, status)}
                                 >
                                   {StatusOption(status)}
