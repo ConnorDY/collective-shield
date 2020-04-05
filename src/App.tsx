@@ -52,10 +52,6 @@ const App: React.FC = () => {
                 <HomeView user={user} />
               </Route>
 
-              <Route path="/home">
-                <HomeView user={user} />
-              </Route>
-
               <Route path="/work" exact>
                 <WorkView user={user} />
               </Route>

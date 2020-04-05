@@ -14,7 +14,7 @@ const Navbar: React.FC<{ user: User | undefined }> = ({ user }) => {
       <Container>
         <Row>
           <Col className="branding">
-            <Link to="/home">
+            <Link to="/">
               <>
                 <img alt="Logo" className="logo" src={navLogo}></img>
                 <div>MaskShield</div>
@@ -27,7 +27,7 @@ const Navbar: React.FC<{ user: User | undefined }> = ({ user }) => {
             <Col xs={6}>
               <Row className="justify-content-between">
                 <Col className="my-auto font-weight-bold text-center">
-                  <NavLink to="/home" activeClassName="active" className="nav-link">Request Shields</NavLink>
+                  <NavLink to="/" exact activeClassName="active" className="nav-link">Request Shields</NavLink>
                   <NavLink to="/work" activeClassName="active" className="nav-link">Print Shields</NavLink>
                 {
                   showAdmin &&
