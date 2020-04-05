@@ -18,35 +18,37 @@ const RoleModal: React.FC<{
 
   return (
     <Modal show size="lg" backdrop>
-      <Modal.Header>
-        <Modal.Title>Choose Your Role</Modal.Title>
-      </Modal.Header>
+      <div className="p-3">
+        <Modal.Header>
+          <Modal.Title>Choose Your Role</Modal.Title>
+        </Modal.Header>
 
-      <Modal.Body>
-        <p>Do you have a 3D printer and want to print mask shields?</p>
-        <p>
-          Or, do you work at a healthcare facility and want to request mask
-          shields?
-        </p>
-      </Modal.Body>
+        <Modal.Body>
+          <p>Do you have a 3D printer and want to print mask shields?</p>
+          <p>
+            Or, do you work at a healthcare facility and want to request mask
+            shields?
+          </p>
+        </Modal.Body>
 
-      <Modal.Footer>
-        <Container>
-          <Row className="justify-content-md-center p-2">
-            <Button
-              variant="primary"
-              className="mr-2"
-              onClick={() => pickRole('maker')}
-            >
-              Printer / Maker
-            </Button>
+        <Modal.Footer>
+          <Container>
+            <Row className="justify-content-md-center p-2">
+              <Button
+                variant="primary"
+                className="mr-2"
+                onClick={() => pickRole('maker')}
+              >
+                Printer / Maker
+              </Button>
 
-            <Button variant="primary" onClick={() => pickRole('requestor')}>
-              Requestor
-            </Button>
-          </Row>
-        </Container>
-      </Modal.Footer>
+              <Button variant="primary" onClick={() => pickRole('requestor')}>
+                Requestor
+              </Button>
+            </Row>
+          </Container>
+        </Modal.Footer>
+      </div>
     </Modal>
   );
 };
