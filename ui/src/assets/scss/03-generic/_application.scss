@@ -1,10 +1,27 @@
-body {
+html,
+body,
+#root {
+  height: 100%;
   font-size: $font-base;
 }
+
+/* BEGIN: Sticky Footer CSS */
+#root {
+  display: flex;
+  flex-direction: column;
+}
+
+#headerAndMain {
+  flex: 1 0 auto;
+}
+
+#footer {
+  flex-shrink: 0;
+}
+/* END: Sticky Footer CSS */
+
 .main {
   font-family: $font-normal;
-  min-height: 100vh;
-  padding-bottom: -200px;
 
   .inner {
     padding-bottom: 3em;

@@ -46,55 +46,57 @@ const App: React.FC = () => {
 
   return (
     <Provider store={store}>
-      <Navbar user={user} />
+      <div id="headerAndMain">
+        <Navbar user={user} />
 
-      <ScrollToTop>
-        <main className="main">
-          <Container className="inner">
-            {user ? (
-              <>
-                <Switch>
-                  <Route path="/" exact>
-                    <HomeView user={user} role={role!} />
+        <ScrollToTop>
+          <main className="main">
+            <Container className="inner">
+              {user ? (
+                <>
+                  <Switch>
+                    <Route path="/" exact>
+                      <HomeView user={user} role={role!} />
+                    </Route>
+
+                    <Route path="/request" exact>
+                      <RequestFormView user={user} />
+                    </Route>
+
+                    <Route path="/requests" exact>
+                      <RequestListView user={user} />
+                    </Route>
+
+                    <Route path="/request/:id" exact>
+                      <RequestFormView user={user} />
+                    </Route>
+
+                    <Route path="/makers" exact>
+                      <MakerView />
+                    </Route>
+
+                    <Route path="/logout" exact>
+                      <LogoutView />
+                    </Route>
+
+                    <Route path="*">
+                      <ErrorView />
+                    </Route>
+                  </Switch>
+
+                  {!role && <RoleModal setRole={setRole} />}
+                </>
+              ) : (
+                <>
+                  <Route path="/login">
+                    <LoginView />
                   </Route>
-
-                  <Route path="/request" exact>
-                    <RequestFormView user={user} />
-                  </Route>
-
-                  <Route path="/requests" exact>
-                    <RequestListView user={user} />
-                  </Route>
-
-                  <Route path="/request/:id" exact>
-                    <RequestFormView user={user} />
-                  </Route>
-
-                  <Route path="/makers" exact>
-                    <MakerView />
-                  </Route>
-
-                  <Route path="/logout" exact>
-                    <LogoutView />
-                  </Route>
-
-                  <Route path="*">
-                    <ErrorView />
-                  </Route>
-                </Switch>
-
-                {!role && <RoleModal setRole={setRole} />}
-              </>
-            ) : (
-              <>
-                <Route path="/login">
-                  <LoginView />
-                </Route>
-              </>
-            )}
-          </Container>
-        </main>
-      </ScrollToTop>
+                </>
+              )}
+            </Container>
+          </main>
+        </ScrollToTop>
+      </div>
 
       <Footer />
 
