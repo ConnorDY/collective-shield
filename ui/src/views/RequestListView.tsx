@@ -32,21 +32,22 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
 
   if (allRequests.length) {
     const keys = [
-      'address.line1',
-      'address.line2',
-      'address.city',
-      'address.state',
-      'address.zip',
-      'name',
-      'printer'
+      'facilityName',
+      'addressCity',
+      'addressState',
+      'addressZip',
+      'requestorID',
+      'makerID',
     ];
 
     const results = allRequests.filter((m) => {
+      console.log('status:', get(m, 'status', ''), 'search term:', searchStatusTerm);
       return (
         get(m, 'status', '').includes(searchStatusTerm) &&
-        keys.some((k) =>
-          lowerCase(get(m, k, '')).includes(lowerCase(searchTerm || ''))
-        )
+        keys.some((k) => {
+          console.log(get(m, k), searchTerm);
+          return lowerCase(get(m, k, '')).includes(lowerCase(searchTerm || ''))
+        })
       );
     });
     searchResults = results;
