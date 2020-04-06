@@ -8,7 +8,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd ui && npm install
-      - uses: paambaati/codeclimate-action@v2.3.0
+      - uses: paambaati/codeclimate-action@v2.5.6
         env:
           CC_TEST_REPORTER_ID: bc077d621575c16478726cd685820407cf1af9d16c2f8b6cd8aee925c80c692a
         with:
