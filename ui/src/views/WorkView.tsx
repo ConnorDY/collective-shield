@@ -186,7 +186,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                 <thead>
                   <tr>
                     <th className="count">Count</th>
-                    <th className="distance">Distance</th>
+                    <th className="distance">State</th>
                     <th className="requestor">Requestor</th>
                     <th>
                       <span className="sr-only">Claim</span>
@@ -199,7 +199,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                     return (
                       <tr key={key}>
                         <td className="count">{w.maskShieldCount}</td>
-                        <td className="distance">X miles</td>
+                        <td className="distance">{w.addressState}</td>
                         <td className="requestor">{w.facilityName}</td>
                         <td className="claim">
                           <Button
