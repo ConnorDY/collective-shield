@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ButtonGroup, Col, Dropdown, Row } from 'react-bootstrap';
+import { ButtonGroup, Col, Dropdown, Row, Jumbotron } from 'react-bootstrap';
 import axios from 'axios';
 import { get, lowerCase } from 'lodash';
 import { Link } from 'react-router-dom';
@@ -114,7 +114,7 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
 
       <Row>
         {(!allRequests || allRequests.length === 0) && (
-          <Col className="no-work">No request found</Col>
+          <Col><Jumbotron className="text-center">No request found.</Jumbotron></Col>
         )}
 
         {allRequests && allRequests.length > 0 && (

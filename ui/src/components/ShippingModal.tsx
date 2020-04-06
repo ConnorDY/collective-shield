@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Container, Modal, Row } from 'react-bootstrap';
+import { Button, Container, Modal, Row, ListGroup } from 'react-bootstrap';
 
 const ShippingModal: React.FC = () => {
   const [show, setShow] = useState(false);
@@ -19,14 +19,12 @@ const ShippingModal: React.FC = () => {
           </Modal.Header>
 
           <Modal.Body>
-            <p>1. Contact the requestor to obtain their shipping address.</p>
-            <p>
-              2. Email{' '}
-              <a href="mailto: Jeffrey@collectiveshield.org">
-                Jeffrey@collectiveshield.org
-              </a>{' '}
-              with the requestor's shipping address.
-            </p>
+            <ListGroup as="ol">
+              <ListGroup.Item as="li">Contact the requestor to obtain their shipping address.</ListGroup.Item>
+              <ListGroup.Item as="li">
+                2. Email <a href="mailto: Jeffrey@collectiveshield.org">Jeffrey@collectiveshield.org</a> with the requestor's shipping address.
+            </ListGroup.Item>
+            </ListGroup>
           </Modal.Body>
         </div>
       </Modal>

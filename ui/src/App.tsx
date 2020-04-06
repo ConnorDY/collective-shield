@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Route, useHistory } from 'react-router-dom';
+import { Route, useHistory, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { Container } from 'react-bootstrap';
 import { ToastContainer } from 'react-toastify';
@@ -18,6 +18,7 @@ import MakerView from './views/MakerView';
 import RequestListView from './views/RequestListView';
 import RequestFormView from './views/RequestFormView';
 import WorkView from './views/WorkView';
+import ErrorView from './views/ErrorView';
 
 import './assets/scss/app.scss';
 import RoleModal from './components/RoleModal';
@@ -52,7 +53,7 @@ const App: React.FC = () => {
         <main className="main">
           <Container className="inner">
             {user ? (
-              <>
+              <Switch>
                 <Route path="/" exact>
                   <HomeView user={user} role={role!} />
                 </Route>
@@ -78,14 +79,19 @@ const App: React.FC = () => {
                 </Route>
 
                 {!role && <RoleModal setRole={setRole} />}
-              </>
-            ) : (
-              <>
-                <Route path="/login">
-                  <LoginView />
+
+                <Route path="*">
+                  <ErrorView />
                 </Route>
-              </>
-            )}
+
+              </Switch>
+            ) : (
+                <>
+                  <Route path="/login">
+                    <LoginView />
+                  </Route>
+                </>
+              )}
           </Container>
         </main>
       </ScrollToTop>

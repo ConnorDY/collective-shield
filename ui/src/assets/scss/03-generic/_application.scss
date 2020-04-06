@@ -28,14 +28,6 @@ body {
     font-weight: 600;
   }
 
-  .panel.empty {
-    padding: 5em;
-    text-align: center;
-    background-color: lighten($grey, 15%);
-    border-radius: 5px;
-    margin-bottom: 2em;
-  }
-
   // My Requests View
   .my-requests {
     .view-header {
