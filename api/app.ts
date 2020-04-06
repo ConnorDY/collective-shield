@@ -15,7 +15,6 @@ import './passport';
 import config from './config';
 import {
   LoginController,
-  LogoutController,
   MakersController,
   MiscController,
   RequestsController
@@ -78,7 +77,6 @@ app.use(parseForm);
 useExpressServer(app, {
   controllers: [
     LoginController,
-    LogoutController,
     MakersController,
     MiscController,
     RequestsController
