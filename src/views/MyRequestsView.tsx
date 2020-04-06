@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Col, Row, Jumbotron } from 'react-bootstrap';
 import moment from 'moment';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -40,48 +40,50 @@ const MyRequestsView: React.FC<{ user: User }> = ({ user }) => {
 
       <Row>
         {!requests || !requests.length ? (
-          <Col className="no-work panel empty">
-            You have not made a request.{' '}
-            <Button variant="link" onClick={createNewRequest}>
-              Create A New Request Now.
+          <Col>
+            <Jumbotron>
+              You have not made a request.{' '}
+              <Button variant="link" onClick={createNewRequest}>
+                Create A New Request Now.
             </Button>
+            </Jumbotron>
           </Col>
         ) : (
-          <Col>
-            <div className="table-wrapper">
-              <table className="my-work-table">
-                <thead>
-                  <tr>
-                    <th className="date">Date Requested</th>
-                    <th className="count">Count</th>
-                    <th className="details">Details</th>
-                    <th className="status">Status</th>
-                  </tr>
-                </thead>
+            <Col>
+              <div className="table-wrapper">
+                <table className="my-work-table">
+                  <thead>
+                    <tr>
+                      <th className="date">Date Requested</th>
+                      <th className="count">Count</th>
+                      <th className="details">Details</th>
+                      <th className="status">Status</th>
+                    </tr>
+                  </thead>
 
-                <tbody>
-                  {requests.map((request, key) => {
-                    return (
-                      <tr key={key}>
-                        <td className="date">
-                          <Link to={`/request/${request._id}`}>
-                            {moment(request.createDate).format('dddd, MMMM Do')}
-                          </Link>
-                        </td>
-                        <td className="count">{request.maskShieldCount}</td>
-                        <td className="details">
-                          {request.details.substring(0, 21)}
-                          {get(request, 'details', '').length > 20 ? '...' : ''}
-                        </td>
-                        <td className="status">{request.status}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </Col>
-        )}
+                  <tbody>
+                    {requests.map((request, key) => {
+                      return (
+                        <tr key={key}>
+                          <td className="date">
+                            <Link to={`/request/${request._id}`}>
+                              {moment(request.createDate).format('dddd, MMMM Do')}
+                            </Link>
+                          </td>
+                          <td className="count">{request.maskShieldCount}</td>
+                          <td className="details">
+                            {request.details.substring(0, 21)}
+                            {get(request, 'details', '').length > 20 ? '...' : ''}
+                          </td>
+                          <td className="status">{request.status}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </Col>
+          )}
       </Row>
     </div>
   );
