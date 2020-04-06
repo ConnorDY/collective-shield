@@ -13,6 +13,7 @@ phases:
   post_build:
     commands:
       - cd .. && mkdir output
+      - cp -r .ebextensions output
       - cp api/package.json output
       - cp api/package-lock.json output
       - mv api/build output/api
