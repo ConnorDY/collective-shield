@@ -3,14 +3,10 @@ import { Col, Container, Row } from 'react-bootstrap';
 
 const Footer: React.FC<{}> = () => {
   return (
-    <footer className="footer footer-default">
+    <footer id="footer">
       <Container>
         <Row>
-          <Col className="footer">
-            <div className="copyright">
-              © {new Date().getFullYear()} Collective Shield
-            </div>
-          </Col>
+          <Col>© {new Date().getFullYear()} Collective Shield</Col>
         </Row>
       </Container>
     </footer>

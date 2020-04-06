@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Button, ButtonGroup, Col, Dropdown, Row } from 'react-bootstrap';
+import {
+  Button,
+  ButtonGroup,
+  Col,
+  Dropdown,
+  Row,
+  Jumbotron
+} from 'react-bootstrap';
 import axios from 'axios';
 import { find, indexOf } from 'lodash';
 import { toast } from 'react-toastify';
@@ -97,7 +104,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
         </Col>
 
         <Col className="right-col">
-          <a href={googleDriveLink} target="_blank">
+          <a href={googleDriveLink} target="_blank" rel="noopener noreferrer">
             Download Models
           </a>
         </Col>
@@ -105,7 +112,9 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
 
       <Row>
         {!work || !work.length ? (
-          <Col className="no-work panel empty">No work found</Col>
+          <Col>
+            <Jumbotron className="text-center">No work found.</Jumbotron>
+          </Col>
         ) : (
           <Col>
             <div className="table-wrapper">
@@ -176,7 +185,9 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
 
       <Row>
         {(!availableWork || availableWork.length === 0) && (
-          <Col className="no-work">No work found</Col>
+          <Col>
+            <Jumbotron className="text-center">No work found.</Jumbotron>
+          </Col>
         )}
 
         {availableWork && availableWork.length > 0 && (
