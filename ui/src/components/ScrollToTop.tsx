@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { useLocation, withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { useLocation } from 'react-router-dom';
 import { scrollToTop } from '../utilities';
 
 const ScrollToTop: React.FC<{ children: any }> = ({ children }) => {
