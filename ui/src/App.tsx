@@ -52,37 +52,39 @@ const App: React.FC = () => {
         <main className="main">
           <Container className="inner">
             {user ? (
-              <Switch>
-                <Route path="/" exact>
-                  <HomeView user={user} role={role!} />
-                </Route>
+              <>
+                <Switch>
+                  <Route path="/" exact>
+                    <HomeView user={user} role={role!} />
+                  </Route>
 
-                <Route path="/request" exact>
-                  <RequestFormView user={user} />
-                </Route>
+                  <Route path="/request" exact>
+                    <RequestFormView user={user} />
+                  </Route>
 
-                <Route path="/requests" exact>
-                  <RequestListView user={user} />
-                </Route>
+                  <Route path="/requests" exact>
+                    <RequestListView user={user} />
+                  </Route>
 
-                <Route path="/request/:id" exact>
-                  <RequestFormView user={user} />
-                </Route>
+                  <Route path="/request/:id" exact>
+                    <RequestFormView user={user} />
+                  </Route>
 
-                <Route path="/makers" exact>
-                  <MakerView />
-                </Route>
+                  <Route path="/makers" exact>
+                    <MakerView />
+                  </Route>
 
-                <Route path="/logout" exact>
-                  <LogoutView />
-                </Route>
+                  <Route path="/logout" exact>
+                    <LogoutView />
+                  </Route>
 
-                <Route path="*">
-                  <ErrorView />
-                </Route>
+                  <Route path="*">
+                    <ErrorView />
+                  </Route>
+                </Switch>
 
                 {!role && <RoleModal setRole={setRole} />}
-              </Switch>
+              </>
             ) : (
               <>
                 <Route path="/login">
