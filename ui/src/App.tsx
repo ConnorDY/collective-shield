@@ -17,7 +17,6 @@ import LogoutView from './views/LogoutView';
 import MakerView from './views/MakerView';
 import RequestListView from './views/RequestListView';
 import RequestFormView from './views/RequestFormView';
-import WorkView from './views/WorkView';
 import ErrorView from './views/ErrorView';
 
 import './assets/scss/app.scss';
@@ -66,6 +65,10 @@ const App: React.FC = () => {
                   <RequestListView user={user} />
                 </Route>
 
+                <Route path="/request/:id" exact>
+                  <RequestFormView user={user} />
+                </Route>
+
                 <Route path="/makers" exact>
                   <MakerView />
                 </Route>
@@ -74,24 +77,19 @@ const App: React.FC = () => {
                   <LogoutView />
                 </Route>
 
-                <Route path="/request/:id" exact>
-                  <RequestFormView user={user} />
-                </Route>
-
-                {!role && <RoleModal setRole={setRole} />}
-
                 <Route path="*">
                   <ErrorView />
                 </Route>
 
+                {!role && <RoleModal setRole={setRole} />}
               </Switch>
             ) : (
-                <>
-                  <Route path="/login">
-                    <LoginView />
-                  </Route>
-                </>
-              )}
+              <>
+                <Route path="/login">
+                  <LoginView />
+                </Route>
+              </>
+            )}
           </Container>
         </main>
       </ScrollToTop>
