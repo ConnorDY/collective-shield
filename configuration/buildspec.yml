@@ -36,7 +36,6 @@ phases:
   post_build:
     commands:
       - mkdir output
-      - cp -r .ebextensions output
       - cp .npmrc output
       - cp package.json output
       - cp package-lock.json output
