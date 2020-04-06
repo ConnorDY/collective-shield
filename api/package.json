@@ -4,7 +4,7 @@
   "scripts": {
     "start": "ts-node-dev --project tsconfig.json app.ts",
     "start:eb": "npm install && npm run prod",
-    "prod": "node ./app.js",
+    "prod": "node ./api/app.js",
     "build": "tsc --project tsconfig.json"
   },
   "dependencies": {
