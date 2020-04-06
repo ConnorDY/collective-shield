@@ -2,6 +2,7 @@
   "name": "collective-shield",
   "version": "1.0.0",
   "scripts": {
+    "test:ui:coverage": "cd ui && npm run test:coverage",
     "prettier:base": "prettier \"{ui,api}/**/*.{js,jsx,ts,tsx,css,scss}\"",
     "prettier:check": "npm run prettier:base -- --check",
     "prettier:write": "npm run prettier:base -- --write"
