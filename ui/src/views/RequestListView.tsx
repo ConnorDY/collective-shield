@@ -37,14 +37,14 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
       'addressState',
       'addressZip',
       'requestorID',
-      'makerID',
+      'makerID'
     ];
 
     const results = allRequests.filter((m) => {
       return (
         get(m, 'status', '').includes(searchStatusTerm) &&
         keys.some((k) => {
-          return lowerCase(get(m, k, '')).includes(lowerCase(searchTerm || ''))
+          return lowerCase(get(m, k, '')).includes(lowerCase(searchTerm || ''));
         })
       );
     });
@@ -113,7 +113,9 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
 
       <Row>
         {(!allRequests || allRequests.length === 0) && (
-          <Col><Jumbotron className="text-center">No request found.</Jumbotron></Col>
+          <Col>
+            <Jumbotron className="text-center">No request found.</Jumbotron>
+          </Col>
         )}
 
         {allRequests && allRequests.length > 0 && (

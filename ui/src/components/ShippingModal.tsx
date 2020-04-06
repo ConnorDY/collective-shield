@@ -20,10 +20,16 @@ const ShippingModal: React.FC = () => {
 
           <Modal.Body>
             <ListGroup as="ol">
-              <ListGroup.Item as="li">Contact the requestor to obtain their shipping address.</ListGroup.Item>
               <ListGroup.Item as="li">
-                2. Email <a href="mailto: Jeffrey@collectiveshield.org">Jeffrey@collectiveshield.org</a> with the requestor's shipping address.
-            </ListGroup.Item>
+                Contact the requestor to obtain their shipping address.
+              </ListGroup.Item>
+              <ListGroup.Item as="li">
+                2. Email{' '}
+                <a href="mailto: Jeffrey@collectiveshield.org">
+                  Jeffrey@collectiveshield.org
+                </a>{' '}
+                with the requestor's shipping address.
+              </ListGroup.Item>
             </ListGroup>
           </Modal.Body>
         </div>

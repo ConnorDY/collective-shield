@@ -42,29 +42,31 @@ export default function MakerView() {
 
       <Row>
         {makers === null || makers.length === 0 ? (
-          <Col><Jumbotron className="text-center">No makers found.</Jumbotron></Col>
+          <Col>
+            <Jumbotron className="text-center">No makers found.</Jumbotron>
+          </Col>
         ) : (
-            <Col>
-              <table className="makers-table">
-                <thead>
-                  <tr>
-                    <th className="name">Name</th>
-                    <th className="email">Email</th>
-                    <th className="prints">Total Prints</th>
-                  </tr>
-                </thead>
-              </table>
-              {makers.map((maker, key) => {
-                return (
-                  <tr key={key}>
-                    <td>{maker.name}</td>
-                    <td>{maker.email}</td>
-                    <td>{maker.prints}</td>
-                  </tr>
-                );
-              })}
-            </Col>
-          )}
+          <Col>
+            <table className="makers-table">
+              <thead>
+                <tr>
+                  <th className="name">Name</th>
+                  <th className="email">Email</th>
+                  <th className="prints">Total Prints</th>
+                </tr>
+              </thead>
+            </table>
+            {makers.map((maker, key) => {
+              return (
+                <tr key={key}>
+                  <td>{maker.name}</td>
+                  <td>{maker.email}</td>
+                  <td>{maker.prints}</td>
+                </tr>
+              );
+            })}
+          </Col>
+        )}
       </Row>
     </div>
   );
