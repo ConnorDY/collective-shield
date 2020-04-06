@@ -26,6 +26,7 @@ phases:
   pre_build:
     commands:
       - echo Installing source NPM dependencies...
+      - sudo npm install -g --unsafe-perm node-sass@4.13.0
       - npm install
   build:
     commands:
