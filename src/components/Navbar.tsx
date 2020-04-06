@@ -43,6 +43,9 @@ const Navbar: React.FC<{ user: User | undefined }> = ({ user }) => {
                   {user.firstName}
                 </Col>
                 <Avatar size="40" user={user} />
+                <Col xs={1} className="my-auto ml-3 font-weight-bold">
+                  <Link to="/logout">Logout</Link>
+                </Col>
               </Row>
             </Col>
           ) : (

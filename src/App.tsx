@@ -13,6 +13,7 @@ import Footer from './components/Footers/Footer';
 import ScrollToTop from './components/ScrollToTop';
 import HomeView from './views/HomeView';
 import LoginView from './views/LoginView';
+import LogoutView from './views/LogoutView';
 import MakerView from './views/MakerView';
 import RequestListView from './views/RequestListView';
 import RequestFormView from './views/RequestFormView';
@@ -66,6 +67,10 @@ const App: React.FC = () => {
 
                 <Route path="/makers" exact>
                   <MakerView />
+                </Route>
+
+                <Route path="/logout" exact>
+                  <LogoutView />
                 </Route>
 
                 <Route path="/request/:id" exact>

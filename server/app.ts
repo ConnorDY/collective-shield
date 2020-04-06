@@ -15,6 +15,7 @@ import './passport';
 import config from './config';
 import {
   LoginController,
+  LogoutController,
   MakersController,
   MiscController,
   RequestsController
@@ -77,6 +78,7 @@ app.use(parseForm);
 useExpressServer(app, {
   controllers: [
     LoginController,
+    LogoutController,
     MakersController,
     MiscController,
     RequestsController
@@ -91,6 +93,14 @@ useExpressServer(app, {
     return true;
   }
 });
+
+app.get('/api/logout', (req, res) => {
+  req.logout();
+  req.session.destroy((err) => {
+    res.clearCookie('connect.sid');
+    res.send('You have successfully logged out');
+  });
+})
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
