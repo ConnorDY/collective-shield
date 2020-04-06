@@ -8,7 +8,8 @@
     font-size: 16px;
     font-weight: bold;
 
-    a, a:hover {
+    a,
+    a:hover {
       color: $black;
       text-decoration: none;
     }
@@ -29,7 +30,7 @@
     display: inline;
     padding-left: 1em;
     padding-right: 1em;
-    margin-right: .5em;
+    margin-right: 0.5em;
     &:last-child {
       margin-right: 0;
     }
