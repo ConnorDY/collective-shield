@@ -5,7 +5,7 @@ import LoginView from './LoginView';
 describe('LoginView', () => {
   it('is defined', () => {
     const wrapper = shallow(<LoginView />);
-    expect(wrapper).toBeUndefined();
+    expect(wrapper).toBeDefined();
   });
 
   it('matches snapshot', () => {
