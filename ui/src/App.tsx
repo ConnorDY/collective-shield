@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Route, useHistory } from 'react-router-dom';
+import { Route, useHistory, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { Container } from 'react-bootstrap';
 import { ToastContainer } from 'react-toastify';
@@ -17,7 +17,7 @@ import LogoutView from './views/LogoutView';
 import MakerView from './views/MakerView';
 import RequestListView from './views/RequestListView';
 import RequestFormView from './views/RequestFormView';
-import WorkView from './views/WorkView';
+import ErrorView from './views/ErrorView';
 
 import './assets/scss/app.scss';
 import RoleModal from './components/RoleModal';
@@ -46,49 +46,57 @@ const App: React.FC = () => {
 
   return (
     <Provider store={store}>
-      <Navbar user={user} />
+      <div id="headerAndMain">
+        <Navbar user={user} />
 
-      <ScrollToTop>
-        <main className="main">
-          <Container className="inner">
-            {user ? (
-              <>
-                <Route path="/" exact>
-                  <HomeView user={user} role={role!} />
-                </Route>
+        <ScrollToTop>
+          <main className="main">
+            <Container className="inner">
+              {user ? (
+                <>
+                  <Switch>
+                    <Route path="/" exact>
+                      <HomeView user={user} role={role!} />
+                    </Route>
 
-                <Route path="/request" exact>
-                  <RequestFormView user={user} />
-                </Route>
+                    <Route path="/request" exact>
+                      <RequestFormView user={user} />
+                    </Route>
 
-                <Route path="/requests" exact>
-                  <RequestListView user={user} />
-                </Route>
+                    <Route path="/requests" exact>
+                      <RequestListView user={user} />
+                    </Route>
 
-                <Route path="/makers" exact>
-                  <MakerView />
-                </Route>
+                    <Route path="/request/:id" exact>
+                      <RequestFormView user={user} />
+                    </Route>
 
-                <Route path="/logout" exact>
-                  <LogoutView />
-                </Route>
+                    <Route path="/makers" exact>
+                      <MakerView />
+                    </Route>
 
-                <Route path="/request/:id" exact>
-                  <RequestFormView user={user} />
-                </Route>
+                    <Route path="/logout" exact>
+                      <LogoutView />
+                    </Route>
 
-                {!role && <RoleModal setRole={setRole} />}
-              </>
-            ) : (
-              <>
-                <Route path="/login">
-                  <LoginView />
-                </Route>
-              </>
-            )}
-          </Container>
-        </main>
-      </ScrollToTop>
+                    <Route path="*">
+                      <ErrorView />
+                    </Route>
+                  </Switch>
+
+                  {!role && <RoleModal setRole={setRole} />}
+                </>
+              ) : (
+                <>
+                  <Route path="/login">
+                    <LoginView />
+                  </Route>
+                </>
+              )}
+            </Container>
+          </main>
+        </ScrollToTop>
+      </div>
 
       <Footer />
 

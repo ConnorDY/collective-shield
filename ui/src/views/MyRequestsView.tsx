@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Col, Row, Jumbotron } from 'react-bootstrap';
 import moment from 'moment';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -40,11 +40,13 @@ const MyRequestsView: React.FC<{ user: User }> = ({ user }) => {
 
       <Row>
         {!requests || !requests.length ? (
-          <Col className="no-work panel empty">
-            You have not made a request.{' '}
-            <Button variant="link" onClick={createNewRequest}>
-              Create A New Request Now.
-            </Button>
+          <Col>
+            <Jumbotron>
+              You have not made a request.{' '}
+              <Button variant="link" onClick={createNewRequest}>
+                Create A New Request Now.
+              </Button>
+            </Jumbotron>
           </Col>
         ) : (
           <Col>
