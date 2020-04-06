@@ -105,7 +105,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
 
       <Row>
         {!work || !work.length ? (
-          <Col><Jumbotron>No work found</Jumbotron></Col>
+          <Col><Jumbotron className="text-center">No work found.</Jumbotron></Col>
         ) : (
             <Col>
               <div className="table-wrapper">
@@ -176,7 +176,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
 
       <Row>
         {(!availableWork || availableWork.length === 0) && (
-          <Col><Jumbotron>No work found</Jumbotron></Col>
+          <Col><Jumbotron className="text-center">No work found.</Jumbotron></Col>
         )}
 
         {availableWork && availableWork.length > 0 && (

@@ -114,7 +114,7 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
 
       <Row>
         {(!allRequests || allRequests.length === 0) && (
-          <Col><Jumbotron>No request found</Jumbotron></Col>
+          <Col><Jumbotron className="text-center">No request found.</Jumbotron></Col>
         )}
 
         {allRequests && allRequests.length > 0 && (

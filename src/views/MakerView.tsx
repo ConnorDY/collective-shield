@@ -42,7 +42,7 @@ export default function MakerView() {
 
       <Row>
         {makers === null || makers.length === 0 ? (
-          <Col><Jumbotron>No makers found.</Jumbotron></Col>
+          <Col><Jumbotron className="text-center">No makers found.</Jumbotron></Col>
         ) : (
             <Col>
               <table className="makers-table">
