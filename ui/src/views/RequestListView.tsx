@@ -41,11 +41,9 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
     ];
 
     const results = allRequests.filter((m) => {
-      console.log('status:', get(m, 'status', ''), 'search term:', searchStatusTerm);
       return (
         get(m, 'status', '').includes(searchStatusTerm) &&
         keys.some((k) => {
-          console.log(get(m, k), searchTerm);
           return lowerCase(get(m, k, '')).includes(lowerCase(searchTerm || ''))
         })
       );
