@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link } from 'react-router-dom';
 import { get } from 'lodash';
 
 import User from '../models/User';
@@ -22,19 +22,23 @@ const Navbar: React.FC<{ user: User | undefined }> = ({ user }) => {
             </Link>
           </Col>
 
-          {
-            user &&
+          {user && (
             <Col xs={6}>
               <Row>
                 <Col className="my-auto font-weight-bold text-center">
-                {
-                  showAdmin &&
-                    <NavLink to="/requests" activeClassName="active" className="nav-link">Admin</NavLink>
-                }
+                  {showAdmin && (
+                    <NavLink
+                      to="/requests"
+                      activeClassName="active"
+                      className="nav-link"
+                    >
+                      Admin
+                    </NavLink>
+                  )}
                 </Col>
               </Row>
             </Col>
-          }
+          )}
 
           {user ? (
             <Col className="user">

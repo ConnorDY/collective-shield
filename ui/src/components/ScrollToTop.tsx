@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { scrollToTop } from '../utilities';
 
 const ScrollToTop: React.FC<{ children: any }> = ({ children }) => {
-  const location = useLocation()
+  const location = useLocation();
   const prevLocation = useRef({});
 
   useEffect(() => {

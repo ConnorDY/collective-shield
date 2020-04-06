@@ -1,0 +1,83 @@
+{
+  "name": "collective-shield-ui",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "env BROWSER=false react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "test:coverage": "react-scripts test --coverage --watchAll=false --runInBand=true",
+    "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.3.2",
+    "axios": "^0.19.2",
+    "bootstrap": "^4.4.1",
+    "input-moment": "^0.4.0",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "node-sass": "4.13.0",
+    "react": "^16.13.1",
+    "react-avatar": "^3.9.2",
+    "react-bootstrap": "^1.0.0",
+    "react-color": "^2.18.0",
+    "react-dom": "^16.13.1",
+    "react-dropdown": "^1.7.0",
+    "react-modal": "^3.11.2",
+    "react-redux": "^7.2.0",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "^3.4.1",
+    "react-toastify": "^5.5.0",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
+    "typescript": "^3.8.3"
+  },
+  "devDependencies": {
+    "@types/enzyme": "^3.10.5",
+    "@types/jest": "^25.1.4",
+    "@types/lodash": "^4.14.149",
+    "@types/react": "^16.9.25",
+    "@types/react-dom": "^16.9.5",
+    "@types/react-modal": "^3.10.5",
+    "@types/react-redux": "^7.1.7",
+    "@types/react-router-dom": "^5.1.3",
+    "@types/redux": "^3.6.0",
+    "chai": "^4.2.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
+    "enzyme-to-json": "^3.4.4",
+    "ts-jest": "^25.2.1"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!<rootDir>/node_modules/"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 0,
+        "functions": 0,
+        "lines": 0,
+        "statements": 0
+      }
+    },
+    "coverageReporters": [
+      "text-summary",
+      "lcov"
+    ]
+  }
+}

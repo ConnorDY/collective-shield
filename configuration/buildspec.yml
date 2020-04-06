@@ -1,59 +1,23 @@
 version: 0.2
-#env:
-#variables:
-# key: "value"
-# key: "value"
-#parameter-store:
-# key: "value"
-# key: "value"
-#secrets-manager:
-# key: secret-id:json-key:version-stage:version-id
-# key: secret-id:json-key:version-stage:version-id
-#exported-variables:
-# - variable
-# - variable
-#git-credential-helper: yes
 phases:
-  #install:
-  #If you use the Ubuntu standard image 2.0 or later, you must specify runtime-versions.
-  #If you specify runtime-versions and use an image other than Ubuntu standard image 2.0, the build fails.
-  #runtime-versions:
-  # name: version
-  # name: version
-  #commands:
-  # - command
-  # - command
   pre_build:
     commands:
-      - echo Installing source NPM dependencies...
-      - npm install
+      - echo Installing dependencies...
+      - cd api && npm install
+      - cd ../ui && npm install
   build:
     commands:
       - echo Build started on `date`
-      - npm run build
-      - npm run build:api
+      - cd ../api && npm run build
+      - cd ../ui && npm run build
   post_build:
     commands:
-      - mkdir output
-      - cp package.json output
-      - cp package-lock.json output
-      - mv build output/ui
-      - mv server/build output/api
-#reports:
-#report-name-or-arn:
-#files:
-# - location
-# - location
-#base-directory: location
-#discard-paths: yes
-#file-format: JunitXml | CucumberJson
+      - cd .. && mkdir output
+      - cp api/package.json output
+      - cp api/package-lock.json output
+      - mv api/build output/api
+      - mv ui/build output/ui
 artifacts:
   files:
     - '**/*'
   base-directory: output
-  #name: $(date +%Y-%m-%d)
-  #discard-paths: yes
-  #base-directory: location
-#cache:
-#paths:
-# - paths

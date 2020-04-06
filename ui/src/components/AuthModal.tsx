@@ -30,9 +30,7 @@ const HomeView: React.FC<{}> = () => {
             {modalType === 'register' && 'Sign Up'}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          Choose one of the authentication methods below.
-        </Modal.Body>
+        <Modal.Body>Choose one of the authentication methods below.</Modal.Body>
         <Modal.Footer>
           {/*
             modalType === 'register' &&

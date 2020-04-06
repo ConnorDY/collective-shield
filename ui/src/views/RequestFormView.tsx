@@ -1,6 +1,6 @@
 import React, { useEffect, useState, BaseSyntheticEvent } from 'react';
 import { useHistory, Link } from 'react-router-dom';
-import { useParams } from "react-router";
+import { useParams } from 'react-router';
 import {
   Alert,
   Button,
@@ -9,7 +9,7 @@ import {
   Col,
   Dropdown,
   Form,
-  Row,
+  Row
 } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -44,17 +44,18 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
     addressZip: '',
     status: '',
     makerID: '',
-    requestorID: '',
-  })
+    requestorID: ''
+  });
 
-  const isMakerView = isExisting && !isCreated && detailsReq.makerID === user._id;
+  const isMakerView =
+    isExisting && !isCreated && detailsReq.makerID === user._id;
 
   const updateDetailsReq = (data: object) => {
     setDetailsReq({
       ...detailsReq,
-      ...data,
+      ...data
     });
-  }
+  };
 
   const roleOptions = [
     'Doctor',
@@ -67,11 +68,11 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
     axios.get(buildEndpointUrl(`requests/${id}`)).then((res) => {
       updateDetailsReq(res.data);
     });
-  }
+  };
 
   const getPlaceHolder = (text: string) => {
     return disabled ? '' : text;
-  }
+  };
 
   function setStatus(status: string) {
     axios
@@ -103,8 +104,8 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
         'facilityName',
         'addressCity',
         'addressState',
-        'addressZip',
-      ])
+        'addressZip'
+      ]);
 
       axios
         .post(buildEndpointUrl('requests'), data)
@@ -135,41 +136,38 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
     <div className="new-requests">
       <Row className="view-header">
         <Col>
-          <h1 className="h1">{ isExisting ? 'Request Details' : 'New Request' }</h1>
+          <h1 className="h1">
+            {isExisting ? 'Request Details' : 'New Request'}
+          </h1>
         </Col>
-          <Col sm={6} className="right-col">
-            {
-              isMakerView &&
-                <Row className="justify-content-md-center">
-                  <Col>
-                    <ShippingModal />
-                  </Col>
-                  <Col>
-                    <Dropdown as={ButtonGroup}>
-                      <Dropdown.Toggle
-                        id="details-status-dropdown"
-                        variant="outline-secondary"
-                      >
-                        {StatusOption(detailsReq.status || 'Requested')}
-                      </Dropdown.Toggle>
+        <Col sm={6} className="right-col">
+          {isMakerView && (
+            <Row className="justify-content-md-center">
+              <Col>
+                <ShippingModal />
+              </Col>
+              <Col>
+                <Dropdown as={ButtonGroup}>
+                  <Dropdown.Toggle
+                    id="details-status-dropdown"
+                    variant="outline-secondary"
+                  >
+                    {StatusOption(detailsReq.status || 'Requested')}
+                  </Dropdown.Toggle>
 
-                      <Dropdown.Menu>
-                        {statuses.map((status) => (
-                          <Dropdown.Item
-                            onClick={() => setStatus(status)}
-                          >
-                            {StatusOption(status)}
-                          </Dropdown.Item>
-                        ))}
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </Col>
-                </Row>
-            }
-            {
-              isExisting && !isMakerView && StatusOption(detailsReq.status)
-            }
-          </Col>
+                  <Dropdown.Menu>
+                    {statuses.map((status) => (
+                      <Dropdown.Item onClick={() => setStatus(status)}>
+                        {StatusOption(status)}
+                      </Dropdown.Item>
+                    ))}
+                  </Dropdown.Menu>
+                </Dropdown>
+              </Col>
+            </Row>
+          )}
+          {isExisting && !isMakerView && StatusOption(detailsReq.status)}
+        </Col>
       </Row>
 
       {isCreated ? (
@@ -193,26 +191,19 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                 <Card.Body>
                   <Row>
                     <Col sm={3}>
-                      {
-                        !isExisting &&
-                          <Avatar size="100" user={user} />
-                      }
+                      {!isExisting && <Avatar size="100" user={user} />}
                     </Col>
 
                     <Col sm={9}>
                       <Card.Title id="requested-by-name">
-                        {
-                          !isExisting ?
-                            `${user?.firstName} ${user?.lastName}`
-                            :
-                            detailsReq.email
-                        }
+                        {!isExisting
+                          ? `${user?.firstName} ${user?.lastName}`
+                          : detailsReq.email}
                       </Card.Title>
                       <Card.Text>
-                      {
-                        !isExisting &&
+                        {!isExisting && (
                           <span id="requested-by-email">{user?.email}</span>
-                      }
+                        )}
                       </Card.Text>
                     </Col>
                   </Row>
@@ -280,7 +271,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                     disabled={disabled}
                     required
                     type="email"
-                    placeholder={getPlaceHolder("Email")}
+                    placeholder={getPlaceHolder('Email')}
                     value={detailsReq.email}
                     onChange={(e: BaseSyntheticEvent) =>
                       updateDetailsReq({ email: e.target.value })
@@ -294,7 +285,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                     disabled={disabled}
                     required
                     type="text"
-                    placeholder={getPlaceHolder("Sacred Heart Hospital")}
+                    placeholder={getPlaceHolder('Sacred Heart Hospital')}
                     value={detailsReq.facilityName}
                     onChange={(e: BaseSyntheticEvent) =>
                       updateDetailsReq({ facilityName: e.target.value })
@@ -308,7 +299,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                     <Form.Control
                       disabled={disabled}
                       required
-                      placeholder={getPlaceHolder("Denver")}
+                      placeholder={getPlaceHolder('Denver')}
                       value={detailsReq.addressCity}
                       onChange={(e: BaseSyntheticEvent) =>
                         updateDetailsReq({ addressCity: e.target.value })
@@ -339,7 +330,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                     <Form.Control
                       disabled={disabled}
                       required
-                      placeholder={getPlaceHolder("80205")}
+                      placeholder={getPlaceHolder('80205')}
                       value={detailsReq.addressZip}
                       onChange={(e: BaseSyntheticEvent) =>
                         updateDetailsReq({ addressZip: e.target.value })
@@ -348,22 +339,21 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                   </Form.Group>
                 </Form.Row>
 
-                {
-                  !isExisting &&
-                    <div id="request-button-group">
-                      <Button variant="primary" type="submit">
-                        Submit Request
-                      </Button>
+                {!isExisting && (
+                  <div id="request-button-group">
+                    <Button variant="primary" type="submit">
+                      Submit Request
+                    </Button>
 
-                      <Button
-                        variant="light"
-                        id="cancel-request-button"
-                        onClick={cancel}
-                      >
-                        Cancel Request
-                      </Button>
-                    </div>
-                }
+                    <Button
+                      variant="light"
+                      id="cancel-request-button"
+                      onClick={cancel}
+                    >
+                      Cancel Request
+                    </Button>
+                  </div>
+                )}
               </Form>
             </Col>
 
@@ -375,7 +365,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                     disabled={disabled}
                     as="textarea"
                     rows="13"
-                    placeholder={getPlaceHolder("Add any request details here")}
+                    placeholder={getPlaceHolder('Add any request details here')}
                     value={detailsReq.details}
                     onChange={(e: BaseSyntheticEvent) =>
                       updateDetailsReq({ details: e.target.value })

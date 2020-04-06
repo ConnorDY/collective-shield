@@ -100,7 +100,7 @@ app.get('/api/logout', (req, res) => {
     res.clearCookie('connect.sid');
     res.send('You have successfully logged out');
   });
-})
+});
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
