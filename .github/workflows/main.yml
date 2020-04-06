@@ -14,4 +14,3 @@ jobs:
         with:
           prefix: 'ui'
           coverageCommand: npm run test:ui:coverage
-          coverageLocations: 'coverage/lcov.info:lcov'
