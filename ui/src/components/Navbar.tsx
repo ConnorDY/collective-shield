@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Row, Navbar, Nav } from 'react-bootstrap';
 import { NavLink, Link } from 'react-router-dom';
 import { get } from 'lodash';
 
@@ -7,61 +7,54 @@ import User from '../models/User';
 import Avatar from './Avatar';
 import navLogo from '../assets/img/navlogo.png';
 
-const Navbar: React.FC<{ user: User | undefined }> = ({ user }) => {
-  const showAdmin = get(user, 'isSuperAdmin', false);
+const MainNav: React.FC<{ user: User | undefined }> = ({ user }) => {
+  const showAdmin = get(user, 'isSuperAdmin', true);
+
   return (
-    <nav className="nav">
+    <Navbar expand="lg" className="nav">
       <Container>
-        <Row>
-          <Col className="branding">
-            <Link to="/">
-              <>
-                <img alt="Logo" className="logo" src={navLogo}></img>
-                <div>Collective Shield</div>
-              </>
-            </Link>
+        <Row className="justify-content-end nav-inner">
+          <Col xs={12} lg={3}>
+            <Navbar.Brand href="/" className="branding">
+              <Link to="/">
+                <img alt="Logo" className="logo" src={navLogo} />
+                <span>Collective Shield</span>
+              </Link>
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="main-nav-bar" />
           </Col>
+          <Col xs={12} lg={9}>
+            <Navbar.Collapse id="main-nav-bar" className="justify-content-between">
 
-          {user && (
-            <Col md={6} className="nav-lnks">
-              <Row>
-                <Col
-                  xs={12}
-                  className="my-auto font-weight-bold text-md-center"
-                >
-                  {showAdmin && (
-                    <NavLink
-                      to="/requests"
-                      activeClassName="active"
-                      className="nav-link"
-                    >
-                      Admin
-                    </NavLink>
+              <Col xs lg={6} className="nav-links">
+                {
+                  user &&
+                  <Nav className="mr-auto text-lg-center">
+                    {
+                      showAdmin &&
+                      <NavLink to="/requests" activeClassName="active" className="nav-link">Admin</NavLink>
+                    }
+                  </Nav>
+                }
+              </Col>
+              <Col xs lg="auto" className="user">
+                {user ? (
+                  <Navbar.Text className="my-auto text-lg-right font-weight-bold">
+                    <span className="ml-lg-3 mr-3 my-auto">{user.firstName}</span>
+                    <Avatar size="40" user={user} />
+                    <Link to="/logout" className="ml-lg-3 my-lg-auto">Logout</Link>
+                  </Navbar.Text>
+                ) : (
+                    <></>
                   )}
-                </Col>
-              </Row>
-            </Col>
-          )}
+              </Col>
 
-          {user ? (
-            <Col md={4} className="user">
-              <Row>
-                <Col xs={12} className="my-auto text-md-right font-weight-bold">
-                  <span className="ml-3 mr-3">{user.firstName}</span>
-                  <Avatar size="40" user={user} />
-                  <Link to="/logout" className="ml-5">
-                    Logout
-                  </Link>
-                </Col>
-              </Row>
-            </Col>
-          ) : (
-            <></>
-          )}
+            </Navbar.Collapse>
+          </Col>
         </Row>
       </Container>
-    </nav>
+    </Navbar>
   );
 };
 
-export default Navbar;
+export default MainNav;

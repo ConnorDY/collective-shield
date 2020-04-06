@@ -4,6 +4,22 @@
   line-height: 24px;
   color: $blue-grey-dark;
 
+  &.navbar-light .navbar-toggler {
+    position: absolute;
+    right: 0;
+  }
+
+  .container {
+    position: relative;
+  }
+
+  .nav-inner {
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+  }
+
+
   .branding {
     font-size: 16px;
     font-weight: bold;
@@ -14,11 +30,19 @@
       text-decoration: none;
     }
 
+    a {
+      display: block;
+    }
+
     .logo {
       height: 30px;
-      float: left;
+      display: inline-block;
       margin-right: 5px;
     }
+  }
+
+  #main-nav-bar, .user {
+    margin-right: -15px;
   }
 
   .nav-lnks {
@@ -28,11 +52,28 @@
     }
   }
 
+
   .user {
     // text-align: right;
     font-size: 12px;
+    @include media-breakpoint-up(lg) {
+    // position: absolute;
+    // right: 0;
+    }
+  }
+  // override default NavBar theme
+  .navbar-text {
+    color: $black;
+      @include media-breakpoint-up(lg) {
+        padding-bottom: 0;
+        padding-top: 0;
+      }
   }
 
+  &.navbar-light .navbar-nav .nav-link, .navbar-text a {
+    color: $blue-purple;
+    font-weight: bold;
+  }
   .nav-link {
     display: inline;
     padding-left: 1em;
@@ -44,5 +85,25 @@
   }
   .active {
     text-decoration: underline;
+  }
+
+
+  .navbar-collapse {
+    @include media-breakpoint-down(md) {
+    background-color: $grey-light;
+    padding: 1em;
+      .nav-link {
+        border-bottom: 1px solid $grey;
+      }
+      .navbar-text {
+        display: block;
+      }
+      .navbar-text a {
+        display: block;
+        border-top: 1px solid $grey;
+        padding: 0.5rem 0;
+        margin-top: 0.5em;
+      }
+    }
   }
 }
