@@ -22,5 +22,6 @@ jobs:
         run: |
           cd ui && npm install
       - name: Build
+        # Set CI=false because we want to pass even if there are warnings
         run: |
-          cd ui && npm run build
+          cd ui && CI=false npm run build
