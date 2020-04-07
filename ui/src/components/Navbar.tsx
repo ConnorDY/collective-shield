@@ -5,10 +5,17 @@ import { get } from 'lodash';
 
 import User from '../models/User';
 import Avatar from './Avatar';
-import navLogo from '../assets/img/navlogo.png';
+import Logo from './Logo';
+// import navLogo from '../assets/img/CSLogo.svg';
 
 const MainNav: React.FC<{ user: User | undefined }> = ({ user }) => {
   const showAdmin = get(user, 'isSuperAdmin', false);
+  const logoFill = [
+    'default',
+    'blue-purple',
+    'orange',
+    'gray'
+  ];
 
   return (
     <Navbar expand="lg" className="nav">
@@ -16,8 +23,8 @@ const MainNav: React.FC<{ user: User | undefined }> = ({ user }) => {
         <Row className="justify-content-end nav-inner">
           <Col xs={12} lg={3}>
             <Navbar.Brand href="/" className="branding">
-              <img alt="Logo" className="logo" src={navLogo} />
-              <span>Collective Shield</span>
+              <Logo height="30" width="30" fill={logoFill[1]} />
+              <span className={`align-middle logo-text logo-text-${logoFill[0]}`}>Collective Shield</span>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="main-nav-bar" />
           </Col>
