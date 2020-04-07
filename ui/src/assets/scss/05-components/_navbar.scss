@@ -1,3 +1,12 @@
+$custom-logo-fill: () !default;
+$logo-fill: (
+  blue-purple: $blue-purple,
+  orange: $orange,
+  gray: $grey-dark,
+  default: $black
+);
+$logoFillColor: map-merge($logo-fill, $custom-logo-fill);
+
 .nav {
   margin: 3em 0;
 
@@ -20,8 +29,8 @@
   }
 
   .branding {
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 20px;
+    font-weight: 200;
 
     a,
     a:hover {
@@ -37,6 +46,18 @@
       height: 30px;
       display: inline-block;
       margin-right: 5px;
+      @each $name, $fill in $logoFillColor {
+        &.cs-logo-#{$name} {
+          fill: $fill;
+        }
+      }
+    }
+    .logo-text {
+      @each $name, $fill in $logoFillColor {
+        &.logo-text-#{$name} {
+          color: $fill;
+        }
+      }
     }
   }
 
