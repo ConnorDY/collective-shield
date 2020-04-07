@@ -8,7 +8,7 @@ import Avatar from './Avatar';
 import navLogo from '../assets/img/navlogo.png';
 
 const MainNav: React.FC<{ user: User | undefined }> = ({ user }) => {
-  const showAdmin = get(user, 'isSuperAdmin', true);
+  const showAdmin = get(user, 'isSuperAdmin', false);
 
   return (
     <Navbar expand="lg" className="nav">
