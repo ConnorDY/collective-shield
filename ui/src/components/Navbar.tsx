@@ -16,10 +16,8 @@ const MainNav: React.FC<{ user: User | undefined }> = ({ user }) => {
         <Row className="justify-content-end nav-inner">
           <Col xs={12} lg={3}>
             <Navbar.Brand href="/" className="branding">
-              <Link to="/">
-                <img alt="Logo" className="logo" src={navLogo} />
-                <span>Collective Shield</span>
-              </Link>
+              <img alt="Logo" className="logo" src={navLogo} />
+              <span>Collective Shield</span>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="main-nav-bar" />
           </Col>
@@ -55,8 +53,8 @@ const MainNav: React.FC<{ user: User | undefined }> = ({ user }) => {
                     </Link>
                   </Navbar.Text>
                 ) : (
-                  <></>
-                )}
+                    <></>
+                  )}
               </Col>
             </Navbar.Collapse>
           </Col>
