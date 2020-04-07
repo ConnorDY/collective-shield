@@ -3,7 +3,8 @@ import {
   Button,
   Container,
   Modal,
-  Row
+  Row,
+  Col
   // ToggleButton,
   // ToggleButtonGroup
 } from 'react-bootstrap';
@@ -48,22 +49,26 @@ const HomeView: React.FC<{}> = () => {
             */}
           <Container>
             <Row className="justify-content-md-center p-2">
-              <Button
-                disabled={registerDisabled}
-                variant="primary"
-                href="/login/facebook"
-                className="mr-2 mb-2"
-              >
-                {buttonPreText} with Facebook
-              </Button>{' '}
-              <Button
-                disabled={registerDisabled}
-                variant="primary"
-                href="/login/google"
-                className="mb-2"
-              >
-                {buttonPreText} with Google
-              </Button>{' '}
+              <Col sm={6}>
+                <Button
+                  disabled={registerDisabled}
+                  variant="primary"
+                  href="/login/facebook"
+                  className="mr-2 mb-2 btn-block"
+                >
+                  {buttonPreText} with Facebook
+                </Button>{' '}
+              </Col>
+              <Col sm={6}>
+                <Button
+                  disabled={registerDisabled}
+                  variant="primary"
+                  href="/login/google"
+                  className="mb-2 btn-block"
+                >
+                  {buttonPreText} with Google
+                </Button>{' '}
+              </Col>
             </Row>
           </Container>
           {/*
