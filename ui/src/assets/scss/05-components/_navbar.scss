@@ -19,13 +19,19 @@ $logoFillColor: map-merge($logo-fill, $custom-logo-fill);
   }
 
   .container {
-    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
   }
 
   .nav-inner {
     margin-left: 0;
     margin-right: 0;
     width: 100%;
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .branding {
@@ -63,7 +69,10 @@ $logoFillColor: map-merge($logo-fill, $custom-logo-fill);
 
   #main-nav-bar,
   .user {
-    margin-right: -15px;
+    // margin-right: -15px;
+    .row {
+      width: 100%;
+    }
   }
 
   .nav-lnks {
@@ -108,10 +117,16 @@ $logoFillColor: map-merge($logo-fill, $custom-logo-fill);
     text-decoration: underline;
   }
 
+  .collapse-row {
+    margin-right: 0;
+    margin-left: 0;
+  }
   .navbar-collapse {
     @include media-breakpoint-down(md) {
       background-color: $grey-light;
       padding: 1em;
+      margin-left: 0;
+      margin-right: 0;
       .nav-link {
         border-bottom: 1px solid $grey;
       }
