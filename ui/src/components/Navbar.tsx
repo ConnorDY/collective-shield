@@ -5,7 +5,7 @@ import { get } from 'lodash';
 
 import User from '../models/User';
 import Avatar from './Avatar';
-import navLogo from '../assets/img/navlogo.png';
+import navLogo from '../assets/img/CSLogo.svg';
 
 const MainNav: React.FC<{ user: User | undefined }> = ({ user }) => {
   const showAdmin = get(user, 'isSuperAdmin', false);
