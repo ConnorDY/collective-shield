@@ -92,9 +92,10 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
+      setIsValidated(true);
     } else {
       event.preventDefault();
-      setIsValidated(!isValidated);
+      setIsValidated(true);
 
       const data = pick(detailsReq, [
         'maskShieldCount',
@@ -258,7 +259,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                       updateDetailsReq({ jobRole: e.target.value })
                     }
                   >
-                    <option>Select Your Role</option>
+                    <option value={''}>Select your Role</option>
                     {roleOptions.map((role, i) => {
                       return <option key={i}>{role}</option>;
                     })}
@@ -318,7 +319,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                         updateDetailsReq({ addressState: e.target.value })
                       }
                     >
-                      <option>Choose...</option>
+                      <option value={''}>Choose...</option>
                       {states.map((state, i) => (
                         <option key={i}>{state}</option>
                       ))}
