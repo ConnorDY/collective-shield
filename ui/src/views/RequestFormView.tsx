@@ -286,7 +286,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                     disabled={disabled}
                     required
                     type="text"
-                    placeholder={getPlaceHolder('Sacred Heart Hospital')}
+                    placeholder={getPlaceHolder('Example: Sacred Heart Hospital')}
                     value={detailsReq.facilityName}
                     onChange={(e: BaseSyntheticEvent) =>
                       updateDetailsReq({ facilityName: e.target.value })
