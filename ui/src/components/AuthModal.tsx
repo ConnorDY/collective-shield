@@ -54,7 +54,7 @@ const HomeView: React.FC<{}> = () => {
                   disabled={registerDisabled}
                   variant="primary"
                   href="/login/facebook"
-                  className="mr-2 mb-2 btn-block"
+                  className="mr-2 mb-2 mb-sm-0 btn-block"
                 >
                   {buttonPreText} with Facebook
                 </Button>{' '}
@@ -64,7 +64,7 @@ const HomeView: React.FC<{}> = () => {
                   disabled={registerDisabled}
                   variant="primary"
                   href="/login/google"
-                  className="mb-2 btn-block"
+                  className="mb-2 mb-sm-0 btn-block"
                 >
                   {buttonPreText} with Google
                 </Button>{' '}

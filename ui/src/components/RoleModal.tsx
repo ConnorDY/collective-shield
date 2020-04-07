@@ -30,7 +30,7 @@ const RoleModal: React.FC<{
               <Col sm={6}>
                 <Button
                   variant="primary"
-                  className="mr-2 mb-2 btn-block"
+                  className="mr-2 mb-2 mb-sm-0 btn-block"
                   onClick={() => pickRole('maker')}
                 >
                   Printer / Maker
@@ -40,7 +40,7 @@ const RoleModal: React.FC<{
                 <Button
                   variant="primary"
                   onClick={() => pickRole('requestor')}
-                  className="mb-2 btn-block"
+                  className="mb-2 mb-sm-0 btn-block"
                 >
                   Requestor
                 </Button>
