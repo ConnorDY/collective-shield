@@ -49,7 +49,7 @@ const HomeView: React.FC<{}> = () => {
             */}
           <Container>
             <Row className="justify-content-md-center p-2">
-              <Col sm={6}>
+              <Col sm={6} lg={4}>
                 <Button
                   disabled={registerDisabled}
                   variant="primary"
@@ -59,12 +59,12 @@ const HomeView: React.FC<{}> = () => {
                   {buttonPreText} with Facebook
                 </Button>{' '}
               </Col>
-              <Col sm={6}>
+              <Col sm={6} lg={4}>
                 <Button
                   disabled={registerDisabled}
                   variant="primary"
                   href="/login/google"
-                  className="mb-2 mb-sm-0 btn-block"
+                  className="btn-block"
                 >
                   {buttonPreText} with Google
                 </Button>{' '}
