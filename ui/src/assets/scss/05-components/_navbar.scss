@@ -19,7 +19,6 @@
     width: 100%;
   }
 
-
   .branding {
     font-size: 16px;
     font-weight: bold;
@@ -41,7 +40,8 @@
     }
   }
 
-  #main-nav-bar, .user {
+  #main-nav-bar,
+  .user {
     margin-right: -15px;
   }
 
@@ -52,25 +52,25 @@
     }
   }
 
-
   .user {
     // text-align: right;
     font-size: 12px;
     @include media-breakpoint-up(lg) {
-    // position: absolute;
-    // right: 0;
+      // position: absolute;
+      // right: 0;
     }
   }
   // override default NavBar theme
   .navbar-text {
     color: $black;
-      @include media-breakpoint-up(lg) {
-        padding-bottom: 0;
-        padding-top: 0;
-      }
+    @include media-breakpoint-up(lg) {
+      padding-bottom: 0;
+      padding-top: 0;
+    }
   }
 
-  &.navbar-light .navbar-nav .nav-link, .navbar-text a {
+  &.navbar-light .navbar-nav .nav-link,
+  .navbar-text a {
     color: $blue-purple;
     font-weight: bold;
   }
@@ -87,11 +87,10 @@
     text-decoration: underline;
   }
 
-
   .navbar-collapse {
     @include media-breakpoint-down(md) {
-    background-color: $grey-light;
-    padding: 1em;
+      background-color: $grey-light;
+      padding: 1em;
       .nav-link {
         border-bottom: 1px solid $grey;
       }

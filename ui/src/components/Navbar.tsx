@@ -24,31 +24,40 @@ const MainNav: React.FC<{ user: User | undefined }> = ({ user }) => {
             <Navbar.Toggle aria-controls="main-nav-bar" />
           </Col>
           <Col xs={12} lg={9}>
-            <Navbar.Collapse id="main-nav-bar" className="justify-content-between">
-
+            <Navbar.Collapse
+              id="main-nav-bar"
+              className="justify-content-between"
+            >
               <Col xs lg={6} className="nav-links">
-                {
-                  user &&
+                {user && (
                   <Nav className="mr-auto text-lg-center">
-                    {
-                      showAdmin &&
-                      <NavLink to="/requests" activeClassName="active" className="nav-link">Admin</NavLink>
-                    }
+                    {showAdmin && (
+                      <NavLink
+                        to="/requests"
+                        activeClassName="active"
+                        className="nav-link"
+                      >
+                        Admin
+                      </NavLink>
+                    )}
                   </Nav>
-                }
+                )}
               </Col>
               <Col xs lg="auto" className="user">
                 {user ? (
                   <Navbar.Text className="my-auto text-lg-right font-weight-bold">
-                    <span className="ml-lg-3 mr-3 my-auto">{user.firstName}</span>
+                    <span className="ml-lg-3 mr-3 my-auto">
+                      {user.firstName}
+                    </span>
                     <Avatar size="40" user={user} />
-                    <Link to="/logout" className="ml-lg-3 my-lg-auto">Logout</Link>
+                    <Link to="/logout" className="ml-lg-3 my-lg-auto">
+                      Logout
+                    </Link>
                   </Navbar.Text>
                 ) : (
-                    <></>
-                  )}
+                  <></>
+                )}
               </Col>
-
             </Navbar.Collapse>
           </Col>
         </Row>
