@@ -27,7 +27,7 @@ const RoleModal: React.FC<{
         <Modal.Footer>
           <Container>
             <Row className="justify-content-md-center p-2">
-              <Col sm={6}>
+              <Col sm={6} lg={4}>
                 <Button
                   variant="primary"
                   className="mr-2 mb-2 mb-sm-0 btn-block"
@@ -36,11 +36,11 @@ const RoleModal: React.FC<{
                   Printer / Maker
                 </Button>
               </Col>
-              <Col sm={6}>
+              <Col sm={6} lg={4}>
                 <Button
                   variant="primary"
                   onClick={() => pickRole('requestor')}
-                  className="mb-2 mb-sm-0 btn-block"
+                  className="btn-block"
                 >
                   Requestor
                 </Button>
