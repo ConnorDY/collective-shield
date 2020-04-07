@@ -1,7 +1,7 @@
 name: Test
 on: [push]
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -14,3 +14,10 @@ jobs:
         with:
           prefix: 'ui'
           coverageCommand: npm run test:ui:coverage
+    build:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v1
+        - name: Install dependencies and build
+          run: |
+            cd ui && npm install && npm run build
