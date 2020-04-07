@@ -332,9 +332,11 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                       required
                       placeholder={getPlaceHolder('80205')}
                       value={detailsReq.addressZip}
-                      onChange={(e: BaseSyntheticEvent) =>
-                        updateDetailsReq({ addressZip: e.target.value })
-                      }
+                      onChange={(e: BaseSyntheticEvent) => {
+                        if (/^\d{0,5}$/.test(e.target.value)) {
+                          updateDetailsReq({ addressZip: e.target.value });
+                        } else e.preventDefault();
+                      }}
                     />
                   </Form.Group>
                 </Form.Row>
