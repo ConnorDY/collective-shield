@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Container, Modal, Row } from 'react-bootstrap';
+import { Button, Container, Modal, Row, Col } from 'react-bootstrap';
 
 const RoleModal: React.FC<{
   setRole: React.Dispatch<React.SetStateAction<string | null>>;
@@ -27,17 +27,24 @@ const RoleModal: React.FC<{
         <Modal.Footer>
           <Container>
             <Row className="justify-content-md-center p-2">
-              <Button
-                variant="primary"
-                className="mr-2"
-                onClick={() => pickRole('maker')}
-              >
-                Printer / Maker
-              </Button>
-
-              <Button variant="primary" onClick={() => pickRole('requestor')}>
-                Requestor
-              </Button>
+              <Col sm={6} lg={4}>
+                <Button
+                  variant="primary"
+                  className="mr-2 mb-2 mb-sm-0 btn-block"
+                  onClick={() => pickRole('maker')}
+                >
+                  Printer / Maker
+                </Button>
+              </Col>
+              <Col sm={6} lg={4}>
+                <Button
+                  variant="primary"
+                  onClick={() => pickRole('requestor')}
+                  className="btn-block"
+                >
+                  Requestor
+                </Button>
+              </Col>
             </Row>
           </Container>
         </Modal.Footer>
