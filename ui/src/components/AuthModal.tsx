@@ -57,7 +57,7 @@ const HomeView: React.FC<{}> = () => {
                   className="mr-2 mb-2 mb-sm-0 btn-block"
                 >
                   {buttonPreText} with Facebook
-                </Button>{' '}
+                </Button>
               </Col>
               <Col sm={6} lg={4}>
                 <Button
@@ -67,7 +67,7 @@ const HomeView: React.FC<{}> = () => {
                   className="btn-block"
                 >
                   {buttonPreText} with Google
-                </Button>{' '}
+                </Button>
               </Col>
             </Row>
           </Container>
