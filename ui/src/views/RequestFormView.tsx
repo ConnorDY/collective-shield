@@ -133,7 +133,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
   }, []);
 
   return (
-    <div className="new-requests">
+    <div className="request-details">
       <Row className="view-header">
         <Col>
           <h1 className="h1">
