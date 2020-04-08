@@ -1,15 +1,32 @@
 .my-work-table,
 .available-work-table {
-  .count {
-    width: 6rem;
+  .date {
+    width: 20%;
+    max-width: 150px;
   }
 
-  .requestor {
-    width: 99%;
+  .status {
+    width: 20%;
+    max-width: 150px;
+  }
+
+  .count, .distance {
+    width: 10%;
+    max-width: 75px;
+  }
+
+  .details, .requestor {
+    width: 30%;
+    min-width: 200px;
+  }
+
+  .action, .claim {
+    width: 10%;
+    // max-width: 120px;
   }
 
   .action button {
-    width: 10rem;
+    // width: 10rem;
   }
 }
 
@@ -36,10 +53,10 @@
 
 .available-work-table {
   .distance {
-    width: 7rem;
+    // max-width: 100px;
   }
 
   .claim button {
-    width: 10rem;
+    // width: 10rem;
   }
 }
