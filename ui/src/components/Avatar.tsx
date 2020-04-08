@@ -7,6 +7,7 @@ import User from '../models/User';
 interface Props {
   name?: string;
   size: string;
+  alt: string,
   round?: boolean;
   facebookId?: string;
 }
@@ -25,6 +26,7 @@ const AvatarProfile: React.FC<{ user: User | undefined; size: string }> = ({
   let props: Props = {
     name,
     size,
+    alt: name || 'Profile picture',
     round
   };
 
