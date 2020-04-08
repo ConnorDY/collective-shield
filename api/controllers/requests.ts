@@ -1,7 +1,6 @@
 import {
   JsonController,
   Body,
-  Delete,
   Get,
   Param,
   Patch,
@@ -11,6 +10,7 @@ import {
   Authorized,
   UseBefore
 } from 'routing-controllers';
+import { MongooseFilterQuery } from 'mongoose';
 import { celebrate, Segments } from 'celebrate';
 
 import config from '../config';
@@ -89,11 +89,15 @@ export default class RequestsController {
 
   @Get('/:id')
   getOneById(@Param('id') id: string, @CurrentUser() user: IUser) {
-    // Can only view details if requestor or assigned
-    return Request.findOne({
-      _id: id,
-      $or: [{ requestorID: user._id }, { makerID: user._id }]
-    })
+    // Can only view details if requestor, assigned, or admin
+    const query: MongooseFilterQuery<Pick<IRequest, any>> = {
+      _id: id
+    };
+    if (!user.isSuperAdmin) {
+      query.$or = [{ requestorID: user._id }, { makerID: user._id }];
+    }
+
+    return Request.findOne(query)
       .then((result) => {
         return result;
       })
