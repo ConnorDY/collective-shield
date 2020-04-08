@@ -6,16 +6,10 @@ import { get } from 'lodash';
 import User from '../models/User';
 import Avatar from './Avatar';
 import Logo from './Logo';
-// import navLogo from '../assets/img/CSLogo.svg';
 
 const MainNav: React.FC<{ user: User | undefined }> = ({ user }) => {
   const showAdmin = get(user, 'isSuperAdmin', false);
-  const logoFill = [
-    'default',
-    'blue-purple',
-    'orange',
-    'gray'
-  ];
+  const logoFill = ['default', 'blue-purple', 'orange', 'gray'];
 
   return (
     <Navbar expand="lg" className="nav">
@@ -24,7 +18,11 @@ const MainNav: React.FC<{ user: User | undefined }> = ({ user }) => {
           <Col xs={12} lg={3}>
             <Navbar.Brand href="/" className="branding">
               <Logo height="30" width="30" fill={logoFill[1]} />
-              <span className={`align-middle logo-text logo-text-${logoFill[0]}`}>Collective Shield</span>
+              <span
+                className={`align-middle logo-text logo-text-${logoFill[0]}`}
+              >
+                Collective Shield
+              </span>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="main-nav-bar" />
           </Col>
@@ -58,11 +56,11 @@ const MainNav: React.FC<{ user: User | undefined }> = ({ user }) => {
                       <Avatar size="40" user={user} />
                       <Link to="/logout" className="ml-lg-3 my-lg-auto">
                         Logout
-                    </Link>
+                      </Link>
                     </Navbar.Text>
                   ) : (
-                      <></>
-                    )}
+                    <></>
+                  )}
                 </Col>
               </Row>
             </Navbar.Collapse>

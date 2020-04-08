@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Button, Col, Row, Jumbotron } from 'react-bootstrap';
+import { Col, Row, Jumbotron } from 'react-bootstrap';
 import axios from 'axios';
 
 import { buildEndpointUrl } from '../utilities';
