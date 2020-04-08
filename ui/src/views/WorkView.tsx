@@ -136,7 +136,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                       <tr key={index}>
                         <td className="count">{w.maskShieldCount}</td>
                         <td className="requestor">
-                          <Link to={`/request/${w._id}`}>{w.facilityName}</Link>
+                          <Link to={`/request/${w._id}`} title="View details for this request">{w.facilityName}</Link>
                         </td>
                         <td className="status">
                           <Dropdown as={ButtonGroup}>
