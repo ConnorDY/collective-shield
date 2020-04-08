@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { Container } from 'react-bootstrap';
 import { ToastContainer } from 'react-toastify';
 import axios from 'axios';
+import Analytics from 'react-router-ga';
 
 import configureStore from './store';
 import { buildEndpointUrl } from './utilities';
@@ -23,6 +24,8 @@ import './assets/scss/app.scss';
 import RoleModal from './components/RoleModal';
 
 const store = configureStore();
+
+const GA_KEY = process.env.REACT_APP_GA_KEY;
 
 const App: React.FC = () => {
   const history = useHistory();
@@ -44,6 +47,50 @@ const App: React.FC = () => {
       });
   }, []);
 
+  const routes = (
+    user ? (
+      <>
+        <Switch>
+          <Route path="/" exact>
+            <HomeView user={user} role={role!} />
+          </Route>
+
+          <Route path="/request" exact>
+            <RequestFormView user={user} />
+          </Route>
+
+          <Route path="/requests" exact>
+            <RequestListView user={user} />
+          </Route>
+
+          <Route path="/request/:id" exact>
+            <RequestFormView user={user} />
+          </Route>
+
+          <Route path="/makers" exact>
+            <MakerView />
+          </Route>
+
+          <Route path="/logout" exact>
+            <LogoutView />
+          </Route>
+
+          <Route path="*">
+            <ErrorView />
+          </Route>
+        </Switch>
+
+        {!role && <RoleModal setRole={setRole} />}
+      </>
+    ) : (
+      <>
+        <Route path="/login">
+          <LoginView />
+        </Route>
+      </>
+    )
+  )
+
   return (
     <Provider store={store}>
       <div id="headerAndMain">
@@ -52,47 +99,16 @@ const App: React.FC = () => {
         <ScrollToTop>
           <main className="main">
             <Container className="inner">
-              {user ? (
+              {
+                GA_KEY ?
+                <Analytics id={GA_KEY}>
+                  {routes}
+                </Analytics>
+                :
                 <>
-                  <Switch>
-                    <Route path="/" exact>
-                      <HomeView user={user} role={role!} />
-                    </Route>
-
-                    <Route path="/request" exact>
-                      <RequestFormView user={user} />
-                    </Route>
-
-                    <Route path="/requests" exact>
-                      <RequestListView user={user} />
-                    </Route>
-
-                    <Route path="/request/:id" exact>
-                      <RequestFormView user={user} />
-                    </Route>
-
-                    <Route path="/makers" exact>
-                      <MakerView />
-                    </Route>
-
-                    <Route path="/logout" exact>
-                      <LogoutView />
-                    </Route>
-
-                    <Route path="*">
-                      <ErrorView />
-                    </Route>
-                  </Switch>
-
-                  {!role && <RoleModal setRole={setRole} />}
+                  {routes}
                 </>
-              ) : (
-                <>
-                  <Route path="/login">
-                    <LoginView />
-                  </Route>
-                </>
-              )}
+              }
             </Container>
           </main>
         </ScrollToTop>
