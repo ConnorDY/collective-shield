@@ -66,7 +66,7 @@ const MyRequestsView: React.FC<{ user: User }> = ({ user }) => {
                       return (
                         <tr key={key}>
                           <td className="date">
-                            <Link to={`/request/${request._id}`}>
+                            <Link to={`/request/${request._id}`} title="View details for this request">
                               {moment(request.createDate).format('dddd, MMMM Do')}
                             </Link>
                           </td>
