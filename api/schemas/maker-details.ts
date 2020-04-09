@@ -8,5 +8,8 @@ export const MakerDetailsSchema = new Schema({
   city: String,
   state: String,
   zip: String,
-  phone: String
+  phone: String,
+  homePickUp: Boolean,
+  willShip: Boolean,
+  willDeliver: Boolean
 });

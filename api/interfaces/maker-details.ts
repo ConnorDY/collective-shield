@@ -7,4 +7,7 @@ export default interface IMakerDetails {
   state: string;
   zip: string;
   phone: string;
+  homePickUp: boolean;
+  willShip: boolean;
+  willDeliver: boolean;
 }

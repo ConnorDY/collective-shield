@@ -10,5 +10,7 @@ export default {
     secret: process.env.GOOGLE_SECRET
   },
   domainName: process.env.OAUTH_DOMAIN,
-  cookieSecret: process.env.COOKIE_SECRET
+  cookieSecret: process.env.COOKIE_SECRET,
+  mailgunAPIKey: process.env.MAILGUN_API_KEY,
+  mailgunDomain: process.env.MAILGUN_DOMAIN
 };
