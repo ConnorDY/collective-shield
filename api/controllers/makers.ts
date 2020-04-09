@@ -8,6 +8,7 @@ import {
 
 import config from '../config';
 import { User } from '../schemas';
+import { sendEmail } from '../mailer';
 
 @JsonController(`${config.apiPrefix}/makers`)
 export default class MakersController {
@@ -34,7 +35,17 @@ export default class MakersController {
       { $set: { isVerifiedMaker: true } }
     )
       .then((result) => {
-        return result;
+        return sendEmail({
+          to: result.email,
+          subject: "You've been approved",
+          body: 'Placeholder body'
+        })
+          .then(() => {
+            return result;
+          })
+          .catch((err) => {
+            throw err;
+          });
       })
       .catch((err) => {
         throw err;
