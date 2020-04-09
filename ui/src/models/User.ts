@@ -1,3 +1,5 @@
+import MakerDetails from './MakerDetails';
+
 export default interface User {
   _id: string;
   firstName: string;
@@ -6,17 +8,5 @@ export default interface User {
   maker?: boolean;
   isSuperAdmin?: boolean;
   isVerifiedMaker?: boolean;
-  makerDetails?: {
-    firstName: string;
-    lastName: string;
-    addressLine1: string;
-    addressLine2?: string;
-    city: string;
-    state: string;
-    zip: string;
-    phone: string;
-    homePickUp: boolean;
-    willShip: boolean;
-    willDeliver: boolean;
-  };
+  makerDetails?: MakerDetails;
 }
