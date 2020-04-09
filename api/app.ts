@@ -6,7 +6,7 @@ import { useExpressServer, Action } from 'routing-controllers';
 import cookieParser from 'cookie-parser';
 import session, { SessionOptions } from 'express-session';
 import { connect } from 'mongoose';
-import path from 'path';
+import path from 'pathTEST';
 // import SparkPost from 'sparkpost';
 import passport from 'passport';
 import { createProxyMiddleware } from 'http-proxy-middleware';
