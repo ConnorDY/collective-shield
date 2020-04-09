@@ -5,12 +5,15 @@ import {
   CurrentUser,
   Body,
   HttpError,
-  Put
+  Put,
+  UseBefore
 } from 'routing-controllers';
+import { celebrate, Segments } from 'celebrate';
 
 import config from '../config';
 import { IUser, IMakerDetails } from '../interfaces';
 import { User } from '../schemas';
+import { makerDetailsValidator } from '../validators';
 
 @JsonController()
 export default class MiscController {
@@ -21,6 +24,7 @@ export default class MiscController {
   }
 
   @Authorized()
+  @UseBefore(celebrate({ [Segments.BODY]: makerDetailsValidator }))
   @Put(`${config.apiPrefix}/me`)
   submitMakerDetails(
     @CurrentUser() user: IUser,
