@@ -15,7 +15,9 @@ export default class MakersController {
   @Authorized(['admin'])
   @Get('')
   getAll() {
-    return User.find({})
+    return User.find({
+      $or: [{ isVerifiedMaker: true }, { makerDetails: { $ne: undefined } }]
+    })
       .then((results) => {
         return results;
       })
@@ -29,7 +31,7 @@ export default class MakersController {
   getUnapproved() {
     return User.find({
       $or: [{ isVerifiedMaker: false }, { isVerifiedMaker: undefined }],
-      makerDetails: undefined
+      makerDetails: { $not: undefined }
     })
       .then((results) => {
         return results;
