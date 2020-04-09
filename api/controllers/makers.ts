@@ -31,7 +31,7 @@ export default class MakersController {
   getUnapproved() {
     return User.find({
       $or: [{ isVerifiedMaker: false }, { isVerifiedMaker: undefined }],
-      makerDetails: { $not: undefined }
+      makerDetails: { $ne: undefined }
     })
       .then((results) => {
         return results;
