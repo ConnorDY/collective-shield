@@ -1,6 +1,23 @@
-.status-options {
-  float: right;
-  margin-bottom: 0;
-  margin-right: 1rem;
-  width: 200px;
+.request-details {
+  .dropdown {
+    button {
+      background-color: $white;
+      border-color: $grey;
+      border-width: 2px;
+      color: $black;
+      &:hover,
+      :active {
+        background-color: $white !important;
+        color: $black;
+      }
+    }
+  }
+  .show {
+    .btn-outline-secondary {
+      &.dropdown-toggle {
+        background-color: $white !important;
+        color: $black;
+      }
+    }
+  }
 }

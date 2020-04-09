@@ -1,3 +1,12 @@
+$custom-logo-fill: () !default;
+$logo-fill: (
+  blue-purple: $blue-purple,
+  orange: $orange,
+  gray: $grey-dark,
+  default: $black
+);
+$logoFillColor: map-merge($logo-fill, $custom-logo-fill);
+
 .nav {
   margin: 3em 0;
 
@@ -10,19 +19,24 @@
   }
 
   .container {
-    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
   }
 
   .nav-inner {
     margin-left: 0;
     margin-right: 0;
     width: 100%;
+    padding-left: 0;
+    padding-right: 0;
   }
 
-
   .branding {
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 20px;
+    font-weight: 600;
 
     a,
     a:hover {
@@ -38,11 +52,27 @@
       height: 30px;
       display: inline-block;
       margin-right: 5px;
+      @each $name, $fill in $logoFillColor {
+        &.cs-logo-#{$name} {
+          fill: $fill;
+        }
+      }
+    }
+    .logo-text {
+      @each $name, $fill in $logoFillColor {
+        &.logo-text-#{$name} {
+          color: $fill;
+        }
+      }
     }
   }
 
-  #main-nav-bar, .user {
-    margin-right: -15px;
+  #main-nav-bar,
+  .user {
+    // margin-right: -15px;
+    .row {
+      width: 100%;
+    }
   }
 
   .nav-lnks {
@@ -52,25 +82,25 @@
     }
   }
 
-
   .user {
     // text-align: right;
     font-size: 12px;
     @include media-breakpoint-up(lg) {
-    // position: absolute;
-    // right: 0;
+      // position: absolute;
+      // right: 0;
     }
   }
   // override default NavBar theme
   .navbar-text {
     color: $black;
-      @include media-breakpoint-up(lg) {
-        padding-bottom: 0;
-        padding-top: 0;
-      }
+    @include media-breakpoint-up(lg) {
+      padding-bottom: 0;
+      padding-top: 0;
+    }
   }
 
-  &.navbar-light .navbar-nav .nav-link, .navbar-text a {
+  &.navbar-light .navbar-nav .nav-link,
+  .navbar-text a {
     color: $blue-purple;
     font-weight: bold;
   }
@@ -87,11 +117,16 @@
     text-decoration: underline;
   }
 
-
+  .collapse-row {
+    margin-right: 0;
+    margin-left: 0;
+  }
   .navbar-collapse {
     @include media-breakpoint-down(md) {
-    background-color: $grey-light;
-    padding: 1em;
+      background-color: $grey-light;
+      padding: 1em;
+      margin-left: 0;
+      margin-right: 0;
       .nav-link {
         border-bottom: 1px solid $grey;
       }
