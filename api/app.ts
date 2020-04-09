@@ -13,6 +13,7 @@ import { createProxyMiddleware } from 'http-proxy-middleware';
 
 import './passport';
 import config from './config';
+import { IUser } from './interfaces';
 import {
   LoginController,
   MiscController,
@@ -74,18 +75,16 @@ app.use(parseForm);
 
 // setup routing-controllers
 useExpressServer(app, {
-  controllers: [
-    LoginController,
-    MiscController,
-    RequestsController
-  ],
+  controllers: [LoginController, MiscController, RequestsController],
   classTransformer: false,
   currentUserChecker: async (action: Action) => {
     return action.request.user;
   },
   authorizationChecker: async (action: Action, roles: string[]) => {
-    if (!action.request.user) return false;
-    if (roles.includes('admin')) return action.request.user.isSuperAdmin;
+    const user = action.request.user as IUser;
+    if (!user) return false;
+    if (roles.includes('admin')) return user.isSuperAdmin;
+    if (roles.includes('verified')) return user.isVerifiedMaker;
     return true;
   }
 });

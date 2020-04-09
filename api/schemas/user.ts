@@ -14,6 +14,7 @@ export const UserSchema = new Schema({
   email: String,
   providers: oauthProviders,
   isSuperAdmin: Boolean,
+  isVerifiedMaker: Boolean,
   login: UserLoginSchema
 });
 

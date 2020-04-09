@@ -9,6 +9,7 @@ export default interface IUser extends Document {
   providers: IOauthProviders;
   maker?: IMaker;
   isSuperAdmin: boolean;
+  isVerifiedMaker: boolean;
   login?: IUserLogin;
   roles: string[];
 }
