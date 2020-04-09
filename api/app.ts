@@ -14,6 +14,7 @@ import './passport';
 import config from './config';
 import {
   LoginController,
+  MakersController,
   MiscController,
   RequestsController
 } from './controllers';
@@ -73,7 +74,12 @@ app.use(parseForm);
 
 // setup routing-controllers
 useExpressServer(app, {
-  controllers: [LoginController, MiscController, RequestsController],
+  controllers: [
+    LoginController,
+    MakersController,
+    MiscController,
+    RequestsController
+  ],
   classTransformer: false,
   currentUserChecker: async (action: Action) => {
     return action.request.user;

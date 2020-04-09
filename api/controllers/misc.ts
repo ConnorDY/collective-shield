@@ -8,19 +8,20 @@ import {
   Put
 } from 'routing-controllers';
 
+import config from '../config';
 import { IUser, IMakerDetails } from '../interfaces';
 import { User } from '../schemas';
 
 @JsonController()
 export default class MiscController {
   @Authorized()
-  @Get('/api/me')
+  @Get(`${config.apiPrefix}/me`)
   getMyProfile(@CurrentUser() user: IUser) {
     return user;
   }
 
   @Authorized()
-  @Put('/api/me')
+  @Put(`${config.apiPrefix}/me`)
   submitMakerDetails(
     @CurrentUser() user: IUser,
     @Body() makerDetails: IMakerDetails
