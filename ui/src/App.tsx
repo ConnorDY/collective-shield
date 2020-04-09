@@ -47,49 +47,47 @@ const App: React.FC = () => {
       });
   }, []);
 
-  const routes = (
-    user ? (
-      <>
-        <Switch>
-          <Route path="/" exact>
-            <HomeView user={user} role={role!} />
-          </Route>
-
-          <Route path="/request" exact>
-            <RequestFormView user={user} />
-          </Route>
-
-          <Route path="/requests" exact>
-            <RequestListView user={user} />
-          </Route>
-
-          <Route path="/request/:id" exact>
-            <RequestFormView user={user} />
-          </Route>
-
-          <Route path="/makers" exact>
-            <MakerView />
-          </Route>
-
-          <Route path="/logout" exact>
-            <LogoutView />
-          </Route>
-
-          <Route path="*">
-            <ErrorView />
-          </Route>
-        </Switch>
-
-        {!role && <RoleModal setRole={setRole} />}
-      </>
-    ) : (
-      <>
-        <Route path="/login">
-          <LoginView />
+  const routes = user ? (
+    <>
+      <Switch>
+        <Route path="/" exact>
+          <HomeView user={user} role={role!} />
         </Route>
-      </>
-    )
-  )
+
+        <Route path="/request" exact>
+          <RequestFormView user={user} />
+        </Route>
+
+        <Route path="/requests" exact>
+          <RequestListView user={user} />
+        </Route>
+
+        <Route path="/request/:id" exact>
+          <RequestFormView user={user} />
+        </Route>
+
+        <Route path="/makers" exact>
+          <MakerView />
+        </Route>
+
+        <Route path="/logout" exact>
+          <LogoutView />
+        </Route>
+
+        <Route path="*">
+          <ErrorView />
+        </Route>
+      </Switch>
+
+      {!role && <RoleModal setRole={setRole} />}
+    </>
+  ) : (
+    <>
+      <Route path="/login">
+        <LoginView />
+      </Route>
+    </>
+  );
 
   return (
     <Provider store={store}>
@@ -99,16 +97,11 @@ const App: React.FC = () => {
         <ScrollToTop>
           <main className="main">
             <Container className="inner">
-              {
-                GA_KEY ?
-                <Analytics id={GA_KEY}>
-                  {routes}
-                </Analytics>
-                :
-                <>
-                  {routes}
-                </>
-              }
+              {GA_KEY ? (
+                <Analytics id={GA_KEY}>{routes}</Analytics>
+              ) : (
+                <>{routes}</>
+              )}
             </Container>
           </main>
         </ScrollToTop>

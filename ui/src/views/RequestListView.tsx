@@ -138,7 +138,10 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
                     return (
                       <tr key={key}>
                         <td className="requestedDate">
-                          <Link to={`/request/${r._id}`} title="View details for this request">
+                          <Link
+                            to={`/request/${r._id}`}
+                            title="View details for this request"
+                          >
                             {new Intl.DateTimeFormat('en-US', options).format(
                               date
                             )}

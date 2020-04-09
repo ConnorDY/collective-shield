@@ -10,17 +10,20 @@
     max-width: 150px;
   }
 
-  .count, .distance {
+  .count,
+  .distance {
     width: 10%;
     max-width: 75px;
   }
 
-  .details, .requestor {
+  .details,
+  .requestor {
     width: 30%;
     min-width: 200px;
   }
 
-  .action, .claim {
+  .action,
+  .claim {
     width: 10%;
     // max-width: 120px;
   }

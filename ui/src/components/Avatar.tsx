@@ -7,7 +7,7 @@ import User from '../models/User';
 interface Props {
   name?: string;
   size: string;
-  alt: string,
+  alt: string;
   round?: boolean;
   facebookId?: string;
 }
