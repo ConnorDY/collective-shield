@@ -81,11 +81,20 @@ useExpressServer(app, {
     return action.request.user;
   },
   authorizationChecker: async (action: Action, roles: string[]) => {
+    // check if the user is logged in
     const user = action.request.user as IUser;
     if (!user) return false;
-    if (roles.includes('admin') && !user.isSuperAdmin) return false;
-    if (roles.includes('verified') && !user.isVerifiedMaker) return false;
-    return true;
+
+    // if no roles are provided, allow the logged-in
+    // user to access the endpoint
+    if (!roles || !roles.length) return true;
+
+    // role checks
+    if (roles.includes('admin') && user.isSuperAdmin) return true;
+    if (roles.includes('verified') && user.isVerifiedMaker) return true;
+
+    // return false if they don't have the required roles
+    return false;
   }
 });
 
