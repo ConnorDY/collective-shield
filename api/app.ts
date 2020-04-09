@@ -93,7 +93,7 @@ useExpressServer(app, {
     if (roles.includes('admin') && user.isSuperAdmin) return true;
     if (roles.includes('verified') && user.isVerifiedMaker) return true;
 
-    // return false if they don't have the required roles
+    // return false if they don't have any of the required roles
     return false;
   }
 });
