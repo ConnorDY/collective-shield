@@ -30,8 +30,6 @@ export default class MiscController {
     @CurrentUser() user: IUser,
     @Body() makerDetails: IMakerDetails
   ) {
-    console.log(makerDetails);
-
     if (user.makerDetails) {
       throw new HttpError(405, 'Maker information already submitted.');
     }
