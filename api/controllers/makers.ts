@@ -13,6 +13,18 @@ import { sendEmail } from '../mailer';
 @JsonController(`${config.apiPrefix}/makers`)
 export default class MakersController {
   @Authorized(['admin'])
+  @Get('')
+  getAll() {
+    return User.find({})
+      .then((results) => {
+        return results;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  }
+
+  @Authorized(['admin'])
   @Get('/unapproved')
   getUnapproved() {
     return User.find({
