@@ -1,7 +1,7 @@
 name: Test
 on: [push]
 jobs:
-  test:
+  test-ui:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -14,7 +14,7 @@ jobs:
         with:
           prefix: 'ui'
           coverageCommand: npm run test:ui:coverage
-  build:
+  build-ui:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -25,3 +25,13 @@ jobs:
         # Set CI=false because we want to pass even if there are warnings
         run: |
           cd ui && CI=false npm run build
+  build-api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install dependencies
+        run: |
+          cd api && npm install
+      - name: Build
+        run: |
+          cd api && npm run build
