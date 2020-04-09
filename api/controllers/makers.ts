@@ -13,10 +13,10 @@ import { sendEmail } from '../mailer';
 @JsonController(`${config.apiPrefix}/makers`)
 export default class MakersController {
   @Authorized(['admin'])
-  @Get('')
-  getAll() {
+  @Get('/approved')
+  getApproved() {
     return User.find({
-      $or: [{ isVerifiedMaker: true }, { makerDetails: { $ne: undefined } }]
+      isVerifiedMaker: true
     })
       .then((results) => {
         return results;
