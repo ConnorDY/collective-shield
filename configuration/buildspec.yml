@@ -9,7 +9,7 @@ phases:
     commands:
       - echo Build started on `date`
       - cd ../api && npm run build
-      - cd ../ui && npm run build
+      - cd ../ui && REACT_APP_GA_KEY=UA-162138850-1 npm run build
   post_build:
     commands:
       - cd .. && mkdir output
