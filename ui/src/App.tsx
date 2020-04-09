@@ -15,7 +15,7 @@ import ScrollToTop from './components/ScrollToTop';
 import HomeView from './views/HomeView';
 import LoginView from './views/LoginView';
 import LogoutView from './views/LogoutView';
-import MakerView from './views/MakerView';
+import MakersView from './views/MakersView';
 import RequestListView from './views/RequestListView';
 import RequestFormView from './views/RequestFormView';
 import ErrorView from './views/ErrorView';
@@ -67,7 +67,7 @@ const App: React.FC = () => {
         </Route>
 
         <Route path="/makers" exact>
-          <MakerView />
+          <MakersView />
         </Route>
 
         <Route path="/logout" exact>

@@ -7,7 +7,6 @@ import cookieParser from 'cookie-parser';
 import session, { SessionOptions } from 'express-session';
 import { connect } from 'mongoose';
 import path from 'path';
-// import SparkPost from 'sparkpost';
 import passport from 'passport';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 
@@ -15,6 +14,7 @@ import './passport';
 import config from './config';
 import {
   LoginController,
+  MakersController,
   MiscController,
   RequestsController
 } from './controllers';
@@ -26,7 +26,6 @@ const cookieSession: SessionOptions = {
   cookie: {}
 };
 const parseForm = bodyParser.urlencoded({ extended: false });
-// const sparkpostClient = new SparkPost(config.sparkpostKey);
 
 connect(
   config.mongoUri!,
@@ -75,7 +74,12 @@ app.use(parseForm);
 
 // setup routing-controllers
 useExpressServer(app, {
-  controllers: [LoginController, MiscController, RequestsController],
+  controllers: [
+    LoginController,
+    MakersController,
+    MiscController,
+    RequestsController
+  ],
   classTransformer: false,
   currentUserChecker: async (action: Action) => {
     return action.request.user;

@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 
-import { IOauthProviders, IUserLogin } from '.';
+import { IOauthProviders, IUserLogin, IMakerDetails } from '.';
 
 export default interface IUser extends Document {
   firstName: string;
@@ -10,4 +10,5 @@ export default interface IUser extends Document {
   isSuperAdmin?: boolean;
   isVerifiedMaker?: boolean;
   login?: IUserLogin;
+  makerDetails?: IMakerDetails;
 }
