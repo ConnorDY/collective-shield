@@ -83,8 +83,8 @@ useExpressServer(app, {
   authorizationChecker: async (action: Action, roles: string[]) => {
     const user = action.request.user as IUser;
     if (!user) return false;
-    if (roles.includes('admin')) return user.isSuperAdmin;
-    if (roles.includes('verified')) return user.isVerifiedMaker;
+    if (roles.includes('admin') && !user.isSuperAdmin) return false;
+    if (roles.includes('verified') && !user.isVerifiedMaker) return false;
     return true;
   }
 });
