@@ -9,7 +9,7 @@
     border: 2px solid $grey;
     border-radius: 4px;
     margin-bottom: 3em;
-    min-width: 400px;
+    min-width: 520px;
   }
 
   table {
@@ -30,6 +30,7 @@
 
     th {
       color: $grey-dark;
+      font-weight: 600;
     }
 
     td {
