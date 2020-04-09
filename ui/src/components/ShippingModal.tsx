@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Container, Modal, Row, ListGroup } from 'react-bootstrap';
+import { Button, Modal, ListGroup } from 'react-bootstrap';
 
 const ShippingModal: React.FC = () => {
   const [show, setShow] = useState(false);
