@@ -116,65 +116,70 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
             <Jumbotron className="text-center">No requests found.</Jumbotron>
           </Col>
         ) : (
-            <Col>
-              <div className="table-wrapper">
-                <table className="my-work-table">
-                  <thead>
-                    <tr>
-                      <th className="count">Count</th>
-                      <th className="requestor">Requestor</th>
-                      <th>Status</th>
-                      <th>
-                        <span className="sr-only">Action</span>
-                      </th>
-                    </tr>
-                  </thead>
+          <Col>
+            <div className="table-wrapper">
+              <table className="my-work-table">
+                <thead>
+                  <tr>
+                    <th className="count">Count</th>
+                    <th className="requestor">Requestor</th>
+                    <th>Status</th>
+                    <th>
+                      <span className="sr-only">Action</span>
+                    </th>
+                  </tr>
+                </thead>
 
-                  <tbody>
-                    {work.map((w, index) => {
-                      return (
-                        <tr key={index}>
-                          <td className="count">{w.maskShieldCount}</td>
-                          <td className="requestor">
-                            <Link to={`/request/${w._id}`} title="View details for this request">{w.facilityName}</Link>
-                          </td>
-                          <td className="status">
-                            <Dropdown as={ButtonGroup}>
-                              <Dropdown.Toggle
-                                id={`status-dropdown-${index}`}
-                                variant="outline-secondary"
-                              >
-                                {StatusOption(w.status || 'Requested')}
-                              </Dropdown.Toggle>
-
-                              <Dropdown.Menu>
-                                {statuses.map((status, index2) => (
-                                  <Dropdown.Item
-                                    key={index2}
-                                    onClick={() => setStatus(w._id, status)}
-                                  >
-                                    {StatusOption(status)}
-                                  </Dropdown.Item>
-                                ))}
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </td>
-                          <td className="action">
-                            <Button
-                              variant="primary"
-                              onClick={() => removeWork(w._id)}
+                <tbody>
+                  {work.map((w, index) => {
+                    return (
+                      <tr key={index}>
+                        <td className="count">{w.maskShieldCount}</td>
+                        <td className="requestor">
+                          <Link
+                            to={`/request/${w._id}`}
+                            title="View details for this request"
+                          >
+                            {w.facilityName}
+                          </Link>
+                        </td>
+                        <td className="status">
+                          <Dropdown as={ButtonGroup}>
+                            <Dropdown.Toggle
+                              id={`status-dropdown-${index}`}
+                              variant="outline-secondary"
                             >
-                              Unassign
+                              {StatusOption(w.status || 'Requested')}
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                              {statuses.map((status, index2) => (
+                                <Dropdown.Item
+                                  key={index2}
+                                  onClick={() => setStatus(w._id, status)}
+                                >
+                                  {StatusOption(status)}
+                                </Dropdown.Item>
+                              ))}
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </td>
+                        <td className="action">
+                          <Button
+                            variant="primary"
+                            onClick={() => removeWork(w._id)}
+                          >
+                            Unassign
                           </Button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </Col>
-          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </Col>
+        )}
       </Row>
 
       <Row className="view-header">

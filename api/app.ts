@@ -18,6 +18,7 @@ import {
   MiscController,
   RequestsController
 } from './controllers';
+import { authorizationChecker } from './utils';
 
 const portNumber = process.env.PORT || 3050;
 const cookieSession: SessionOptions = {
@@ -74,20 +75,13 @@ app.use(parseForm);
 
 // setup routing-controllers
 useExpressServer(app, {
-  controllers: [
-    LoginController,
-    MiscController,
-    RequestsController
-  ],
+  controllers: [LoginController, MiscController, RequestsController],
   classTransformer: false,
   currentUserChecker: async (action: Action) => {
     return action.request.user;
   },
-  authorizationChecker: async (action: Action, roles: string[]) => {
-    if (!action.request.user) return false;
-    if (roles.includes('admin')) return action.request.user.isSuperAdmin;
-    return true;
-  }
+  authorizationChecker: (action: Action, roles?: string[]) =>
+    authorizationChecker(action.request.user, roles)
 });
 
 app.get('/api/logout', (req, res) => {
