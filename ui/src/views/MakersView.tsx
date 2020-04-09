@@ -51,7 +51,9 @@ export default function MakersView() {
                   <tr>
                     <th className="name">Name</th>
                     <th className="email">Email</th>
-                    <th className="prints">View Details</th>
+                    <th className="view-details">
+                      <span className="sr-only">View Details</span>
+                    </th>
                   </tr>
                 </thead>
               </table>
@@ -62,7 +64,7 @@ export default function MakersView() {
                       {makerDetails!.firstName} {makerDetails!.lastName}
                     </td>
                     <td>{email}</td>
-                    <td>Button here</td>
+                    <td>Button to view details here</td>
                   </tr>
                 );
               })}
@@ -91,7 +93,9 @@ export default function MakersView() {
                   <tr>
                     <th className="name">Name</th>
                     <th className="email">Email</th>
-                    <th className="prints">View Details</th>
+                    <th className="view-details">
+                      <span className="sr-only">View Details</span>
+                    </th>
                   </tr>
                 </thead>
               </table>
@@ -102,7 +106,7 @@ export default function MakersView() {
                       {makerDetails!.firstName} {makerDetails!.lastName}
                     </td>
                     <td>{email}</td>
-                    <td>Button here</td>
+                    <td>Button to view details here</td>
                   </tr>
                 );
               })}
