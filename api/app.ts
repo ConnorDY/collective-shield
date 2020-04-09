@@ -13,12 +13,12 @@ import { createProxyMiddleware } from 'http-proxy-middleware';
 
 import './passport';
 import config from './config';
-import { IUser } from './interfaces';
 import {
   LoginController,
   MiscController,
   RequestsController
 } from './controllers';
+import { authorizationChecker } from './utils';
 
 const portNumber = process.env.PORT || 3050;
 const cookieSession: SessionOptions = {
@@ -80,22 +80,8 @@ useExpressServer(app, {
   currentUserChecker: async (action: Action) => {
     return action.request.user;
   },
-  authorizationChecker: async (action: Action, roles: string[]) => {
-    // check if the user is logged in
-    const user = action.request.user as IUser;
-    if (!user) return false;
-
-    // if no roles are provided, allow the logged-in
-    // user to access the endpoint
-    if (!roles || !roles.length) return true;
-
-    // role checks
-    if (roles.includes('admin') && user.isSuperAdmin) return true;
-    if (roles.includes('verified') && user.isVerifiedMaker) return true;
-
-    // return false if they don't have any of the required roles
-    return false;
-  }
+  authorizationChecker: (action: Action, roles?: string[]) =>
+    authorizationChecker(action.request.user, roles)
 });
 
 app.get('/api/logout', (req, res) => {
