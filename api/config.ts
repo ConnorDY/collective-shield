@@ -10,6 +10,5 @@ export default {
     secret: process.env.GOOGLE_SECRET
   },
   domainName: process.env.OAUTH_DOMAIN,
-  cookieSecret: process.env.COOKIE_SECRET,
-  sparkpostKey: process.env.SPARKPOST_KEY
+  cookieSecret: process.env.COOKIE_SECRET
 };

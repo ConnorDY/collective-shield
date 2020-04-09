@@ -7,7 +7,6 @@ import cookieParser from 'cookie-parser';
 import session, { SessionOptions } from 'express-session';
 import { connect } from 'mongoose';
 import path from 'path';
-// import SparkPost from 'sparkpost';
 import passport from 'passport';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 
@@ -26,7 +25,6 @@ const cookieSession: SessionOptions = {
   cookie: {}
 };
 const parseForm = bodyParser.urlencoded({ extended: false });
-// const sparkpostClient = new SparkPost(config.sparkpostKey);
 
 connect(
   config.mongoUri!,
