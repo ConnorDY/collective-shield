@@ -115,7 +115,6 @@ const MakerVerificationView: React.FC<{ user: User }> = ({ user }) => {
           <Col>
             <div className="c-requestForm -pad">
               <Alert variant="success">
-                {' '}
                 Thank you! You will receive an email once your Maker account has been approved.
               </Alert>
             </div>
