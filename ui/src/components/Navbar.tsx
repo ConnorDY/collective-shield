@@ -16,7 +16,11 @@ const MainNav: React.FC<{ user: User | undefined }> = ({ user }) => {
       <Container>
         <Row className="justify-content-end nav-inner no-gutters">
           <Col xs={12} lg={3}>
-            <Navbar.Brand href="/" className="branding">
+            <Navbar.Brand
+              href="http://collectiveshield.org"
+              className="branding"
+              target="_blank"
+            >
               <Logo height="30" width="30" fill={logoFill[1]} />
               <span
                 className={`align-middle logo-text logo-text-${logoFill[0]}`}

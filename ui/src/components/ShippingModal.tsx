@@ -10,7 +10,7 @@ const ShippingModal: React.FC = () => {
   return (
     <>
       <Button variant="primary" onClick={handleShow}>
-        Shipping Info
+        Get Shipping Label
       </Button>
       <Modal show={show} size="lg" backdrop onHide={handleClose}>
         <div className="p-3">
