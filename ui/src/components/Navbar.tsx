@@ -17,7 +17,7 @@ const MainNav: React.FC<{ user: User | undefined }> = ({ user }) => {
         <Row className="justify-content-end nav-inner no-gutters">
           <Col xs={12} lg={3}>
             <Navbar.Brand
-              href="http://collectiveshield.org"
+              href="https://www.collectiveshield.org"
               className="branding"
               target="_blank"
             >
