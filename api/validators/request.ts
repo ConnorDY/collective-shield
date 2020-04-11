@@ -5,10 +5,13 @@ import { states } from '../constants';
 const requestValidator = Joi.object().keys({
   maskShieldCount: Joi.number().required(),
   jobRole: Joi.string()
-    .valid('Doctor', 'Nurse', 'First Responder', 'Medical Support Staff')
+    .valid('Doctor', 'Nurse', 'First Responder', 'Medical Support Staff', 'Healthcare Worker', 'Critical Workforce',
+    'Delivery or Retail', 'Military')
     .required(),
   email: Joi.string().email().required(),
-  facilityName: Joi.string().required(),
+  facilityName: Joi.string().allow('').optional(),
+  addressLine1: Joi.string().required(),
+  addressLine2: Joi.string().allow('').optional(),
   addressCity: Joi.string().required(),
   addressState: Joi.string()
     .valid(...states)

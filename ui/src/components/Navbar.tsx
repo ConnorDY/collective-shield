@@ -19,7 +19,6 @@ const MainNav: React.FC<{ user: User | undefined }> = ({ user }) => {
             <Navbar.Brand
               href="https://www.collectiveshield.org"
               className="branding"
-              target="_blank"
             >
               <Logo height="30" width="30" fill={logoFill[1]} />
               <span
