@@ -15,6 +15,8 @@ import ScrollToTop from './components/ScrollToTop';
 import HomeView from './views/HomeView';
 import LoginView from './views/LoginView';
 import LogoutView from './views/LogoutView';
+import MakerVerificationPendingView from './views/MakerVerificationPendingView';
+import MakerVerificationView from './views/MakerVerificationView';
 import MakersView from './views/MakersView';
 import RequestListView from './views/RequestListView';
 import RequestFormView from './views/RequestFormView';
@@ -34,17 +36,21 @@ const App: React.FC = () => {
     sessionStorage.getItem('role')
   );
 
-  // on app load
-  useEffect(() => {
-    // get user profile
+  const getUser = () => {
     axios
       .get(buildEndpointUrl('me'))
       .then((res) => {
         setUser(res.data);
       })
-      .catch((err) => {
+      .catch(() => {
         history.push('/login');
       });
+  }
+
+  // on app load
+  useEffect(() => {
+    // get user profile
+    getUser();
   }, []);
 
   const routes = user ? (
@@ -68,6 +74,14 @@ const App: React.FC = () => {
 
         <Route path="/makers" exact>
           <MakersView />
+        </Route>
+
+        <Route path="/verification" exact>
+          <MakerVerificationView user={user} />
+        </Route>
+
+        <Route path="/verification-pending" exact>
+          <MakerVerificationPendingView />
         </Route>
 
         <Route path="/logout" exact>
