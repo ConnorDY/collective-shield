@@ -37,6 +37,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
     maskShieldCount: 1,
     details: '',
     jobRole: '',
+    otherJobRole: '',
     email: '',
     facilityName: '',
     addressLine1: '',
@@ -64,7 +65,8 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
     'First Responder',
     'Critical Workforce',
     'Delivery or Retail',
-    'Military'
+    'Military',
+    'Other'
   ];
 
   const getDetails = () => {
@@ -105,6 +107,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
         'maskShieldCount',
         'details',
         'jobRole',
+        'otherJobRole',
         'email',
         'facilityName',
         'addressLine1',
@@ -287,7 +290,8 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                     required
                     value={detailsReq.jobRole}
                     onChange={(e: BaseSyntheticEvent) =>
-                      updateDetailsReq({ jobRole: e.target.value })
+                      // reset otherJobRole on change
+                      updateDetailsReq({ jobRole: e.target.value, otherJobRole: '' })
                     }
                   >
                     <option value={''}>Select your Role</option>
@@ -296,6 +300,22 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                     })}
                   </Form.Control>
                 </Form.Group>
+
+                {
+                  detailsReq.jobRole === 'Other' &&
+                    <Form.Group controlId="formBasicOtherRole">
+                      <Form.Label>Other Job Role</Form.Label>
+                      <Form.Control
+                        disabled={disabled}
+                        required // Actually only required when detailsReq.jobRole === 'Other'
+                        type="text"
+                        value={detailsReq.otherJobRole}
+                        onChange={(e: BaseSyntheticEvent) =>
+                          updateDetailsReq({ otherJobRole: e.target.value })
+                        }
+                      />
+                    </Form.Group>
+                }
 
                 <Form.Group controlId="formBasicEmail">
                   <Form.Label>Preferred Email Address</Form.Label>
