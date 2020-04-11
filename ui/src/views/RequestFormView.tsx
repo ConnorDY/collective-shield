@@ -150,9 +150,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
     <div className="request-details">
       <Row className="view-header">
         <Col>
-          <h1 className="h1">
-            {h1}
-          </h1>
+          <h1 className="h1">{h1}</h1>
         </Col>
 
         <Col sm={6} className="right-col">
@@ -278,9 +276,6 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                   >
                     <option>1</option>
                     <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
                   </Form.Control>
                 </Form.Group>
               </Form>
@@ -306,7 +301,10 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                     value={detailsReq.jobRole}
                     onChange={(e: BaseSyntheticEvent) =>
                       // reset otherJobRole on change
-                      updateDetailsReq({ jobRole: e.target.value, otherJobRole: '' })
+                      updateDetailsReq({
+                        jobRole: e.target.value,
+                        otherJobRole: ''
+                      })
                     }
                   >
                     <option value={''}>Select your Role</option>
@@ -316,21 +314,20 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                   </Form.Control>
                 </Form.Group>
 
-                {
-                  detailsReq.jobRole === 'Other' &&
-                    <Form.Group controlId="formBasicOtherRole">
-                      <Form.Label>Other Job Role</Form.Label>
-                      <Form.Control
-                        disabled={disabled}
-                        required // Actually only required when detailsReq.jobRole === 'Other'
-                        type="text"
-                        value={detailsReq.otherJobRole}
-                        onChange={(e: BaseSyntheticEvent) =>
-                          updateDetailsReq({ otherJobRole: e.target.value })
-                        }
-                      />
-                    </Form.Group>
-                }
+                {detailsReq.jobRole === 'Other' && (
+                  <Form.Group controlId="formBasicOtherRole">
+                    <Form.Label>Other Job Role</Form.Label>
+                    <Form.Control
+                      disabled={disabled}
+                      required // Actually only required when detailsReq.jobRole === 'Other'
+                      type="text"
+                      value={detailsReq.otherJobRole}
+                      onChange={(e: BaseSyntheticEvent) =>
+                        updateDetailsReq({ otherJobRole: e.target.value })
+                      }
+                    />
+                  </Form.Group>
+                )}
 
                 <Form.Group controlId="formBasicEmail">
                   <Form.Label>Preferred Email Address</Form.Label>
