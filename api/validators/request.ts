@@ -17,11 +17,10 @@ const requestValidator = Joi.object().keys({
       'Other'
     )
     .required(),
-  otherJobRole: Joi.string()
-    .when('jobRole', {
-      is: Joi.string().valid('Other'),
-      then: Joi.string().required(),
-      otherwise: Joi.string().allow('').optional(),
+  otherJobRole: Joi.string().when('jobRole', {
+    is: Joi.string().valid('Other'),
+    then: Joi.string().required(),
+    otherwise: Joi.string().allow('').optional()
   }),
   email: Joi.string().email().required(),
   facilityName: Joi.string().allow('').optional(),
