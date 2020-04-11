@@ -126,7 +126,7 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
                   <tr>
                     <th className="requestedDate">Date Requested</th>
                     <th className="count">Count</th>
-                    <th className="requestor">Requestor</th>
+                    <th className="requestor">Requester</th>
                     <th className="printer">Printer</th>
                     <th className="status">Status</th>
                   </tr>

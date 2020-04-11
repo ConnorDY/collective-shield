@@ -136,7 +136,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                   <tr>
                     <th className="requestedDate">Date Requested</th>
                     <th className="count">Count</th>
-                    <th className="requestor">Requestor</th>
+                    <th className="requestor">Requester</th>
                     <th>Status</th>
                     <th>
                       <span className="sr-only">Action</span>
@@ -224,7 +224,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                     <th className="requestedDate">Date Requested</th>
                     <th className="count">Count</th>
                     <th className="distance">State</th>
-                    <th className="requestor">Requestor</th>
+                    <th className="requestor">Requester</th>
                     <th>
                       <span className="sr-only">Claim</span>
                     </th>
