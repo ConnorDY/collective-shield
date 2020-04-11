@@ -6,8 +6,9 @@
     "start:eb": "npm install && npm run prod",
     "prod": "node ./api/app.js",
     "build": "tsc --project tsconfig.json",
-    "test": "jest --coverage",
-    "test:watch": "jest --coverage --watchAll"
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watchAll"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
