@@ -27,9 +27,9 @@ body,
   }
 
   .right-col {
-    // display: flex;
-    // justify-content: flex-end;
+    display: flex;
     align-items: center;
+    justify-content: flex-end;
 
     font-size: 16px;
     font-weight: 700;

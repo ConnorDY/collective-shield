@@ -126,13 +126,18 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
           </Col>
         ) : (
           <Col>
+            <p className="mb-4 ml-1 font-weight-bold">
+              Once you claim a request it will appear in this box. Use the
+              dropdown menu to share your progress. Requesters will be notified
+              as the job progresses.
+            </p>
             <div className="table-wrapper">
               <table className="my-work-table">
                 <thead>
                   <tr>
                     <th className="requestedDate">Date Requested</th>
                     <th className="count">Count</th>
-                    <th className="requestor">Requestor</th>
+                    <th className="requestor">Requester</th>
                     <th>Status</th>
                     <th>
                       <span className="sr-only">Action</span>
@@ -220,7 +225,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                     <th className="requestedDate">Date Requested</th>
                     <th className="count">Count</th>
                     <th className="distance">State</th>
-                    <th className="requestor">Requestor</th>
+                    <th className="requestor">Requester</th>
                     <th>
                       <span className="sr-only">Claim</span>
                     </th>
@@ -244,7 +249,9 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                         </td>
                         <td className="count">{w.maskShieldCount}</td>
                         <td className="distance">{w.addressState}</td>
-                        <td className="requestor">{w.facilityName || 'Organization not provided'}</td>
+                        <td className="requestor">
+                          {w.facilityName || 'Organization not provided'}
+                        </td>
                         <td className="claim">
                           <Button
                             variant="primary"

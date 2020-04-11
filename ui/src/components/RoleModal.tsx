@@ -42,7 +42,7 @@ const RoleModal: React.FC<{
                   onClick={() => pickRole('requestor')}
                   className="btn-block"
                 >
-                  Requestor
+                  Requester
                 </Button>
               </Col>
             </Row>

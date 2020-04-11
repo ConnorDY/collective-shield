@@ -147,64 +147,74 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
     <div className="request-details">
       <Row className="view-header">
         <Col>
-          <Link to="/">
-            <Button>Go back</Button>
-          </Link>
-        </Col>
-      </Row>
-      <Row className="view-header">
-        <Col>
           <h1 className="h1">
             {h1}
           </h1>
         </Col>
-        <Col sm={6} className="right-col">
-          {isMakerView && (
-            <Row className="justify-content-md-center">
-              <Col>
-                <ShippingModal />
-              </Col>
-              <Col>
-                <Dropdown as={ButtonGroup}>
-                  <Dropdown.Toggle
-                    id="details-status-dropdown"
-                    variant="outline-secondary"
-                  >
-                    {StatusOption(detailsReq.status || 'Requested')}
-                  </Dropdown.Toggle>
 
-                  <Dropdown.Menu>
-                    {statuses.map((status) => (
-                      <Dropdown.Item onClick={() => setStatus(status)}>
-                        {StatusOption(status)}
-                      </Dropdown.Item>
-                    ))}
-                  </Dropdown.Menu>
-                </Dropdown>
-              </Col>
-            </Row>
-          )}
-          {isExisting && !isMakerView && StatusOption(detailsReq.status)}
+        <Col sm={6} className="right-col">
+          <Row>
+            {isMakerView && (
+              <>
+                <Col className="col-auto">
+                  <ShippingModal />
+                </Col>
+
+                <Col className="col-auto">
+                  <Dropdown as={ButtonGroup}>
+                    <Dropdown.Toggle
+                      id="details-status-dropdown"
+                      variant="outline-secondary"
+                    >
+                      {StatusOption(detailsReq.status || 'Requested')}
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                      {statuses.map((status) => (
+                        <Dropdown.Item onClick={() => setStatus(status)}>
+                          {StatusOption(status)}
+                        </Dropdown.Item>
+                      ))}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </Col>
+              </>
+            )}
+
+            {isExisting && !isMakerView && (
+              <Col className="col-auto">{StatusOption(detailsReq.status)}</Col>
+            )}
+
+            <Col className="col-auto">
+              <Link to="/">
+                <Button>Go back</Button>
+              </Link>
+            </Col>
+          </Row>
         </Col>
       </Row>
 
-      {
-        isExisting &&
-          <Row className="view-header">
-            <Col>
-              <p>
-                Please update the status of your job to keep the requester apprised of your progress using the drop-down menu
-                in the upper right corner of this screen.
-              </p>
-              <p>
-                When your job is complete, either email the requester directly to arrange transfer or select
-                "Get Shipping Label" and Collective Shield will email a pre-paid label to you.
-                Don’t forget to include
-                the <a href="/PrintInsert_20200406.pdf" target="_blank">shipping insert</a> in your package.
-              </p>
-            </Col>
-          </Row>
-      }
+      {isExisting && (
+        <Row className="view-header">
+          <Col>
+            <p>
+              Please update the status of your job to keep the requester
+              apprised of your progress using the drop-down menu in the upper
+              right corner of this screen.
+            </p>
+            <p>
+              When your job is complete, either email the requester directly to
+              arrange transfer or select "Get Shipping Label" and Collective
+              Shield will email a pre-paid label to you. Don’t forget to include
+              the{' '}
+              <a href="/PrintInsert_20200406.pdf" target="_blank">
+                shipping insert
+              </a>{' '}
+              in your package.
+            </p>
+          </Col>
+        </Row>
+      )}
 
       {isCreated ? (
         <Row>
@@ -355,7 +365,6 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                 </Form.Row>
 
                 <Form.Row>
-
                   <Form.Group as={Col} controlId="formGridCity">
                     <Form.Label>City</Form.Label>
                     <Form.Control

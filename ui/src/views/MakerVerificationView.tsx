@@ -1,12 +1,6 @@
 import React, { useEffect, useState, BaseSyntheticEvent } from 'react';
 import { useHistory } from 'react-router-dom';
-import {
-  Alert,
-  Button,
-  Col,
-  Form,
-  Row
-} from 'react-bootstrap';
+import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { pick } from 'lodash';
@@ -34,13 +28,13 @@ const MakerVerificationView: React.FC<{ user: User }> = ({ user }) => {
     homePickUp: false,
     willShip: false,
     willDeliver: false,
-    doesAgree: false,
+    doesAgree: false
   });
 
   const resetRole = () => {
     sessionStorage.removeItem('role');
     window.location.href = '/';
-  }
+  };
 
   const updateDetailsReq = (data: object) => {
     setDetailsReq({
@@ -70,7 +64,7 @@ const MakerVerificationView: React.FC<{ user: User }> = ({ user }) => {
         'phone',
         'homePickUp',
         'willShip',
-        'willDeliver',
+        'willDeliver'
       ]);
 
       axios
@@ -104,9 +98,7 @@ const MakerVerificationView: React.FC<{ user: User }> = ({ user }) => {
     <div className="request-details">
       <Row className="view-header">
         <Col>
-          <h1 className="h1">
-            Become a Collective Shield Maker!
-          </h1>
+          <h1 className="h1">Become a Collective Shield Maker!</h1>
         </Col>
       </Row>
 
@@ -115,7 +107,8 @@ const MakerVerificationView: React.FC<{ user: User }> = ({ user }) => {
           <Col>
             <div className="c-requestForm -pad">
               <Alert variant="success">
-                Thank you! You will receive an email once your Maker account has been approved.
+                Thank you! You will receive an email once your Maker account has
+                been approved.
               </Alert>
             </div>
           </Col>
@@ -126,7 +119,12 @@ const MakerVerificationView: React.FC<{ user: User }> = ({ user }) => {
             <Col>
               <Alert variant="info">
                 Are you a healthcare provider and got here by accident?
-                <Button onClick={resetRole} variant="link" className="p-0 pl-1 m-0 mb-1" style={{ verticalAlign: 'initial'}}>
+                <Button
+                  onClick={resetRole}
+                  variant="link"
+                  className="p-0 pl-1 m-0 mb-1"
+                  style={{ verticalAlign: 'initial' }}
+                >
                   Click here.
                 </Button>
               </Alert>
@@ -257,7 +255,16 @@ const MakerVerificationView: React.FC<{ user: User }> = ({ user }) => {
                         updateDetailsReq({ homePickUp: e.target.checked })
                       }
                       type="checkbox"
-                      label={<span>I'm willing to allow people to pick up products from my home <br/><i>Future web features will include geographic matching to allow people to connect in their own city</i></span>}
+                      label={
+                        <span>
+                          I'm willing to allow people to pick up products from
+                          my home <br />
+                          <i>
+                            Future web features will include geographic matching
+                            to allow people to connect in their own city
+                          </i>
+                        </span>
+                      }
                     />
                   </Form.Group>
                 </Form.Row>
@@ -270,7 +277,7 @@ const MakerVerificationView: React.FC<{ user: User }> = ({ user }) => {
                         updateDetailsReq({ willShip: e.target.checked })
                       }
                       type="checkbox"
-                      label="I would like to ship to people from our database of requestors"
+                      label="I would like to ship to people from our database of requesters"
                     />
                   </Form.Group>
                 </Form.Row>
@@ -283,7 +290,15 @@ const MakerVerificationView: React.FC<{ user: User }> = ({ user }) => {
                         updateDetailsReq({ willDeliver: e.target.checked })
                       }
                       type="checkbox"
-                      label={<span>I'm willing to deliver products <br/><i>Future web features will include geographic matching to allow people to connect in their own city</i></span>}
+                      label={
+                        <span>
+                          I'm willing to deliver products <br />
+                          <i>
+                            Future web features will include geographic matching
+                            to allow people to connect in their own city
+                          </i>
+                        </span>
+                      }
                     />
                   </Form.Group>
                 </Form.Row>
@@ -299,9 +314,18 @@ const MakerVerificationView: React.FC<{ user: User }> = ({ user }) => {
                       type="checkbox"
                       label={
                         <span>
-                        I agree to let Collective Shield use the information I’m submitting to connect me with those requesting shield prototypes (while protecting my personally identifiable information), track the progress of the organization towards its goals, and contact me with updates or questions.
-                        This information will only be used for the Collective Shield volunteer effort and no other purposes.
-                        I agree to abide by the <a href="https://collectiveshield.org/whoweare">Collective Shield Guiding Principles</a>.
+                          I agree to let Collective Shield use the information
+                          I’m submitting to connect me with those requesting
+                          shield prototypes (while protecting my personally
+                          identifiable information), track the progress of the
+                          organization towards its goals, and contact me with
+                          updates or questions. This information will only be
+                          used for the Collective Shield volunteer effort and no
+                          other purposes. I agree to abide by the{' '}
+                          <a href="https://collectiveshield.org/whoweare">
+                            Collective Shield Guiding Principles
+                          </a>
+                          .
                         </span>
                       }
                     />

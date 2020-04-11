@@ -45,7 +45,7 @@ const App: React.FC = () => {
       .catch(() => {
         history.push('/login');
       });
-  }
+  };
 
   // on app load
   useEffect(() => {
