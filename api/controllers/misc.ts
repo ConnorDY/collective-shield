@@ -34,7 +34,7 @@ export default class MiscController {
       throw new HttpError(405, 'Maker information already submitted.');
     }
 
-    return User.findOneAndUpdate({ _id: user._id }, { $set: { makerDetails } })
+    return User.findByIdAndUpdate(user._id, { $set: { makerDetails } })
       .then((result) => {
         return result;
       })

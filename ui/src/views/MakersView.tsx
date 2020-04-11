@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Row, Jumbotron } from 'react-bootstrap';
+import { Button, Col, Row, Jumbotron } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 
-import { buildEndpointUrl } from '../utilities';
 import User from '../models/User';
+import MakerDetailsModal from '../components/MakerDetailsModal';
+import { buildEndpointUrl } from '../utilities';
 
 export default function MakersView() {
-  // const [approved, setApproved] = useState<User[]>([]);
+  const [approved, setApproved] = useState<User[]>([]);
   const [unapproved, setUnapproved] = useState<User[]>([]);
+  const [modalUser, setModalUser] = useState<User>();
 
-  // function getApproved() {
-  //   axios
-  //     .get(buildEndpointUrl('makers/approved'))
-  //     .then((res) => {
-  //       setApproved(res.data);
-  //     })
-  // }
+  function getApproved() {
+    axios.get(buildEndpointUrl('makers/approved')).then((res) => {
+      setApproved(res.data);
+    });
+  }
 
   function getUnapproved() {
     axios.get(buildEndpointUrl('makers/unapproved')).then((res) => {
@@ -23,8 +24,36 @@ export default function MakersView() {
     });
   }
 
+  function viewDetails(user: User) {
+    setModalUser(user);
+  }
+
+  function closeModal() {
+    setModalUser(undefined);
+  }
+
+  function approve() {
+    const after = () => {
+      getApproved();
+      getUnapproved();
+      closeModal();
+    };
+
+    axios
+      .put(buildEndpointUrl(`makers/approve/${modalUser!._id}`))
+      .then(() => {
+        after();
+      })
+      .catch((err) => {
+        after();
+        toast.error(err.toString(), {
+          position: toast.POSITION.TOP_LEFT
+        });
+      });
+  }
+
   useEffect(() => {
-    // getApproved();
+    getApproved();
     getUnapproved();
   }, []);
 
@@ -46,34 +75,43 @@ export default function MakersView() {
             </Col>
           ) : (
             <Col>
-              <table className="makers-table">
-                <thead>
-                  <tr>
-                    <th className="name">Name</th>
-                    <th className="email">Email</th>
-                    <th className="view-details">
-                      <span className="sr-only">View Details</span>
-                    </th>
-                  </tr>
-                </thead>
-              </table>
-              {unapproved.map(({ _id, email, makerDetails }, key) => {
-                return (
-                  <tr key={key}>
-                    <td>
-                      {makerDetails!.firstName} {makerDetails!.lastName}
-                    </td>
-                    <td>{email}</td>
-                    <td>Button to view details here</td>
-                  </tr>
-                );
-              })}
+              <div className="table-wrapper">
+                <table className="makers-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>
+                        <span className="sr-only">View Details</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {unapproved.map(({ email, makerDetails }, index) => {
+                      return (
+                        <tr key={index}>
+                          <td>
+                            {makerDetails!.firstName} {makerDetails!.lastName}
+                          </td>
+                          <td>{email}</td>
+                          <td className="view-details">
+                            <Button
+                              onClick={() => viewDetails(unapproved[index])}
+                            >
+                              View Details
+                            </Button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </Col>
           )}
         </Row>
       </div>
 
-      {/*
       <div className="makers-list">
         <Row className="view-header">
           <Col>
@@ -84,36 +122,56 @@ export default function MakersView() {
         <Row>
           {!approved || !approved.length ? (
             <Col>
-              <Jumbotron className="text-center">No approved makers found.</Jumbotron>
+              <Jumbotron className="text-center">
+                No approved makers found.
+              </Jumbotron>
             </Col>
           ) : (
             <Col>
-              <table className="makers-table">
-                <thead>
-                  <tr>
-                    <th className="name">Name</th>
-                    <th className="email">Email</th>
-                    <th className="view-details">
-                      <span className="sr-only">View Details</span>
-                    </th>
-                  </tr>
-                </thead>
-              </table>
-              {approved.map(({ _id, email, makerDetails }, key) => {
-                return (
-                  <tr key={key}>
-                    <td>
-                      {makerDetails!.firstName} {makerDetails!.lastName}
-                    </td>
-                    <td>{email}</td>
-                    <td>Button to view details here</td>
-                  </tr>
-                );
-              })}
+              <div className="table-wrapper">
+                <table className="makers-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>
+                        <span className="sr-only">View Details</span>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {approved.map(({ email, makerDetails }, index) => {
+                      return (
+                        <tr key={index}>
+                          <td>
+                            {makerDetails!.firstName} {makerDetails!.lastName}
+                          </td>
+                          <td>{email}</td>
+                          <td className="view-details">
+                            <Button
+                              onClick={() => viewDetails(approved[index])}
+                            >
+                              View Details
+                            </Button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </Col>
           )}
         </Row>
-      </div>*/}
+      </div>
+
+      {modalUser && (
+        <MakerDetailsModal
+          user={modalUser}
+          onApprove={approve}
+          onClose={closeModal}
+        />
+      )}
     </>
   );
 }
