@@ -33,14 +33,19 @@ export default function MakersView() {
   }
 
   function approve() {
+    const after = () => {
+      getApproved();
+      getUnapproved();
+      closeModal();
+    };
+
     axios
       .put(buildEndpointUrl(`makers/approve/${modalUser!._id}`))
       .then(() => {
-        getApproved();
-        getUnapproved();
-        closeModal();
+        after();
       })
       .catch((err) => {
+        after();
         toast.error(err.toString(), {
           position: toast.POSITION.TOP_LEFT
         });
