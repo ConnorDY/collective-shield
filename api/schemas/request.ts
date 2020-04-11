@@ -5,6 +5,7 @@ import { IRequest } from '../interfaces';
 export const RequestSchema = new Schema({
   maskShieldCount: Number,
   jobRole: String,
+  otherJobRole: String,
   email: String,
   facilityName: String,
   addressLine1: String,
