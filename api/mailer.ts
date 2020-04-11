@@ -18,10 +18,13 @@ export function sendEmail({
   return new Promise((resolve, reject) => {
     mailgun.messages().send(
       {
-        from: 'no-reply@collectiveshield.org',
+        from:
+          process.env.NODE_ENV === 'development'
+            ? 'me@samples.mailgun.org'
+            : 'no-reply@collectiveshield.org',
         to,
         subject,
-        body
+        html: body
       },
       (err, response) => {
         if (err) reject(err);

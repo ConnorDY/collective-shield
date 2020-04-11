@@ -45,14 +45,14 @@ export default class MakersController {
   @Put('/approve/:id')
   approveMaker(@Param('id') id: string) {
     return User.findByIdAndUpdate(id, { $set: { isVerifiedMaker: true } })
-      .then((result) => {
+      .then((user) => {
         return sendEmail({
-          to: result.email,
+          to: user.email,
           subject: "You've been approved",
           body: 'Placeholder body'
         })
           .then(() => {
-            return result;
+            return user;
           })
           .catch((err) => {
             throw err;
