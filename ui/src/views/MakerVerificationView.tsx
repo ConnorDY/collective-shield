@@ -270,7 +270,7 @@ const MakerVerificationView: React.FC<{ user: User }> = ({ user }) => {
                         updateDetailsReq({ willShip: e.target.checked })
                       }
                       type="checkbox"
-                      label="I would like to ship to people from our database of requestors"
+                      label="I would like to ship to people from our database of requesters"
                     />
                   </Form.Group>
                 </Form.Row>
