@@ -5,8 +5,17 @@ import { states } from '../constants';
 const requestValidator = Joi.object().keys({
   maskShieldCount: Joi.number().required(),
   jobRole: Joi.string()
-    .valid('Doctor', 'Nurse', 'First Responder', 'Medical Support Staff', 'Healthcare Worker', 'Critical Workforce',
-    'Delivery or Retail', 'Military', 'Other')
+    .valid(
+      'Doctor',
+      'Nurse',
+      'First Responder',
+      'Medical Support Staff',
+      'Healthcare Worker',
+      'Critical Workforce',
+      'Delivery or Retail',
+      'Military',
+      'Other'
+    )
     .required(),
   otherJobRole: Joi.string()
     .when('jobRole', {
