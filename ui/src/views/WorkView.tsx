@@ -10,7 +10,7 @@ import {
 import axios from 'axios';
 import { find, indexOf } from 'lodash';
 import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import User from '../models/User';
 import Request from '../models/Request';
@@ -22,6 +22,7 @@ const googleDriveLink =
   'https://drive.google.com/drive/folders/1-7AqfcKaGstJ0goRNiYks1Y732DsCLHn?fbclid=IwAR201HiuLkO-IfymI_jZg23gccLgJ0tLUFUPtvm7SjPjhAaEpaa9EFlROsU';
 
 const WorkView: React.FC<{ user: User }> = ({ user }) => {
+  const history = useHistory();
   const [availableWork, setAvailableWork] = useState<Request[]>([]);
   const [work, setWork] = useState<Request[]>([]);
 
@@ -93,7 +94,13 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
 
   // on load
   useEffect(() => {
-    refreshAll();
+    if (!user.makerDetails) {
+      history.push('/verification');
+    } else if (!user.isVerifiedMaker) {
+      history.push('/verification-pending');
+    } else {
+      refreshAll();
+    }
   }, []);
 
   var options = { weekday: 'long', month: 'long', day: 'numeric' };
