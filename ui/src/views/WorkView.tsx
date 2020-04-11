@@ -120,16 +120,16 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
       </Row>
 
       <Row>
-        <p>
-          Once you claim a request it will appear in this box. Use the dropdown menu to share your progress.
-          Requesters will be notified as the job progresses.
-        </p>
         {!work || !work.length ? (
           <Col>
             <Jumbotron className="text-center">No requests found.</Jumbotron>
           </Col>
         ) : (
           <Col>
+            <p className="mb-4 ml-1 font-weight-bold">
+              Once you claim a request it will appear in this box. Use the dropdown menu to share your progress.
+              Requesters will be notified as the job progresses.
+            </p>
             <div className="table-wrapper">
               <table className="my-work-table">
                 <thead>
