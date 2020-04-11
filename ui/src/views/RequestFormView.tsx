@@ -39,6 +39,8 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
     jobRole: '',
     email: '',
     facilityName: '',
+    addressLine1: '',
+    addressLine2: '',
     addressCity: '',
     addressState: '',
     addressZip: '',
@@ -58,10 +60,11 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
   };
 
   const roleOptions = [
-    'Doctor',
-    'Nurse',
+    'Healthcare Worker',
     'First Responder',
-    'Medical Support Staff'
+    'Critical Workforce',
+    'Delivery or Retail',
+    'Military'
   ];
 
   const getDetails = () => {
@@ -70,6 +73,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
     });
   };
 
+  // Not using placeholders, but helpful function to use if we bring them back.
   const getPlaceHolder = (text: string) => {
     return disabled ? '' : text;
   };
@@ -103,6 +107,8 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
         'jobRole',
         'email',
         'facilityName',
+        'addressLine1',
+        'addressLine2',
         'addressCity',
         'addressState',
         'addressZip'
@@ -135,6 +141,13 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
 
   return (
     <div className="request-details">
+      <Row className="view-header">
+        <Col>
+          <Link to="/">
+            <Button>Go back</Button>
+          </Link>
+        </Col>
+      </Row>
       <Row className="view-header">
         <Col>
           <h1 className="h1">
@@ -213,7 +226,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
             </Col>
 
             <Col>
-              <h4>Mask Shields Requested</h4>
+              <h4>Number Requested</h4>
               <Form>
                 <Form.Group>
                   <Form.Control
@@ -240,7 +253,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
 
           <Row id="requested-row-2">
             <Col>
-              <h4>Healthcare Facility</h4>
+              <h4>Requestor Contact Information</h4>
               <Form
                 noValidate
                 validated={isValidated}
@@ -272,7 +285,6 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                     disabled={disabled}
                     required
                     type="email"
-                    placeholder={getPlaceHolder('Email')}
                     value={detailsReq.email}
                     onChange={(e: BaseSyntheticEvent) =>
                       updateDetailsReq({ email: e.target.value })
@@ -281,14 +293,10 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                 </Form.Group>
 
                 <Form.Group controlId="formBasicFacilityName">
-                  <Form.Label>Facility Name</Form.Label>
+                  <Form.Label>Organization (Optional)</Form.Label>
                   <Form.Control
                     disabled={disabled}
-                    required
                     type="text"
-                    placeholder={getPlaceHolder(
-                      'Example: Sacred Heart Hospital'
-                    )}
                     value={detailsReq.facilityName}
                     onChange={(e: BaseSyntheticEvent) =>
                       updateDetailsReq({ facilityName: e.target.value })
@@ -297,12 +305,39 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                 </Form.Group>
 
                 <Form.Row>
+                  <Form.Group as={Col} controlId="formGridAddressLine1">
+                    <Form.Label>Address Line 1</Form.Label>
+                    <Form.Control
+                      disabled={disabled}
+                      required
+                      value={detailsReq.addressLine1}
+                      onChange={(e: BaseSyntheticEvent) =>
+                        updateDetailsReq({ addressLine1: e.target.value })
+                      }
+                    />
+                  </Form.Group>
+                </Form.Row>
+
+                <Form.Row>
+                  <Form.Group as={Col} controlId="formGridAddressLine2">
+                    <Form.Label>Address Line 2 (Optional)</Form.Label>
+                    <Form.Control
+                      disabled={disabled}
+                      value={detailsReq.addressLine2}
+                      onChange={(e: BaseSyntheticEvent) =>
+                        updateDetailsReq({ addressLine2: e.target.value })
+                      }
+                    />
+                  </Form.Group>
+                </Form.Row>
+
+                <Form.Row>
+
                   <Form.Group as={Col} controlId="formGridCity">
                     <Form.Label>City</Form.Label>
                     <Form.Control
                       disabled={disabled}
                       required
-                      placeholder={getPlaceHolder('Denver')}
                       value={detailsReq.addressCity}
                       onChange={(e: BaseSyntheticEvent) =>
                         updateDetailsReq({ addressCity: e.target.value })
@@ -333,7 +368,6 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                     <Form.Control
                       disabled={disabled}
                       required
-                      placeholder={getPlaceHolder('80205')}
                       value={detailsReq.addressZip}
                       pattern={'[0-9]{5}'}
                       onChange={(e: BaseSyntheticEvent) => {
@@ -365,13 +399,13 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
 
             <Col>
               <h4>Request Details</h4>
+              <h5>Add any details or comments about the request here</h5>
               <Form>
                 <Form.Group controlId="">
                   <Form.Control
                     disabled={disabled}
                     as="textarea"
                     rows="13"
-                    placeholder={getPlaceHolder('Add any request details here')}
                     value={detailsReq.details}
                     onChange={(e: BaseSyntheticEvent) =>
                       updateDetailsReq({ details: e.target.value })

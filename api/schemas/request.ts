@@ -7,6 +7,8 @@ export const RequestSchema = new Schema({
   jobRole: String,
   email: String,
   facilityName: String,
+  addressLine1: String,
+  addressLine2: String,
   addressCity: String,
   addressState: String,
   addressZip: String,

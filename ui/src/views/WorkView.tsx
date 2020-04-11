@@ -150,7 +150,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                         </td>
                         <td className="count">{w.maskShieldCount}</td>
                         <td className="requestor">
-                          {w.facilityName}
+                          {w.facilityName || 'Organization not provided'}
                         </td>
                         <td className="status">
                           <Dropdown as={ButtonGroup}>
@@ -237,7 +237,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                         </td>
                         <td className="count">{w.maskShieldCount}</td>
                         <td className="distance">{w.addressState}</td>
-                        <td className="requestor">{w.facilityName}</td>
+                        <td className="requestor">{w.facilityName || 'Organization not provided'}</td>
                         <td className="claim">
                           <Button
                             variant="primary"
