@@ -69,8 +69,7 @@ export default class MakersController {
             </a>
             to share design suggestions, get help with technical maker problems, and collaborate on new solutions
             (for issues connecting to slack, email
-            <a href="mailto:amy@collectiveshield.org">Amy@CollectiveShield.org</a>
-            ).
+            <a href="mailto:amy@collectiveshield.org">Amy@CollectiveShield.org</a>).
           </p>
 
           <p style="font-style: italic;">
