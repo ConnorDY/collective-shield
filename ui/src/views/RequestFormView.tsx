@@ -184,6 +184,23 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
         </Col>
       </Row>
 
+      {
+        isExisting &&
+          <Row className="view-header">
+            <Col>
+              <p>
+                Please update the status of your job to keep the requester apprised of your progress using the drop-down menu
+                in the upper right corner of this screen.
+              </p>
+              <p>
+                When your job is complete, either email the requester directly to arrange transfer or select
+                "Get Shipping Label" and Collective Shield will email a pre-paid label to you.
+                Don’t forget to include the shipping insert in your package.
+              </p>
+            </Col>
+          </Row>
+      }
+
       {isCreated ? (
         <Row>
           <Col>
