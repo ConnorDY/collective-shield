@@ -142,12 +142,16 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
     if (id) getDetails();
   }, []);
 
+  let h1 = 'New Request';
+  if (isExisting) h1 = 'Request Details';
+  if (isCreated) h1 = 'Thank You!';
+
   return (
     <div className="request-details">
       <Row className="view-header">
         <Col>
           <h1 className="h1">
-            {isExisting ? 'Request Details' : 'New Request'}
+            {h1}
           </h1>
         </Col>
 
@@ -220,9 +224,10 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
           <Col>
             <div className="c-requestForm -pad">
               <Alert variant="success">
-                {' '}
-                Thank you! You will receive an email confirming your request.{' '}
-                <Link to="/">View Your Requests.</Link>
+                <div style={{ fontSize: '1.2em' }}>
+                  Check back in to track the progress of your request.{' '}
+                  <Link to="/">View and Follow Your Requests.</Link>
+                </div>
               </Alert>
             </div>
           </Col>
