@@ -195,7 +195,8 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
               <p>
                 When your job is complete, either email the requester directly to arrange transfer or select
                 "Get Shipping Label" and Collective Shield will email a pre-paid label to you.
-                Don’t forget to include the shipping insert in your package.
+                Don’t forget to include
+                the <a href="/PrintInsert_20200406.pdf" target="_blank">shipping insert</a> in your package.
               </p>
             </Col>
           </Row>
