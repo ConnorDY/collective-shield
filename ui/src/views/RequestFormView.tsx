@@ -37,6 +37,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
     maskShieldCount: 1,
     details: '',
     jobRole: '',
+    otherJobRole: '',
     email: '',
     facilityName: '',
     addressLine1: '',
@@ -64,7 +65,8 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
     'First Responder',
     'Critical Workforce',
     'Delivery or Retail',
-    'Military'
+    'Military',
+    'Other'
   ];
 
   const getDetails = () => {
@@ -105,6 +107,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
         'maskShieldCount',
         'details',
         'jobRole',
+        'otherJobRole',
         'email',
         'facilityName',
         'addressLine1',
@@ -139,12 +142,16 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
     if (id) getDetails();
   }, []);
 
+  let h1 = 'New Request';
+  if (isExisting) h1 = 'Request Details';
+  if (isCreated) h1 = 'Thank You!';
+
   return (
     <div className="request-details">
       <Row className="view-header">
         <Col>
           <h1 className="h1">
-            {isExisting ? 'Request Details' : 'New Request'}
+            {h1}
           </h1>
         </Col>
 
@@ -217,9 +224,10 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
           <Col>
             <div className="c-requestForm -pad">
               <Alert variant="success">
-                {' '}
-                Thank you! You will receive an email confirming your request.{' '}
-                <Link to="/">View Your Requests.</Link>
+                <div style={{ fontSize: '1.2em' }}>
+                  Check back in to track the progress of your request.{' '}
+                  <Link to="/">View and Follow Your Requests.</Link>
+                </div>
               </Alert>
             </div>
           </Col>
@@ -297,7 +305,8 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                     required
                     value={detailsReq.jobRole}
                     onChange={(e: BaseSyntheticEvent) =>
-                      updateDetailsReq({ jobRole: e.target.value })
+                      // reset otherJobRole on change
+                      updateDetailsReq({ jobRole: e.target.value, otherJobRole: '' })
                     }
                   >
                     <option value={''}>Select your Role</option>
@@ -306,6 +315,22 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                     })}
                   </Form.Control>
                 </Form.Group>
+
+                {
+                  detailsReq.jobRole === 'Other' &&
+                    <Form.Group controlId="formBasicOtherRole">
+                      <Form.Label>Other Job Role</Form.Label>
+                      <Form.Control
+                        disabled={disabled}
+                        required // Actually only required when detailsReq.jobRole === 'Other'
+                        type="text"
+                        value={detailsReq.otherJobRole}
+                        onChange={(e: BaseSyntheticEvent) =>
+                          updateDetailsReq({ otherJobRole: e.target.value })
+                        }
+                      />
+                    </Form.Group>
+                }
 
                 <Form.Group controlId="formBasicEmail">
                   <Form.Label>Preferred Email Address</Form.Label>
