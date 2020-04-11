@@ -317,7 +317,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                       <Form.Label>Other Job Role</Form.Label>
                       <Form.Control
                         disabled={disabled}
-                        required // Actually only required when detailsReq.jobRole === 'Other'
+                        required={detailsReq.jobRole === 'Other'}
                         type="text"
                         value={detailsReq.otherJobRole}
                         onChange={(e: BaseSyntheticEvent) =>
