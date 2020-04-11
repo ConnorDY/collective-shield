@@ -44,10 +44,7 @@ export default class MakersController {
   @Authorized(['admin'])
   @Put('/approve/:id')
   approveMaker(@Param('id') id: string) {
-    return User.findOneAndUpdate(
-      { _id: id },
-      { $set: { isVerifiedMaker: true } }
-    )
+    return User.findByIdAndUpdate(id, { $set: { isVerifiedMaker: true } })
       .then((result) => {
         return sendEmail({
           to: result.email,
