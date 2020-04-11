@@ -103,6 +103,8 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
     }
   }, []);
 
+  var options = { weekday: 'long', month: 'long', day: 'numeric' };
+
   return (
     <div className="my-work">
       <Row className="view-header">
@@ -128,6 +130,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
               <table className="my-work-table">
                 <thead>
                   <tr>
+                    <th className="requestedDate">Date Requested</th>
                     <th className="count">Count</th>
                     <th className="requestor">Requestor</th>
                     <th>Status</th>
@@ -139,16 +142,22 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
 
                 <tbody>
                   {work.map((w, index) => {
+                    const date = new Date(w.createDate!);
                     return (
                       <tr key={index}>
-                        <td className="count">{w.maskShieldCount}</td>
-                        <td className="requestor">
+                        <td className="requestedDate">
                           <Link
                             to={`/request/${w._id}`}
                             title="View details for this request"
                           >
-                            {w.facilityName}
+                            {new Intl.DateTimeFormat('en-US', options).format(
+                              date
+                            )}
                           </Link>
+                        </td>
+                        <td className="count">{w.maskShieldCount}</td>
+                        <td className="requestor">
+                          {w.facilityName}
                         </td>
                         <td className="status">
                           <Dropdown as={ButtonGroup}>
@@ -208,6 +217,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
               <table className="available-work-table">
                 <thead>
                   <tr>
+                    <th className="requestedDate">Date Requested</th>
                     <th className="count">Count</th>
                     <th className="distance">State</th>
                     <th className="requestor">Requestor</th>
@@ -219,8 +229,19 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
 
                 <tbody>
                   {availableWork.map((w, key) => {
+                    const date = new Date(w.createDate!);
                     return (
                       <tr key={key}>
+                        <td className="requestedDate">
+                          <Link
+                            to={`/request/${w._id}`}
+                            title="View details for this request"
+                          >
+                            {new Intl.DateTimeFormat('en-US', options).format(
+                              date
+                            )}
+                          </Link>
+                        </td>
                         <td className="count">{w.maskShieldCount}</td>
                         <td className="distance">{w.addressState}</td>
                         <td className="requestor">{w.facilityName}</td>
