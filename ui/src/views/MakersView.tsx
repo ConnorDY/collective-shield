@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Row, Jumbotron } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 
 import User from '../models/User';
@@ -31,6 +32,21 @@ export default function MakersView() {
 
   function closeModal() {
     setModalUser(undefined);
+  }
+
+  function approve() {
+    axios
+      .put(buildEndpointUrl(`makers/approve/${modalUser!._id}`))
+      .then(() => {
+        // getApproved();
+        getUnapproved();
+        closeModal();
+      })
+      .catch((err) => {
+        toast.error(err.toString(), {
+          position: toast.POSITION.TOP_LEFT
+        });
+      });
   }
 
   useEffect(() => {
@@ -143,7 +159,11 @@ export default function MakersView() {
       */}
 
       {modalUser && (
-        <MakerDetailsModal onClose={() => closeModal()} user={modalUser} />
+        <MakerDetailsModal
+          user={modalUser}
+          onApprove={approve}
+          onClose={closeModal}
+        />
       )}
     </>
   );

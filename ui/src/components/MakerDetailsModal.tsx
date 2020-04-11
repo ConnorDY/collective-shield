@@ -5,8 +5,9 @@ import User from '../models/User';
 
 const MakerDetailsModal: React.FC<{
   user: User;
+  onApprove: () => void;
   onClose: () => void;
-}> = ({ user, onClose }) => {
+}> = ({ user, onApprove, onClose }) => {
   return (
     <Modal show size="lg" onHide={onClose} backdrop>
       <div className="p-3">
@@ -28,7 +29,9 @@ const MakerDetailsModal: React.FC<{
               </Col>
 
               <Col sm={6} lg={3}>
-                <Button className="btn-block">Approve</Button>
+                <Button className="btn-block" onClick={onApprove}>
+                  Approve
+                </Button>
               </Col>
             </Row>
           </Container>
