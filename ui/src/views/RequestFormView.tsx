@@ -222,7 +222,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
             <div className="c-requestForm -pad">
               <Alert variant="success">
                 <div style={{ fontSize: '1.2em' }}>
-                  You will receive an email confirming your request.{' '}
+                  Check back in to track the progress of your request.{' '}
                   <Link to="/">View and Follow Your Requests.</Link>
                 </div>
               </Alert>
