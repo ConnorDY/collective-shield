@@ -8,17 +8,15 @@ import MakerDetailsModal from '../components/MakerDetailsModal';
 import { buildEndpointUrl } from '../utilities';
 
 export default function MakersView() {
-  // const [approved, setApproved] = useState<User[]>([]);
+  const [approved, setApproved] = useState<User[]>([]);
   const [unapproved, setUnapproved] = useState<User[]>([]);
   const [modalUser, setModalUser] = useState<User>();
 
-  // function getApproved() {
-  //   axios
-  //     .get(buildEndpointUrl('makers/approved'))
-  //     .then((res) => {
-  //       setApproved(res.data);
-  //     })
-  // }
+  function getApproved() {
+    axios.get(buildEndpointUrl('makers/approved')).then((res) => {
+      setApproved(res.data);
+    });
+  }
 
   function getUnapproved() {
     axios.get(buildEndpointUrl('makers/unapproved')).then((res) => {
@@ -38,7 +36,7 @@ export default function MakersView() {
     axios
       .put(buildEndpointUrl(`makers/approve/${modalUser!._id}`))
       .then(() => {
-        // getApproved();
+        getApproved();
         getUnapproved();
         closeModal();
       })
@@ -50,7 +48,7 @@ export default function MakersView() {
   }
 
   useEffect(() => {
-    // getApproved();
+    getApproved();
     getUnapproved();
   }, []);
 
@@ -109,7 +107,6 @@ export default function MakersView() {
         </Row>
       </div>
 
-      {/*
       <div className="makers-list">
         <Row className="view-header">
           <Col>
@@ -126,26 +123,32 @@ export default function MakersView() {
             </Col>
           ) : (
             <Col>
-              <div>
+              <div className="table-wrapper">
                 <table className="makers-table">
                   <thead>
                     <tr>
-                      <th className="name">Name</th>
-                      <th className="email">Email</th>
-                      <th className="view-details">
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>
                         <span className="sr-only">View Details</span>
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {approved.map(({ _id, email, makerDetails }, key) => {
+                    {approved.map(({ email, makerDetails }, index) => {
                       return (
-                        <tr key={key}>
+                        <tr key={index}>
                           <td>
                             {makerDetails!.firstName} {makerDetails!.lastName}
                           </td>
                           <td>{email}</td>
-                          <td>Button to view details here</td>
+                          <td className="view-details">
+                            <Button
+                              onClick={() => viewDetails(approved[index])}
+                            >
+                              View Details
+                            </Button>
+                          </td>
                         </tr>
                       );
                     })}
@@ -156,7 +159,6 @@ export default function MakersView() {
           )}
         </Row>
       </div>
-      */}
 
       {modalUser && (
         <MakerDetailsModal

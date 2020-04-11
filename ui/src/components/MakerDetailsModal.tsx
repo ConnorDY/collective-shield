@@ -28,11 +28,13 @@ const MakerDetailsModal: React.FC<{
                 </Button>
               </Col>
 
-              <Col sm={6} lg={3}>
-                <Button className="btn-block" onClick={onApprove}>
-                  Approve
-                </Button>
-              </Col>
+              {!user.isVerifiedMaker && (
+                <Col sm={6} lg={3}>
+                  <Button className="btn-block" onClick={onApprove}>
+                    Approve
+                  </Button>
+                </Col>
+              )}
             </Row>
           </Container>
         </Modal.Footer>
