@@ -132,7 +132,7 @@ const MakerVerificationView: React.FC<{ user: User }> = ({ user }) => {
           </Row>
           <Row id="requested-row-2">
             <Col>
-              <h4>Healthcare Facility</h4>
+              <h4>Contact Information</h4>
               <Form
                 noValidate
                 validated={isValidated}
