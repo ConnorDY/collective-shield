@@ -233,7 +233,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
       ) : (
         <>
           <Row id="requested-row-1">
-            <Col>
+            <Col xs={6}>
               <h4>Request Submitted By</h4>
               <Card bg="light" id="requested-by-card">
                 <Card.Body>
@@ -259,26 +259,37 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
               </Card>
             </Col>
 
-            <Col>
+            <Col xs={6}>
               <h4>Number Requested</h4>
               <Form>
                 <Form.Group>
                   <Form.Control
+                    required
                     disabled={disabled}
-                    as="select"
+                    type="number"
                     size="lg"
                     custom
                     id="requested-mask-shields-card"
                     value={detailsReq.maskShieldCount}
-                    onChange={(e: BaseSyntheticEvent) =>
-                      updateDetailsReq({ maskShieldCount: e.target.value })
-                    }
-                  >
-                    <option>1</option>
-                    <option>2</option>
-                  </Form.Control>
+                    onChange={(e: BaseSyntheticEvent) => {
+                      // Allow range of 0 to 10000. 0 will still cause server-side error,
+                      // but makes the number input easier to change.
+                      let value = e.target.value;
+                      if (value < 0) value = 0;
+                      if (value > 10000) value = 10000;
+                      updateDetailsReq({ maskShieldCount: value })
+                    }}
+                  />
                 </Form.Group>
               </Form>
+              {
+                detailsReq.maskShieldCount >= 50 && !isExisting &&
+                  <Alert variant="info">
+                    For this request size, you will also need to email us
+                    at <a href="mailto:Jeffrey@CollectiveShield.org">Jeffrey@CollectiveShield.org</a> after
+                    you submit your request.
+                  </Alert>
+              }
             </Col>
           </Row>
 
