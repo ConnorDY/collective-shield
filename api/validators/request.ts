@@ -3,7 +3,7 @@ import { Joi } from 'celebrate';
 import { states } from '../constants';
 
 const requestValidator = Joi.object().keys({
-  maskShieldCount: Joi.number().required(),
+  maskShieldCount: Joi.number().min(1).max(10000).required(),
   jobRole: Joi.string()
     .valid(
       'Doctor',
