@@ -25,8 +25,8 @@ const ShippingModal: React.FC = () => {
               </ListGroup.Item>
               <ListGroup.Item as="li">
                 Email{' '}
-                <a href="mailto: Jeffrey@collectiveshield.org">
-                  Jeffrey@collectiveshield.org
+                <a href="mailto: support@collectiveshield.org">
+                  support@collectiveshield.org
                 </a>{' '}
                 with the requester's shipping address.
               </ListGroup.Item>

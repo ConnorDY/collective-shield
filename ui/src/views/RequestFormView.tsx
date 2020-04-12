@@ -286,7 +286,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                 detailsReq.maskShieldCount >= 50 && !isExisting &&
                   <Alert variant="info">
                     For this request size, you will also need to email us
-                    at <a href="mailto:Jeffrey@CollectiveShield.org">Jeffrey@CollectiveShield.org</a> after
+                    at <a href="mailto:support@collectiveshield.org">support@collectiveshield.org</a> after
                     you submit your request.
                   </Alert>
               }
