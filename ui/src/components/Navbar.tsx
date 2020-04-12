@@ -36,6 +36,14 @@ const MainNav: React.FC<{ user: User | undefined }> = ({ user }) => {
                       {showAdmin && (
                         <>
                           <NavLink
+                            exact
+                            to="/"
+                            activeClassName="active"
+                            className="nav-link"
+                          >
+                            Work
+                          </NavLink>
+                          <NavLink
                             to="/requests"
                             activeClassName="active"
                             className="nav-link"
