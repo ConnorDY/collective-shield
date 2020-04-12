@@ -34,13 +34,30 @@ const MainNav: React.FC<{ user: User | undefined }> = ({ user }) => {
                   {user && (
                     <Nav className="mr-auto text-lg-center">
                       {showAdmin && (
-                        <NavLink
-                          to="/requests"
-                          activeClassName="active"
-                          className="nav-link"
-                        >
-                          Admin
-                        </NavLink>
+                        <>
+                          <NavLink
+                            exact
+                            to="/"
+                            activeClassName="active"
+                            className="nav-link"
+                          >
+                            Work
+                          </NavLink>
+                          <NavLink
+                            to="/requests"
+                            activeClassName="active"
+                            className="nav-link"
+                          >
+                            Requests
+                          </NavLink>
+                          <NavLink
+                            to="/makers"
+                            activeClassName="active"
+                            className="nav-link"
+                          >
+                            Approvals
+                          </NavLink>
+                        </>
                       )}
                     </Nav>
                   )}
