@@ -15,7 +15,9 @@ import ScrollToTop from './components/ScrollToTop';
 import HomeView from './views/HomeView';
 import LoginView from './views/LoginView';
 import LogoutView from './views/LogoutView';
-import MakerView from './views/MakerView';
+import MakerVerificationPendingView from './views/MakerVerificationPendingView';
+import MakerVerificationView from './views/MakerVerificationView';
+import MakersView from './views/MakersView';
 import RequestListView from './views/RequestListView';
 import RequestFormView from './views/RequestFormView';
 import ErrorView from './views/ErrorView';
@@ -34,62 +36,72 @@ const App: React.FC = () => {
     sessionStorage.getItem('role')
   );
 
-  // on app load
-  useEffect(() => {
-    // get user profile
+  const getUser = () => {
     axios
       .get(buildEndpointUrl('me'))
       .then((res) => {
         setUser(res.data);
       })
-      .catch((err) => {
+      .catch(() => {
         history.push('/login');
       });
+  };
+
+  // on app load
+  useEffect(() => {
+    // get user profile
+    getUser();
   }, []);
 
-  const routes = (
-    user ? (
-      <>
-        <Switch>
-          <Route path="/" exact>
-            <HomeView user={user} role={role!} />
-          </Route>
-
-          <Route path="/request" exact>
-            <RequestFormView user={user} />
-          </Route>
-
-          <Route path="/requests" exact>
-            <RequestListView user={user} />
-          </Route>
-
-          <Route path="/request/:id" exact>
-            <RequestFormView user={user} />
-          </Route>
-
-          <Route path="/makers" exact>
-            <MakerView />
-          </Route>
-
-          <Route path="/logout" exact>
-            <LogoutView />
-          </Route>
-
-          <Route path="*">
-            <ErrorView />
-          </Route>
-        </Switch>
-
-        {!role && <RoleModal setRole={setRole} />}
-      </>
-    ) : (
-      <>
-        <Route path="/login">
-          <LoginView />
+  const routes = user ? (
+    <>
+      <Switch>
+        <Route path="/" exact>
+          <HomeView user={user} role={role!} />
         </Route>
-      </>
-    )
-  )
+
+        <Route path="/request" exact>
+          <RequestFormView user={user} />
+        </Route>
+
+        <Route path="/requests" exact>
+          <RequestListView user={user} />
+        </Route>
+
+        <Route path="/request/:id" exact>
+          <RequestFormView user={user} />
+        </Route>
+
+        <Route path="/makers" exact>
+          <MakersView />
+        </Route>
+
+        <Route path="/verification" exact>
+          <MakerVerificationView user={user} />
+        </Route>
+
+        <Route path="/verification-pending" exact>
+          <MakerVerificationPendingView />
+        </Route>
+
+        <Route path="/logout" exact>
+          <LogoutView />
+        </Route>
+
+        <Route path="*">
+          <ErrorView />
+        </Route>
+      </Switch>
+
+      {!role && <RoleModal setRole={setRole} />}
+    </>
+  ) : (
+    <>
+      <Route path="/login">
+        <LoginView />
+      </Route>
+    </>
+  );
 
   return (
     <Provider store={store}>
@@ -99,16 +111,11 @@ const App: React.FC = () => {
         <ScrollToTop>
           <main className="main">
             <Container className="inner">
-              {
-                GA_KEY ?
-                <Analytics id={GA_KEY}>
-                  {routes}
-                </Analytics>
-                :
-                <>
-                  {routes}
-                </>
-              }
+              {GA_KEY ? (
+                <Analytics id={GA_KEY}>{routes}</Analytics>
+              ) : (
+                <>{routes}</>
+              )}
             </Container>
           </main>
         </ScrollToTop>

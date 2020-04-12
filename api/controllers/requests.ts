@@ -58,7 +58,7 @@ export default class RequestsController {
   }
 
   @Get('/all')
-  @Authorized('admin')
+  @Authorized(['admin'])
   getAll() {
     return Request.find()
       .then((results) => {

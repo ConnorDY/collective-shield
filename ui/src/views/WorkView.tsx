@@ -10,7 +10,7 @@ import {
 import axios from 'axios';
 import { find, indexOf } from 'lodash';
 import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import User from '../models/User';
 import Request from '../models/Request';
@@ -22,6 +22,7 @@ const googleDriveLink =
   'https://drive.google.com/drive/folders/1-7AqfcKaGstJ0goRNiYks1Y732DsCLHn?fbclid=IwAR201HiuLkO-IfymI_jZg23gccLgJ0tLUFUPtvm7SjPjhAaEpaa9EFlROsU';
 
 const WorkView: React.FC<{ user: User }> = ({ user }) => {
+  const history = useHistory();
   const [availableWork, setAvailableWork] = useState<Request[]>([]);
   const [work, setWork] = useState<Request[]>([]);
 
@@ -93,8 +94,16 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
 
   // on load
   useEffect(() => {
-    refreshAll();
+    if (!user.makerDetails) {
+      history.push('/verification');
+    } else if (!user.isVerifiedMaker) {
+      history.push('/verification-pending');
+    } else {
+      refreshAll();
+    }
   }, []);
+
+  var options = { weekday: 'long', month: 'long', day: 'numeric' };
 
   return (
     <div className="my-work">
@@ -116,65 +125,82 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
             <Jumbotron className="text-center">No requests found.</Jumbotron>
           </Col>
         ) : (
-            <Col>
-              <div className="table-wrapper">
-                <table className="my-work-table">
-                  <thead>
-                    <tr>
-                      <th className="count">Count</th>
-                      <th className="requestor">Requestor</th>
-                      <th>Status</th>
-                      <th>
-                        <span className="sr-only">Action</span>
-                      </th>
-                    </tr>
-                  </thead>
+          <Col>
+            <p className="mb-4 ml-1 font-weight-bold">
+              Once you claim a request it will appear in this box. Use the
+              dropdown menu to share your progress. Requesters will be notified
+              as the job progresses.
+            </p>
+            <div className="table-wrapper">
+              <table className="my-work-table">
+                <thead>
+                  <tr>
+                    <th className="requestedDate">Date Requested</th>
+                    <th className="count">Count</th>
+                    <th className="requestor">Requester</th>
+                    <th>Status</th>
+                    <th>
+                      <span className="sr-only">Action</span>
+                    </th>
+                  </tr>
+                </thead>
 
-                  <tbody>
-                    {work.map((w, index) => {
-                      return (
-                        <tr key={index}>
-                          <td className="count">{w.maskShieldCount}</td>
-                          <td className="requestor">
-                            <Link to={`/request/${w._id}`} title="View details for this request">{w.facilityName}</Link>
-                          </td>
-                          <td className="status">
-                            <Dropdown as={ButtonGroup}>
-                              <Dropdown.Toggle
-                                id={`status-dropdown-${index}`}
-                                variant="outline-secondary"
-                              >
-                                {StatusOption(w.status || 'Requested')}
-                              </Dropdown.Toggle>
-
-                              <Dropdown.Menu>
-                                {statuses.map((status, index2) => (
-                                  <Dropdown.Item
-                                    key={index2}
-                                    onClick={() => setStatus(w._id, status)}
-                                  >
-                                    {StatusOption(status)}
-                                  </Dropdown.Item>
-                                ))}
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </td>
-                          <td className="action">
-                            <Button
-                              variant="primary"
-                              onClick={() => removeWork(w._id)}
+                <tbody>
+                  {work.map((w, index) => {
+                    const date = new Date(w.createDate!);
+                    return (
+                      <tr key={index}>
+                        <td className="requestedDate">
+                          <Link
+                            to={`/request/${w._id}`}
+                            title="View details for this request"
+                          >
+                            {new Intl.DateTimeFormat('en-US', options).format(
+                              date
+                            )}
+                          </Link>
+                        </td>
+                        <td className="count">{w.maskShieldCount}</td>
+                        <td className="requestor">
+                          {w.facilityName || 'Organization not provided'}
+                        </td>
+                        <td className="status">
+                          <Dropdown as={ButtonGroup}>
+                            <Dropdown.Toggle
+                              id={`status-dropdown-${index}`}
+                              variant="outline-secondary"
                             >
-                              Unassign
+                              {StatusOption(w.status || 'Requested')}
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                              {statuses.map((status, index2) => (
+                                <Dropdown.Item
+                                  key={index2}
+                                  onClick={() => setStatus(w._id, status)}
+                                >
+                                  {StatusOption(status)}
+                                </Dropdown.Item>
+                              ))}
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </td>
+                        <td className="action">
+                          <Button
+                            variant="primary"
+                            onClick={() => removeWork(w._id)}
+                          >
+                            Unassign
                           </Button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </Col>
-          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </Col>
+        )}
       </Row>
 
       <Row className="view-header">
@@ -196,9 +222,10 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
               <table className="available-work-table">
                 <thead>
                   <tr>
+                    <th className="requestedDate">Date Requested</th>
                     <th className="count">Count</th>
                     <th className="distance">State</th>
-                    <th className="requestor">Requestor</th>
+                    <th className="requestor">Requester</th>
                     <th>
                       <span className="sr-only">Claim</span>
                     </th>
@@ -207,11 +234,24 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
 
                 <tbody>
                   {availableWork.map((w, key) => {
+                    const date = new Date(w.createDate!);
                     return (
                       <tr key={key}>
+                        <td className="requestedDate">
+                          <Link
+                            to={`/request/${w._id}`}
+                            title="View details for this request"
+                          >
+                            {new Intl.DateTimeFormat('en-US', options).format(
+                              date
+                            )}
+                          </Link>
+                        </td>
                         <td className="count">{w.maskShieldCount}</td>
                         <td className="distance">{w.addressState}</td>
-                        <td className="requestor">{w.facilityName}</td>
+                        <td className="requestor">
+                          {w.facilityName || 'Organization not provided'}
+                        </td>
                         <td className="claim">
                           <Button
                             variant="primary"

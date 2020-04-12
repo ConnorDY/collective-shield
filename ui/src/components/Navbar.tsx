@@ -16,13 +16,11 @@ const MainNav: React.FC<{ user: User | undefined }> = ({ user }) => {
       <Container>
         <Row className="justify-content-end nav-inner no-gutters">
           <Col xs={12} lg={3}>
-            <Navbar.Brand href="/" className="branding">
-              <Logo height="30" width="30" fill={logoFill[1]} />
-              <span
-                className={`align-middle logo-text logo-text-${logoFill[0]}`}
-              >
-                Collective Shield
-              </span>
+            <Navbar.Brand
+              href="https://www.collectiveshield.org"
+              className="branding"
+            >
+              <Logo height="150" width="250" fill={logoFill[2]} />
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="main-nav-bar" />
           </Col>
@@ -36,13 +34,30 @@ const MainNav: React.FC<{ user: User | undefined }> = ({ user }) => {
                   {user && (
                     <Nav className="mr-auto text-lg-center">
                       {showAdmin && (
-                        <NavLink
-                          to="/requests"
-                          activeClassName="active"
-                          className="nav-link"
-                        >
-                          Admin
-                        </NavLink>
+                        <>
+                          <NavLink
+                            exact
+                            to="/"
+                            activeClassName="active"
+                            className="nav-link"
+                          >
+                            Work
+                          </NavLink>
+                          <NavLink
+                            to="/requests"
+                            activeClassName="active"
+                            className="nav-link"
+                          >
+                            Requests
+                          </NavLink>
+                          <NavLink
+                            to="/makers"
+                            activeClassName="active"
+                            className="nav-link"
+                          >
+                            Approvals
+                          </NavLink>
+                        </>
                       )}
                     </Nav>
                   )}

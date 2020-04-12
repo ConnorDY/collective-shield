@@ -49,41 +49,44 @@ const MyRequestsView: React.FC<{ user: User }> = ({ user }) => {
             </Jumbotron>
           </Col>
         ) : (
-            <Col>
-              <div className="table-wrapper">
-                <table className="my-work-table">
-                  <thead>
-                    <tr>
-                      <th className="date">Date Requested</th>
-                      <th className="count">Count</th>
-                      <th className="details">Details</th>
-                      <th className="status">Status</th>
-                    </tr>
-                  </thead>
+          <Col>
+            <div className="table-wrapper">
+              <table className="my-work-table">
+                <thead>
+                  <tr>
+                    <th className="date">Date Requested</th>
+                    <th className="count">Count</th>
+                    <th className="details">Details</th>
+                    <th className="status">Status</th>
+                  </tr>
+                </thead>
 
-                  <tbody>
-                    {requests.map((request, key) => {
-                      return (
-                        <tr key={key}>
-                          <td className="date">
-                            <Link to={`/request/${request._id}`} title="View details for this request">
-                              {moment(request.createDate).format('dddd, MMMM Do')}
-                            </Link>
-                          </td>
-                          <td className="count">{request.maskShieldCount}</td>
-                          <td className="details">
-                            {request.details.substring(0, 21)}
-                            {get(request, 'details', '').length > 20 ? '...' : ''}
-                          </td>
-                          <td className="status">{request.status}</td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </Col>
-          )}
+                <tbody>
+                  {requests.map((request, key) => {
+                    return (
+                      <tr key={key}>
+                        <td className="date">
+                          <Link
+                            to={`/request/${request._id}`}
+                            title="View details for this request"
+                          >
+                            {moment(request.createDate).format('dddd, MMMM Do')}
+                          </Link>
+                        </td>
+                        <td className="count">{request.maskShieldCount}</td>
+                        <td className="details">
+                          {request.details.substring(0, 21)}
+                          {get(request, 'details', '').length > 20 ? '...' : ''}
+                        </td>
+                        <td className="status">{request.status}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </Col>
+        )}
       </Row>
     </div>
   );

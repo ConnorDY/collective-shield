@@ -25,6 +25,8 @@ FACEBOOK_ID=XXXXX
 FACEBOOK_SECRET=XXXXX
 GOOGLE_ID=XXXXX
 GOOGLE_SECRET=XXXXX
+MAILGUN_API_KEY=XXXXX
+MAILGUN_DOMAIN=mg.collectiveshield.org
 OAUTH_DOMAIN=http://localhost:3050
 ```
 
@@ -83,8 +85,11 @@ The following variables are available:
 | FACEBOOK_SECRET | `String` | ✓        | Facebook client secret                                    |
 | GOOGLE_ID       | `String` | ✓        | Google client ID                                          |
 | GOOGLE_SECRET   | `String` | ✓        | Google client secret                                      |
+| MAILGUN_API_KEY | `String` | ✓        | API Key for authenticating with Mailgun.                  |
+| MAILGUN_DOMAIN  | `String` | ✓        | Domain that emails will be sent from.                     |
 | MONGODB         | URI      | ✓        | A MongoDB connection URL. Should start with `mongodb://`. |
 | OAUTH_DOMAIN    | URI      | ✓        | URL for OAuth                                             |
+| PORT            | `Number` |          | Port the app will listen on. Defaults to `3050`.          |
 
 ## UI
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Container, Modal, Row, ListGroup } from 'react-bootstrap';
+import { Button, Modal, ListGroup } from 'react-bootstrap';
 
 const ShippingModal: React.FC = () => {
   const [show, setShow] = useState(false);
@@ -10,7 +10,7 @@ const ShippingModal: React.FC = () => {
   return (
     <>
       <Button variant="primary" onClick={handleShow}>
-        Shipping Info
+        Get Shipping Label
       </Button>
       <Modal show={show} size="lg" backdrop onHide={handleClose}>
         <div className="p-3">
@@ -21,14 +21,14 @@ const ShippingModal: React.FC = () => {
           <Modal.Body>
             <ListGroup as="ol">
               <ListGroup.Item as="li">
-                Contact the requestor to obtain their shipping address.
+                Contact the requester to obtain their shipping address.
               </ListGroup.Item>
               <ListGroup.Item as="li">
                 Email{' '}
-                <a href="mailto: Jeffrey@collectiveshield.org">
-                  Jeffrey@collectiveshield.org
+                <a href="mailto: support@collectiveshield.org">
+                  support@collectiveshield.org
                 </a>{' '}
-                with the requestor's shipping address.
+                with the requester's shipping address.
               </ListGroup.Item>
             </ListGroup>
           </Modal.Body>

@@ -2,8 +2,11 @@ export default interface Request {
   _id: string;
   maskShieldCount: number;
   jobRole: string;
+  otherJobRole?: string;
   email: string;
-  facilityName: string;
+  facilityName?: string;
+  addressLine1: string;
+  addressLine2?: string;
   addressCity: string;
   addressState: string;
   addressZip: string;

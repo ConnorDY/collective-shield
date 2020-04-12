@@ -37,8 +37,11 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
     maskShieldCount: 1,
     details: '',
     jobRole: '',
+    otherJobRole: '',
     email: '',
     facilityName: '',
+    addressLine1: '',
+    addressLine2: '',
     addressCity: '',
     addressState: '',
     addressZip: '',
@@ -58,10 +61,12 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
   };
 
   const roleOptions = [
-    'Doctor',
-    'Nurse',
+    'Healthcare Worker',
     'First Responder',
-    'Medical Support Staff'
+    'Critical Workforce',
+    'Delivery or Retail',
+    'Military',
+    'Other'
   ];
 
   const getDetails = () => {
@@ -70,6 +75,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
     });
   };
 
+  // Not using placeholders, but helpful function to use if we bring them back.
   const getPlaceHolder = (text: string) => {
     return disabled ? '' : text;
   };
@@ -101,8 +107,11 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
         'maskShieldCount',
         'details',
         'jobRole',
+        'otherJobRole',
         'email',
         'facilityName',
+        'addressLine1',
+        'addressLine2',
         'addressCity',
         'addressState',
         'addressZip'
@@ -133,52 +142,90 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
     if (id) getDetails();
   }, []);
 
+  let h1 = 'New Request';
+  if (isExisting) h1 = 'Request Details';
+  if (isCreated) h1 = 'Thank You!';
+
   return (
     <div className="request-details">
       <Row className="view-header">
         <Col>
-          <h1 className="h1">
-            {isExisting ? 'Request Details' : 'New Request'}
-          </h1>
+          <h1 className="h1">{h1}</h1>
         </Col>
-        <Col sm={6} className="right-col">
-          {isMakerView && (
-            <Row className="justify-content-md-center">
-              <Col>
-                <ShippingModal />
-              </Col>
-              <Col>
-                <Dropdown as={ButtonGroup}>
-                  <Dropdown.Toggle
-                    id="details-status-dropdown"
-                    variant="outline-secondary"
-                  >
-                    {StatusOption(detailsReq.status || 'Requested')}
-                  </Dropdown.Toggle>
 
-                  <Dropdown.Menu>
-                    {statuses.map((status) => (
-                      <Dropdown.Item onClick={() => setStatus(status)}>
-                        {StatusOption(status)}
-                      </Dropdown.Item>
-                    ))}
-                  </Dropdown.Menu>
-                </Dropdown>
-              </Col>
-            </Row>
-          )}
-          {isExisting && !isMakerView && StatusOption(detailsReq.status)}
+        <Col sm={6} className="right-col">
+          <Row>
+            {isMakerView && (
+              <>
+                <Col className="col-auto">
+                  <ShippingModal />
+                </Col>
+
+                <Col className="col-auto">
+                  <Dropdown as={ButtonGroup}>
+                    <Dropdown.Toggle
+                      id="details-status-dropdown"
+                      variant="outline-secondary"
+                    >
+                      {StatusOption(detailsReq.status || 'Requested')}
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                      {statuses.map((status) => (
+                        <Dropdown.Item onClick={() => setStatus(status)}>
+                          {StatusOption(status)}
+                        </Dropdown.Item>
+                      ))}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </Col>
+              </>
+            )}
+
+            {isExisting && !isMakerView && (
+              <Col className="col-auto">{StatusOption(detailsReq.status)}</Col>
+            )}
+
+            <Col className="col-auto">
+              <Link to="/">
+                <Button>Go back</Button>
+              </Link>
+            </Col>
+          </Row>
         </Col>
       </Row>
+
+      {isExisting && (
+        <Row className="view-header">
+          <Col>
+            <p>
+              Please update the status of your job to keep the requester
+              apprised of your progress using the drop-down menu in the upper
+              right corner of this screen.
+            </p>
+            <p>
+              When your job is complete, either email the requester directly to
+              arrange transfer or select "Get Shipping Label" and Collective
+              Shield will email a pre-paid label to you. Don’t forget to include
+              the{' '}
+              <a href="/PrintInsert_20200406.pdf" target="_blank">
+                shipping insert
+              </a>{' '}
+              in your package.
+            </p>
+          </Col>
+        </Row>
+      )}
 
       {isCreated ? (
         <Row>
           <Col>
             <div className="c-requestForm -pad">
               <Alert variant="success">
-                {' '}
-                Thank you! You will receive an email confirming your request.{' '}
-                <Link to="/">View Your Requests.</Link>
+                <div style={{ fontSize: '1.2em' }}>
+                  Check back in to track the progress of your request.{' '}
+                  <Link to="/">View and Follow Your Requests.</Link>
+                </div>
               </Alert>
             </div>
           </Col>
@@ -186,7 +233,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
       ) : (
         <>
           <Row id="requested-row-1">
-            <Col>
+            <Col xs={6}>
               <h4>Request Submitted By</h4>
               <Card bg="light" id="requested-by-card">
                 <Card.Body>
@@ -212,35 +259,43 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
               </Card>
             </Col>
 
-            <Col>
-              <h4>Mask Shields Requested</h4>
+            <Col xs={6}>
+              <h4>Number Requested</h4>
               <Form>
                 <Form.Group>
                   <Form.Control
+                    required
                     disabled={disabled}
-                    as="select"
+                    type="number"
                     size="lg"
                     custom
                     id="requested-mask-shields-card"
                     value={detailsReq.maskShieldCount}
-                    onChange={(e: BaseSyntheticEvent) =>
-                      updateDetailsReq({ maskShieldCount: e.target.value })
-                    }
-                  >
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                  </Form.Control>
+                    onChange={(e: BaseSyntheticEvent) => {
+                      // Allow range of 0 to 10000. 0 will still cause server-side error,
+                      // but makes the number input easier to change.
+                      let value = e.target.value;
+                      if (value < 0) value = 0;
+                      if (value > 10000) value = 10000;
+                      updateDetailsReq({ maskShieldCount: value })
+                    }}
+                  />
                 </Form.Group>
               </Form>
+              {
+                detailsReq.maskShieldCount >= 50 && !isExisting &&
+                  <Alert variant="info">
+                    For this request size, you will also need to email us
+                    at <a href="mailto:support@collectiveshield.org">support@collectiveshield.org</a> after
+                    you submit your request.
+                  </Alert>
+              }
             </Col>
           </Row>
 
           <Row id="requested-row-2">
             <Col>
-              <h4>Healthcare Facility</h4>
+              <h4>Requester Contact Information</h4>
               <Form
                 noValidate
                 validated={isValidated}
@@ -256,7 +311,11 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                     required
                     value={detailsReq.jobRole}
                     onChange={(e: BaseSyntheticEvent) =>
-                      updateDetailsReq({ jobRole: e.target.value })
+                      // reset otherJobRole on change
+                      updateDetailsReq({
+                        jobRole: e.target.value,
+                        otherJobRole: ''
+                      })
                     }
                   >
                     <option value={''}>Select your Role</option>
@@ -266,13 +325,27 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                   </Form.Control>
                 </Form.Group>
 
+                {detailsReq.jobRole === 'Other' && (
+                  <Form.Group controlId="formBasicOtherRole">
+                    <Form.Label>Other Job Role</Form.Label>
+                    <Form.Control
+                      disabled={disabled}
+                      required // Actually only required when detailsReq.jobRole === 'Other'
+                      type="text"
+                      value={detailsReq.otherJobRole}
+                      onChange={(e: BaseSyntheticEvent) =>
+                        updateDetailsReq({ otherJobRole: e.target.value })
+                      }
+                    />
+                  </Form.Group>
+                )}
+
                 <Form.Group controlId="formBasicEmail">
                   <Form.Label>Preferred Email Address</Form.Label>
                   <Form.Control
                     disabled={disabled}
                     required
                     type="email"
-                    placeholder={getPlaceHolder('Email')}
                     value={detailsReq.email}
                     onChange={(e: BaseSyntheticEvent) =>
                       updateDetailsReq({ email: e.target.value })
@@ -281,14 +354,10 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                 </Form.Group>
 
                 <Form.Group controlId="formBasicFacilityName">
-                  <Form.Label>Facility Name</Form.Label>
+                  <Form.Label>Organization (Optional)</Form.Label>
                   <Form.Control
                     disabled={disabled}
-                    required
                     type="text"
-                    placeholder={getPlaceHolder(
-                      'Example: Sacred Heart Hospital'
-                    )}
                     value={detailsReq.facilityName}
                     onChange={(e: BaseSyntheticEvent) =>
                       updateDetailsReq({ facilityName: e.target.value })
@@ -297,12 +366,38 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                 </Form.Group>
 
                 <Form.Row>
+                  <Form.Group as={Col} controlId="formGridAddressLine1">
+                    <Form.Label>Address Line 1</Form.Label>
+                    <Form.Control
+                      disabled={disabled}
+                      required
+                      value={detailsReq.addressLine1}
+                      onChange={(e: BaseSyntheticEvent) =>
+                        updateDetailsReq({ addressLine1: e.target.value })
+                      }
+                    />
+                  </Form.Group>
+                </Form.Row>
+
+                <Form.Row>
+                  <Form.Group as={Col} controlId="formGridAddressLine2">
+                    <Form.Label>Address Line 2 (Optional)</Form.Label>
+                    <Form.Control
+                      disabled={disabled}
+                      value={detailsReq.addressLine2}
+                      onChange={(e: BaseSyntheticEvent) =>
+                        updateDetailsReq({ addressLine2: e.target.value })
+                      }
+                    />
+                  </Form.Group>
+                </Form.Row>
+
+                <Form.Row>
                   <Form.Group as={Col} controlId="formGridCity">
                     <Form.Label>City</Form.Label>
                     <Form.Control
                       disabled={disabled}
                       required
-                      placeholder={getPlaceHolder('Denver')}
                       value={detailsReq.addressCity}
                       onChange={(e: BaseSyntheticEvent) =>
                         updateDetailsReq({ addressCity: e.target.value })
@@ -333,7 +428,6 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                     <Form.Control
                       disabled={disabled}
                       required
-                      placeholder={getPlaceHolder('80205')}
                       value={detailsReq.addressZip}
                       pattern={'[0-9]{5}'}
                       onChange={(e: BaseSyntheticEvent) => {
@@ -365,13 +459,13 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
 
             <Col>
               <h4>Request Details</h4>
+              <h5>Add any details or comments about the request here</h5>
               <Form>
                 <Form.Group controlId="">
                   <Form.Control
                     disabled={disabled}
                     as="textarea"
                     rows="13"
-                    placeholder={getPlaceHolder('Add any request details here')}
                     value={detailsReq.details}
                     onChange={(e: BaseSyntheticEvent) =>
                       updateDetailsReq({ details: e.target.value })

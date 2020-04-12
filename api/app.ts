@@ -7,7 +7,6 @@ import cookieParser from 'cookie-parser';
 import session, { SessionOptions } from 'express-session';
 import { connect } from 'mongoose';
 import path from 'path';
-// import SparkPost from 'sparkpost';
 import passport from 'passport';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 
@@ -15,9 +14,11 @@ import './passport';
 import config from './config';
 import {
   LoginController,
+  MakersController,
   MiscController,
   RequestsController
 } from './controllers';
+import { authorizationChecker } from './utils';
 
 const portNumber = process.env.PORT || 3050;
 const cookieSession: SessionOptions = {
@@ -25,7 +26,6 @@ const cookieSession: SessionOptions = {
   cookie: {}
 };
 const parseForm = bodyParser.urlencoded({ extended: false });
-// const sparkpostClient = new SparkPost(config.sparkpostKey);
 
 connect(
   config.mongoUri!,
@@ -76,6 +76,7 @@ app.use(parseForm);
 useExpressServer(app, {
   controllers: [
     LoginController,
+    MakersController,
     MiscController,
     RequestsController
   ],
@@ -83,11 +84,8 @@ useExpressServer(app, {
   currentUserChecker: async (action: Action) => {
     return action.request.user;
   },
-  authorizationChecker: async (action: Action, roles: string[]) => {
-    if (!action.request.user) return false;
-    if (roles.includes('admin')) return action.request.user.isSuperAdmin;
-    return true;
-  }
+  authorizationChecker: (action: Action, roles?: string[]) =>
+    authorizationChecker(action.request.user, roles)
 });
 
 app.get('/api/logout', (req, res) => {

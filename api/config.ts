@@ -11,5 +11,6 @@ export default {
   },
   domainName: process.env.OAUTH_DOMAIN,
   cookieSecret: process.env.COOKIE_SECRET,
-  sparkpostKey: process.env.SPARKPOST_KEY
+  mailgunAPIKey: process.env.MAILGUN_API_KEY,
+  mailgunDomain: process.env.MAILGUN_DOMAIN
 };

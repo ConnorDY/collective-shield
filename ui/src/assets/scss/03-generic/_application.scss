@@ -22,15 +22,14 @@ body,
 /* END: Sticky Footer CSS */
 
 .main {
-
   .inner {
     padding-bottom: 3em;
   }
 
   .right-col {
-    // display: flex;
-    // justify-content: flex-end;
+    display: flex;
     align-items: center;
+    justify-content: flex-end;
 
     font-size: 16px;
     font-weight: 700;
@@ -64,5 +63,4 @@ body,
       // font-size: 2em;
     }
   }
-
 }
