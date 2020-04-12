@@ -20,12 +20,7 @@ const MainNav: React.FC<{ user: User | undefined }> = ({ user }) => {
               href="https://www.collectiveshield.org"
               className="branding"
             >
-              <Logo height="30" width="30" fill={logoFill[1]} />
-              <span
-                className={`align-middle logo-text logo-text-${logoFill[0]}`}
-              >
-                Collective Shield
-              </span>
+              <Logo height="150" width="250" fill={logoFill[2]} />
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="main-nav-bar" />
           </Col>
