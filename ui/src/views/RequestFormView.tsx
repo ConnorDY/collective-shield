@@ -295,7 +295,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
 
           <Row id="requested-row-2">
             <Col>
-              <h4>Requestor Contact Information</h4>
+              <h4>Requester Contact Information</h4>
               <Form
                 noValidate
                 validated={isValidated}
