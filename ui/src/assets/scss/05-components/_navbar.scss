@@ -35,8 +35,10 @@ $logoFillColor: map-merge($logo-fill, $custom-logo-fill);
   }
 
   .branding {
+    bottom: 13px;
     font-size: 20px;
     font-weight: 600;
+    position: relative;
 
     a,
     a:hover {
@@ -49,7 +51,7 @@ $logoFillColor: map-merge($logo-fill, $custom-logo-fill);
     }
 
     .logo {
-      height: 30px;
+      height: 55px;
       display: inline-block;
       margin-right: 5px;
       @each $name, $fill in $logoFillColor {
