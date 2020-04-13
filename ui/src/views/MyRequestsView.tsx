@@ -62,9 +62,9 @@ const MyRequestsView: React.FC<{ user: User }> = ({ user }) => {
                 </thead>
 
                 <tbody>
-                  {requests.map((request, key) => {
+                  {requests.map((request) => {
                     return (
-                      <tr key={key}>
+                      <tr key={request._id}>
                         <td className="date">
                           <Link
                             to={`/request/${request._id}`}

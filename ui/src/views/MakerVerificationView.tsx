@@ -215,8 +215,8 @@ const MakerVerificationView: React.FC<{ user: User }> = ({ user }) => {
                       }
                     >
                       <option value={''}>Choose...</option>
-                      {states.map((state, i) => (
-                        <option key={i}>{state}</option>
+                      {states.map((state) => (
+                        <option key={`state-${state}`}>{state}</option>
                       ))}
                     </Form.Control>
                   </Form.Group>

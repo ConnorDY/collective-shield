@@ -156,7 +156,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
           <h1 className="h1">{h1}</h1>
         </Col>
 
-        <Col sm={6} className="right-col">
+        <Col sm={7} className="right-col">
           <Row>
             {isExisting && (isMakerView || user.isSuperAdmin) && (
               <>
@@ -175,7 +175,10 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
 
                     <Dropdown.Menu>
                       {statuses.map((status) => (
-                        <Dropdown.Item onClick={() => setStatus(status)}>
+                        <Dropdown.Item
+                          key={`status-${status}`}
+                          onClick={() => setStatus(status)}
+                        >
                           {StatusOption(status)}
                         </Dropdown.Item>
                       ))}
@@ -323,8 +326,8 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                     }
                   >
                     <option value={''}>Select your Role</option>
-                    {roleOptions.map((role, i) => {
-                      return <option key={i}>{role}</option>;
+                    {roleOptions.map((role) => {
+                      return <option key={`role-${role}`}>{role}</option>;
                     })}
                   </Form.Control>
                 </Form.Group>
@@ -443,8 +446,8 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                       }
                     >
                       <option value={''}>Choose...</option>
-                      {states.map((state, i) => (
-                        <option key={i}>{state}</option>
+                      {states.map((state) => (
+                        <option key={`state-${state}`}>{state}</option>
                       ))}
                     </Form.Control>
                   </Form.Group>
