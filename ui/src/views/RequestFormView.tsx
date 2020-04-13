@@ -158,7 +158,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
 
         <Col sm={6} className="right-col">
           <Row>
-            {(isMakerView || user.isSuperAdmin) && (
+            {isExisting && (isMakerView || user.isSuperAdmin) && (
               <>
                 <Col className="col-auto">
                   <ShippingModal request={detailsReq as any} />
