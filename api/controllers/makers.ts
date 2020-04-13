@@ -72,7 +72,8 @@ export default class MakersController {
 
           <p style="font-style: italic;">
             <span style="font-weight: bold">Note:</span>
-            When you return to the Collective Shield website, you may need to log out and log back in to activate your account.
+            When you return to the <a href="https://collectiveshield.org">Collective Shield</a> website,
+            you may need to log out and log back in to activate your account.
           </p>
 
           <p>
