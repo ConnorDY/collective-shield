@@ -32,7 +32,7 @@ const MakerVerificationView: React.FC<{ user: User }> = ({ user }) => {
   });
 
   const resetRole = () => {
-    sessionStorage.removeItem('role');
+    localStorage.removeItem('role');
     window.location.href = '/';
   };
 
