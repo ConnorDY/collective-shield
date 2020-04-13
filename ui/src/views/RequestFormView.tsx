@@ -326,8 +326,8 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                     }
                   >
                     <option value={''}>Select your Role</option>
-                    {roleOptions.map((role, i) => {
-                      return <option key={`role-${i}`}>{role}</option>;
+                    {roleOptions.map((role) => {
+                      return <option key={`role-${role}`}>{role}</option>;
                     })}
                   </Form.Control>
                 </Form.Group>

@@ -149,7 +149,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                 </thead>
 
                 <tbody>
-                  {work.map((w, rowIndex) => {
+                  {work.map((w) => {
                     const date = new Date(w.createDate!);
                     return (
                       <tr key={`my-work-${w._id}`}>
@@ -170,7 +170,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                         <td className="status">
                           <Dropdown as={ButtonGroup}>
                             <Dropdown.Toggle
-                              id={`status-dropdown-${rowIndex}`}
+                              id={`my-work-${w._id}-status-dropdown`}
                               variant="outline-secondary"
                             >
                               {StatusOption(w.status || 'Requested')}
