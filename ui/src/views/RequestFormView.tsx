@@ -158,34 +158,35 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
 
         <Col sm={6} className="right-col">
           <Row>
-            {isMakerView && (
-              <>
-                <Col className="col-auto">
-                  <ShippingModal request={detailsReq as any} />
-                </Col>
+            {isMakerView ||
+              (user.isSuperAdmin && (
+                <>
+                  <Col className="col-auto">
+                    <ShippingModal request={detailsReq as any} />
+                  </Col>
 
-                <Col className="col-auto">
-                  <Dropdown as={ButtonGroup}>
-                    <Dropdown.Toggle
-                      id="details-status-dropdown"
-                      variant="outline-secondary"
-                    >
-                      {StatusOption(detailsReq.status || 'Requested')}
-                    </Dropdown.Toggle>
+                  <Col className="col-auto">
+                    <Dropdown as={ButtonGroup}>
+                      <Dropdown.Toggle
+                        id="details-status-dropdown"
+                        variant="outline-secondary"
+                      >
+                        {StatusOption(detailsReq.status || 'Requested')}
+                      </Dropdown.Toggle>
 
-                    <Dropdown.Menu>
-                      {statuses.map((status) => (
-                        <Dropdown.Item onClick={() => setStatus(status)}>
-                          {StatusOption(status)}
-                        </Dropdown.Item>
-                      ))}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </Col>
-              </>
-            )}
+                      <Dropdown.Menu>
+                        {statuses.map((status) => (
+                          <Dropdown.Item onClick={() => setStatus(status)}>
+                            {StatusOption(status)}
+                          </Dropdown.Item>
+                        ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Col>
+                </>
+              ))}
 
-            {isExisting && !isMakerView && (
+            {isExisting && !isMakerView && !user.isSuperAdmin && (
               <Col className="col-auto">{StatusOption(detailsReq.status)}</Col>
             )}
 
