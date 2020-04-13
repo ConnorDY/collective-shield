@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Container, Row, Navbar, Nav } from 'react-bootstrap';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useHistory } from 'react-router-dom';
 import { get } from 'lodash';
 
 import User from '../models/User';
@@ -12,6 +12,8 @@ const MainNav: React.FC<{
   role: string | null;
   setRole: React.Dispatch<React.SetStateAction<string | null>>;
 }> = ({ user, role, setRole }) => {
+  const history = useHistory();
+
   const showAdmin = get(user, 'isSuperAdmin', false);
   const logoFill = ['default', 'blue-purple', 'orange', 'gray'];
 
@@ -19,6 +21,7 @@ const MainNav: React.FC<{
 
   function switchRole() {
     setRole(oppositeRole);
+    history.push('/');
   }
 
   return (
