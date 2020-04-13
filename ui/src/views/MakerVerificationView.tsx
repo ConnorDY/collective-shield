@@ -325,6 +325,7 @@ const MakerVerificationView: React.FC<{ user: User }> = ({ user }) => {
                           <a
                             href="https://www.collectiveshield.org/about"
                             target="_blank"
+                            rel="noopener noreferrer"
                           >
                             Collective Shield Guiding Principles
                           </a>

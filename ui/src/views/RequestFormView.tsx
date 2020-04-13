@@ -22,7 +22,10 @@ import ShippingModal from '../components/ShippingModal';
 import { buildEndpointUrl, readCookie, scrollToTop } from '../utilities';
 import { states, statuses } from '../utilities/constants';
 
-const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
+const RequestFormView: React.FC<{ user: User; role: string }> = ({
+  user,
+  role
+}) => {
   const history = useHistory();
   let { id } = useParams();
 
@@ -62,8 +65,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
     'Other'
   ];
 
-  const isMakerView =
-    isExisting && !isCreated && detailsReq.makerID === user._id;
+  const isMakerView = role === 'maker';
 
   function updateDetailsReq(data: object) {
     setDetailsReq({
@@ -156,7 +158,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
 
         <Col sm={6} className="right-col">
           <Row>
-            {isMakerView && (
+            {(isMakerView || user.isSuperAdmin) && (
               <>
                 <Col className="col-auto">
                   <ShippingModal request={detailsReq as any} />
@@ -183,7 +185,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
               </>
             )}
 
-            {isExisting && !isMakerView && (
+            {isExisting && !isMakerView && !user.isSuperAdmin && (
               <Col className="col-auto">{StatusOption(detailsReq.status)}</Col>
             )}
 

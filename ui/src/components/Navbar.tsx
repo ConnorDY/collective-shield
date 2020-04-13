@@ -20,6 +20,7 @@ const MainNav: React.FC<{
   const oppositeRole = role === 'maker' ? 'requester' : 'maker';
 
   function switchRole() {
+    localStorage.setItem('role', oppositeRole);
     setRole(oppositeRole);
     history.push('/');
   }
