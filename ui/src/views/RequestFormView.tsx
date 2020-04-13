@@ -40,25 +40,18 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
     otherJobRole: '',
     email: '',
     facilityName: '',
+    firstName: '',
+    lastName: '',
     addressLine1: '',
     addressLine2: '',
     addressCity: '',
     addressState: '',
     addressZip: '',
+    phone: '',
     status: '',
     makerID: '',
     requestorID: ''
   });
-
-  const isMakerView =
-    isExisting && !isCreated && detailsReq.makerID === user._id;
-
-  const updateDetailsReq = (data: object) => {
-    setDetailsReq({
-      ...detailsReq,
-      ...data
-    });
-  };
 
   const roleOptions = [
     'Healthcare Worker',
@@ -69,21 +62,26 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
     'Other'
   ];
 
-  const getDetails = () => {
+  const isMakerView =
+    isExisting && !isCreated && detailsReq.makerID === user._id;
+
+  function updateDetailsReq(data: object) {
+    setDetailsReq({
+      ...detailsReq,
+      ...data
+    });
+  }
+
+  function getDetails() {
     axios.get(buildEndpointUrl(`requests/${id}`)).then((res) => {
       updateDetailsReq(res.data);
     });
-  };
-
-  // Not using placeholders, but helpful function to use if we bring them back.
-  const getPlaceHolder = (text: string) => {
-    return disabled ? '' : text;
-  };
+  }
 
   function setStatus(status: string) {
     axios
       .patch(buildEndpointUrl(`requests/${id}/${status}`))
-      .then((res) => {
+      .then(() => {
         updateDetailsReq({ status });
       })
       .catch((err) => {
@@ -95,7 +93,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
 
   function handleSubmit(event: React.BaseSyntheticEvent) {
     const form = event.currentTarget;
-    if (form.checkValidity() === false) {
+    if (!form.checkValidity()) {
       event.preventDefault();
       event.stopPropagation();
       setIsValidated(true);
@@ -110,11 +108,14 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
         'otherJobRole',
         'email',
         'facilityName',
+        'firstName',
+        'lastName',
         'addressLine1',
         'addressLine2',
         'addressCity',
         'addressState',
-        'addressZip'
+        'addressZip',
+        'phone'
       ]);
 
       axios
@@ -158,7 +159,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
             {isMakerView && (
               <>
                 <Col className="col-auto">
-                  <ShippingModal />
+                  <ShippingModal request={detailsReq as any} />
                 </Col>
 
                 <Col className="col-auto">
@@ -195,7 +196,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
         </Col>
       </Row>
 
-      {isExisting && (
+      {isMakerView && (
         <Row className="view-header">
           <Col>
             <p>
@@ -277,19 +278,20 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                       let value = e.target.value;
                       if (value < 0) value = 0;
                       if (value > 10000) value = 10000;
-                      updateDetailsReq({ maskShieldCount: value })
+                      updateDetailsReq({ maskShieldCount: value });
                     }}
                   />
                 </Form.Group>
               </Form>
-              {
-                detailsReq.maskShieldCount >= 50 && !isExisting &&
-                  <Alert variant="info">
-                    For this request size, you will also need to email us
-                    at <a href="mailto:support@collectiveshield.org">support@collectiveshield.org</a> after
-                    you submit your request.
-                  </Alert>
-              }
+              {detailsReq.maskShieldCount >= 50 && !isExisting && (
+                <Alert variant="info">
+                  For this request size, you will also need to email us at{' '}
+                  <a href="mailto:support@collectiveshield.org">
+                    support@collectiveshield.org
+                  </a>{' '}
+                  after you submit your request.
+                </Alert>
+              )}
             </Col>
           </Row>
 
@@ -366,31 +368,53 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                 </Form.Group>
 
                 <Form.Row>
-                  <Form.Group as={Col} controlId="formGridAddressLine1">
-                    <Form.Label>Address Line 1</Form.Label>
+                  <Form.Group as={Col} controlId="formGridFirstName">
+                    <Form.Label>First Name</Form.Label>
                     <Form.Control
                       disabled={disabled}
                       required
-                      value={detailsReq.addressLine1}
+                      value={detailsReq.firstName}
                       onChange={(e: BaseSyntheticEvent) =>
-                        updateDetailsReq({ addressLine1: e.target.value })
+                        updateDetailsReq({ firstName: e.target.value })
+                      }
+                    />
+                  </Form.Group>
+
+                  <Form.Group as={Col} controlId="formGridLastName">
+                    <Form.Label>Last Name</Form.Label>
+                    <Form.Control
+                      disabled={disabled}
+                      required
+                      value={detailsReq.lastName}
+                      onChange={(e: BaseSyntheticEvent) =>
+                        updateDetailsReq({ lastName: e.target.value })
                       }
                     />
                   </Form.Group>
                 </Form.Row>
 
-                <Form.Row>
-                  <Form.Group as={Col} controlId="formGridAddressLine2">
-                    <Form.Label>Address Line 2 (Optional)</Form.Label>
-                    <Form.Control
-                      disabled={disabled}
-                      value={detailsReq.addressLine2}
-                      onChange={(e: BaseSyntheticEvent) =>
-                        updateDetailsReq({ addressLine2: e.target.value })
-                      }
-                    />
-                  </Form.Group>
-                </Form.Row>
+                <Form.Group controlId="formBasicAddressLine1">
+                  <Form.Label>Address Line 1</Form.Label>
+                  <Form.Control
+                    disabled={disabled}
+                    required
+                    value={detailsReq.addressLine1}
+                    onChange={(e: BaseSyntheticEvent) =>
+                      updateDetailsReq({ addressLine1: e.target.value })
+                    }
+                  />
+                </Form.Group>
+
+                <Form.Group controlId="formBasicAddressLine2">
+                  <Form.Label>Address Line 2 (Optional)</Form.Label>
+                  <Form.Control
+                    disabled={disabled}
+                    value={detailsReq.addressLine2}
+                    onChange={(e: BaseSyntheticEvent) =>
+                      updateDetailsReq({ addressLine2: e.target.value })
+                    }
+                  />
+                </Form.Group>
 
                 <Form.Row>
                   <Form.Group as={Col} controlId="formGridCity">
@@ -429,7 +453,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                       disabled={disabled}
                       required
                       value={detailsReq.addressZip}
-                      pattern={'[0-9]{5}'}
+                      pattern="[0-9]{5}"
                       onChange={(e: BaseSyntheticEvent) => {
                         if (/^\d{0,5}$/.test(e.target.value)) {
                           updateDetailsReq({ addressZip: e.target.value });
@@ -438,6 +462,21 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
                     />
                   </Form.Group>
                 </Form.Row>
+
+                <Form.Group controlId="formBasicPhone">
+                  <Form.Label>Phone Number</Form.Label>
+                  <Form.Control
+                    disabled={disabled}
+                    required
+                    value={detailsReq.phone}
+                    pattern="[0-9-]{10,12}"
+                    onChange={(e: BaseSyntheticEvent) => {
+                      if (/^[0-9-]{0,12}$/.test(e.target.value)) {
+                        updateDetailsReq({ phone: e.target.value });
+                      } else e.preventDefault();
+                    }}
+                  />
+                </Form.Group>
 
                 {!isExisting && (
                   <div id="request-button-group">

@@ -7,9 +7,19 @@ import User from '../models/User';
 import Avatar from './Avatar';
 import Logo from './Logo';
 
-const MainNav: React.FC<{ user: User | undefined }> = ({ user }) => {
+const MainNav: React.FC<{
+  user: User | undefined;
+  role: string | null;
+  setRole: React.Dispatch<React.SetStateAction<string | null>>;
+}> = ({ user, role, setRole }) => {
   const showAdmin = get(user, 'isSuperAdmin', false);
   const logoFill = ['default', 'blue-purple', 'orange', 'gray'];
+
+  const oppositeRole = role === 'maker' ? 'requester' : 'maker';
+
+  function switchRole() {
+    setRole(oppositeRole);
+  }
 
   return (
     <Navbar expand="lg" className="nav">
@@ -24,6 +34,7 @@ const MainNav: React.FC<{ user: User | undefined }> = ({ user }) => {
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="main-nav-bar" />
           </Col>
+
           <Col xs={12} lg={9}>
             <Navbar.Collapse
               id="main-nav-bar"
@@ -43,6 +54,7 @@ const MainNav: React.FC<{ user: User | undefined }> = ({ user }) => {
                           >
                             Work
                           </NavLink>
+
                           <NavLink
                             to="/requests"
                             activeClassName="active"
@@ -50,6 +62,7 @@ const MainNav: React.FC<{ user: User | undefined }> = ({ user }) => {
                           >
                             Requests
                           </NavLink>
+
                           <NavLink
                             to="/makers"
                             activeClassName="active"
@@ -62,14 +75,27 @@ const MainNav: React.FC<{ user: User | undefined }> = ({ user }) => {
                     </Nav>
                   )}
                 </Col>
+
                 <Col xs={12} lg={6} className="user text-lg-right">
                   {user ? (
-                    <Navbar.Text className="my-auto  font-weight-bold">
+                    <Navbar.Text className="my-auto font-weight-bold">
                       <span className="ml-lg-3 mr-3 my-auto">
                         {user.firstName}
                       </span>
+
                       <Avatar size="40" user={user} />
-                      <Link to="/logout" className="ml-lg-3 my-lg-auto">
+
+                      <Link
+                        to="#"
+                        onClick={() => switchRole()}
+                        className="ml-lg-3"
+                      >
+                        Switch to{' '}
+                        {oppositeRole.charAt(0).toUpperCase() +
+                          oppositeRole.slice(1)}
+                      </Link>
+
+                      <Link to="/logout" className="ml-lg-3">
                         Logout
                       </Link>
                     </Navbar.Text>

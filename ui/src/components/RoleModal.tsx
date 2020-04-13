@@ -5,7 +5,7 @@ const RoleModal: React.FC<{
   setRole: React.Dispatch<React.SetStateAction<string | null>>;
 }> = ({ setRole }) => {
   function pickRole(role: string) {
-    sessionStorage.setItem('role', role);
+    localStorage.setItem('role', role);
     setRole(role);
   }
 
@@ -39,7 +39,7 @@ const RoleModal: React.FC<{
               <Col sm={6} lg={4}>
                 <Button
                   variant="primary"
-                  onClick={() => pickRole('requestor')}
+                  onClick={() => pickRole('requester')}
                   className="btn-block"
                 >
                   Requester
