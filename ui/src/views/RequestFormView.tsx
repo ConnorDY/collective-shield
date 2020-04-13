@@ -156,7 +156,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
           <h1 className="h1">{h1}</h1>
         </Col>
 
-        <Col sm={6} className="right-col">
+        <Col sm={7} className="right-col">
           <Row>
             {isExisting && (isMakerView || user.isSuperAdmin) && (
               <>
