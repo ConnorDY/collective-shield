@@ -174,9 +174,9 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                     </Dropdown.Toggle>
 
                     <Dropdown.Menu>
-                      {statuses.map((status, index) => (
+                      {statuses.map((status) => (
                         <Dropdown.Item
-                          key={`status-${index}`}
+                          key={`status-${status}`}
                           onClick={() => setStatus(status)}
                         >
                           {StatusOption(status)}

@@ -177,9 +177,9 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>
-                              {statuses.map((status, statusIndex) => (
+                              {statuses.map((status) => (
                                 <Dropdown.Item
-                                  key={`row-${rowIndex}-status-${statusIndex}`}
+                                  key={`my-work-${w._id}-status-${status}`}
                                   onClick={() => setStatus(w._id, status)}
                                 >
                                   {StatusOption(status)}
