@@ -24,6 +24,8 @@ const requestValidator = Joi.object().keys({
   }),
   email: Joi.string().email().required(),
   facilityName: Joi.string().allow('').optional(),
+  firstName: Joi.string().required(),
+  lastName: Joi.string().required(),
   addressLine1: Joi.string().required(),
   addressLine2: Joi.string().allow('').optional(),
   addressCity: Joi.string().required(),
@@ -31,6 +33,7 @@ const requestValidator = Joi.object().keys({
     .valid(...states)
     .required(),
   addressZip: Joi.number().integer().required(),
+  phone: Joi.string().required(),
   details: Joi.string().allow('').optional()
 });
 
