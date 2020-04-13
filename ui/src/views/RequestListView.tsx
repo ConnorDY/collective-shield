@@ -4,12 +4,11 @@ import axios from 'axios';
 import { get, lowerCase } from 'lodash';
 import { Link } from 'react-router-dom';
 
-import User from '../models/User';
 import Request from '../models/Request';
 import StatusOption from '../components/StatusOption';
 import { buildEndpointUrl } from '../utilities';
 
-const RequestListView: React.FC<{ user: User }> = ({ user }) => {
+const RequestListView: React.FC<{}> = () => {
   const [allRequests, setAllRequests] = useState<Request[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchStatusTerm, setSearchStatusTerm] = useState('');
@@ -148,8 +147,14 @@ const RequestListView: React.FC<{ user: User }> = ({ user }) => {
                           </Link>
                         </td>
                         <td className="count">{r.maskShieldCount}</td>
-                        <td className="requestor">{r.requestorID}</td>
-                        <td className="printer">{r.makerID}</td>
+                        <td className="requestor">
+                          {r.requestor!.firstName} {r.requestor!.lastName}
+                        </td>
+                        <td className="printer">
+                          {r.maker
+                            ? `${r.maker.firstName} ${r.maker.lastName}`
+                            : ''}
+                        </td>
                         <td className="status">
                           {StatusOption(r.status || 'Requested')}
                         </td>

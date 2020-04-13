@@ -61,6 +61,8 @@ export default class RequestsController {
   @Authorized(['admin'])
   getAll() {
     return Request.find()
+      .populate('maker')
+      .populate('requestor')
       .then((results) => {
         this.sortRequestsByCreateDate(results);
         return results;

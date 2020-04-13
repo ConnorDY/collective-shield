@@ -1,3 +1,5 @@
+import User from './User';
+
 export default interface Request {
   _id: string;
   maskShieldCount: number;
@@ -19,4 +21,6 @@ export default interface Request {
   updateDate?: Date;
   makerID?: string;
   requestorID: string;
+  maker?: User;
+  requestor?: User;
 }
