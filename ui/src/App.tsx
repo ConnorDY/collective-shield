@@ -59,7 +59,7 @@ const App: React.FC = () => {
         </Route>
 
         <Route path="/request" exact>
-          <RequestFormView user={user} />
+          <RequestFormView user={user} role={role!} />
         </Route>
 
         <Route path="/requests" exact>
@@ -67,7 +67,7 @@ const App: React.FC = () => {
         </Route>
 
         <Route path="/request/:id" exact>
-          <RequestFormView user={user} />
+          <RequestFormView user={user} role={role!} />
         </Route>
 
         <Route path="/makers" exact>
