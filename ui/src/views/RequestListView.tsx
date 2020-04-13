@@ -132,10 +132,10 @@ const RequestListView: React.FC<{}> = () => {
                 </thead>
 
                 <tbody>
-                  {searchResults.map((r, key) => {
+                  {searchResults.map((r) => {
                     const date = new Date(r.createDate);
                     return (
-                      <tr key={key}>
+                      <tr key={r._id}>
                         <td className="requestedDate">
                           <Link
                             to={`/request/${r._id}`}

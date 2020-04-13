@@ -176,7 +176,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                     <Dropdown.Menu>
                       {statuses.map((status, index) => (
                         <Dropdown.Item
-                          key={index}
+                          key={`status-${index}`}
                           onClick={() => setStatus(status)}
                         >
                           {StatusOption(status)}
@@ -327,7 +327,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                   >
                     <option value={''}>Select your Role</option>
                     {roleOptions.map((role, i) => {
-                      return <option key={i}>{role}</option>;
+                      return <option key={`role-${i}`}>{role}</option>;
                     })}
                   </Form.Control>
                 </Form.Group>
@@ -447,7 +447,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                     >
                       <option value={''}>Choose...</option>
                       {states.map((state, i) => (
-                        <option key={i}>{state}</option>
+                        <option key={`state-${i}`}>{state}</option>
                       ))}
                     </Form.Control>
                   </Form.Group>

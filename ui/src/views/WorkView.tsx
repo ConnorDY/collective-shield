@@ -149,10 +149,10 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                 </thead>
 
                 <tbody>
-                  {work.map((w, index) => {
+                  {work.map((w, rowIndex) => {
                     const date = new Date(w.createDate!);
                     return (
-                      <tr key={index}>
+                      <tr key={`my-work-${w._id}`}>
                         <td className="requestedDate">
                           <Link
                             to={`/request/${w._id}`}
@@ -170,16 +170,16 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                         <td className="status">
                           <Dropdown as={ButtonGroup}>
                             <Dropdown.Toggle
-                              id={`status-dropdown-${index}`}
+                              id={`status-dropdown-${rowIndex}`}
                               variant="outline-secondary"
                             >
                               {StatusOption(w.status || 'Requested')}
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>
-                              {statuses.map((status, index2) => (
+                              {statuses.map((status, statusIndex) => (
                                 <Dropdown.Item
-                                  key={index2}
+                                  key={`row-${rowIndex}-status-${statusIndex}`}
                                   onClick={() => setStatus(w._id, status)}
                                 >
                                   {StatusOption(status)}
@@ -236,10 +236,10 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                 </thead>
 
                 <tbody>
-                  {availableWork.map((w, key) => {
+                  {availableWork.map((w) => {
                     const date = new Date(w.createDate!);
                     return (
-                      <tr key={key}>
+                      <tr key={`available-work-${w._id}`}>
                         <td className="requestedDate">
                           <Link
                             to={`/request/${w._id}`}
