@@ -91,15 +91,9 @@ export default class RequestsController {
 
   @Get('/:id')
   getOneById(@Param('id') id: string, @CurrentUser() user: IUser) {
-    // Can only view details if requestor, assigned, or admin
-    const query: MongooseFilterQuery<Pick<IRequest, any>> = {
+    return Request.findOne({
       _id: id
-    };
-    if (!user.isSuperAdmin) {
-      query.$or = [{ requestorID: user._id }, { makerID: user._id }];
-    }
-
-    return Request.findOne(query)
+    })
       .then((result) => {
         return result;
       })

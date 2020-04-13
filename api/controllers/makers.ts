@@ -10,9 +10,9 @@ import config from '../config';
 import { User } from '../schemas';
 import { sendEmail } from '../mailer';
 
+@Authorized(['admin'])
 @JsonController(`${config.apiPrefix}/makers`)
 export default class MakersController {
-  @Authorized(['admin'])
   @Get('/approved')
   getApproved() {
     return User.find({
@@ -26,7 +26,6 @@ export default class MakersController {
       });
   }
 
-  @Authorized(['admin'])
   @Get('/unapproved')
   getUnapproved() {
     return User.find({
@@ -41,7 +40,6 @@ export default class MakersController {
       });
   }
 
-  @Authorized(['admin'])
   @Put('/approve/:id')
   approveMaker(@Param('id') id: string) {
     return User.findByIdAndUpdate(id, { $set: { isVerifiedMaker: true } })
