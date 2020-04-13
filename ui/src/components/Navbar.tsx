@@ -88,14 +88,16 @@ const MainNav: React.FC<{
                       <Link
                         to="#"
                         onClick={() => switchRole()}
-                        className="ml-lg-3 mr-3"
+                        className="ml-lg-3"
                       >
                         Switch to{' '}
                         {oppositeRole.charAt(0).toUpperCase() +
                           oppositeRole.slice(1)}
                       </Link>
 
-                      <Link to="/logout">Logout</Link>
+                      <Link to="/logout" className="ml-lg-3">
+                        Logout
+                      </Link>
                     </Navbar.Text>
                   ) : (
                     <></>
