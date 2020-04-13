@@ -322,7 +322,10 @@ const MakerVerificationView: React.FC<{ user: User }> = ({ user }) => {
                           updates or questions. This information will only be
                           used for the Collective Shield volunteer effort and no
                           other purposes. I agree to abide by the{' '}
-                          <a href="https://www.collectiveshield.org/about" target="_blank">
+                          <a
+                            href="https://www.collectiveshield.org/about"
+                            target="_blank"
+                          >
                             Collective Shield Guiding Principles
                           </a>
                           .
