@@ -53,16 +53,6 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
     requestorID: ''
   });
 
-  const isMakerView =
-    isExisting && !isCreated && detailsReq.makerID === user._id;
-
-  const updateDetailsReq = (data: object) => {
-    setDetailsReq({
-      ...detailsReq,
-      ...data
-    });
-  };
-
   const roleOptions = [
     'Healthcare Worker',
     'First Responder',
@@ -72,11 +62,21 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
     'Other'
   ];
 
-  const getDetails = () => {
+  const isMakerView =
+    isExisting && !isCreated && detailsReq.makerID === user._id;
+
+  function updateDetailsReq(data: object) {
+    setDetailsReq({
+      ...detailsReq,
+      ...data
+    });
+  }
+
+  function getDetails() {
     axios.get(buildEndpointUrl(`requests/${id}`)).then((res) => {
       updateDetailsReq(res.data);
     });
-  };
+  }
 
   function setStatus(status: string) {
     axios
@@ -159,7 +159,7 @@ const RequestFormView: React.FC<{ user: User }> = ({ user }) => {
             {isMakerView && (
               <>
                 <Col className="col-auto">
-                  <ShippingModal />
+                  <ShippingModal request={detailsReq as any} />
                 </Col>
 
                 <Col className="col-auto">

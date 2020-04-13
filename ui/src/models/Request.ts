@@ -5,11 +5,14 @@ export default interface Request {
   otherJobRole?: string;
   email: string;
   facilityName?: string;
+  firstName: string;
+  lastName: string;
   addressLine1: string;
   addressLine2?: string;
   addressCity: string;
   addressState: string;
   addressZip: string;
+  phone: string;
   details: string;
   status: string;
   createDate?: Date;
