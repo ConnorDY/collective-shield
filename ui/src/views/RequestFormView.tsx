@@ -446,8 +446,8 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                       }
                     >
                       <option value={''}>Choose...</option>
-                      {states.map((state, i) => (
-                        <option key={`state-${i}`}>{state}</option>
+                      {states.map((state) => (
+                        <option key={`state-${state}`}>{state}</option>
                       ))}
                     </Form.Control>
                   </Form.Group>
