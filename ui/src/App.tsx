@@ -62,16 +62,8 @@ const App: React.FC = () => {
           <RequestFormView user={user} role={role!} />
         </Route>
 
-        <Route path="/requests" exact>
-          <RequestListView user={user} />
-        </Route>
-
         <Route path="/request/:id" exact>
           <RequestFormView user={user} role={role!} />
-        </Route>
-
-        <Route path="/makers" exact>
-          <MakersView />
         </Route>
 
         <Route path="/verification" exact>
@@ -85,6 +77,18 @@ const App: React.FC = () => {
         <Route path="/logout" exact>
           <LogoutView />
         </Route>
+
+        {user.isSuperAdmin && (
+          <>
+            <Route path="/requests" exact>
+              <RequestListView />
+            </Route>
+
+            <Route path="/makers" exact>
+              <MakersView />
+            </Route>
+          </>
+        )}
 
         <Route path="*">
           <ErrorView />

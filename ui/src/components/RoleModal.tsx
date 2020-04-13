@@ -17,10 +17,9 @@ const RoleModal: React.FC<{
         </Modal.Header>
 
         <Modal.Body>
-          <p>Do you have a 3D printer and want to print mask shields?</p>
           <p>
-            Or, do you work at a healthcare facility and want to request mask
-            shields?
+            Are you a maker or a critical worker requesting personal protective
+            equipment (PPE)?
           </p>
         </Modal.Body>
 
@@ -33,7 +32,7 @@ const RoleModal: React.FC<{
                   className="mr-2 mb-2 mb-sm-0 btn-block"
                   onClick={() => pickRole('maker')}
                 >
-                  Printer / Maker
+                  Maker
                 </Button>
               </Col>
               <Col sm={6} lg={4}>
@@ -42,7 +41,7 @@ const RoleModal: React.FC<{
                   onClick={() => pickRole('requester')}
                   className="btn-block"
                 >
-                  Requester
+                  Critical Worker
                 </Button>
               </Col>
             </Row>

@@ -87,9 +87,9 @@ export default function MakersView() {
                     </tr>
                   </thead>
                   <tbody>
-                    {unapproved.map(({ email, makerDetails }, index) => {
+                    {unapproved.map(({ _id, email, makerDetails }, index) => {
                       return (
-                        <tr key={index}>
+                        <tr key={`unapproved-${_id}`}>
                           <td>
                             {makerDetails!.firstName} {makerDetails!.lastName}
                           </td>
@@ -140,9 +140,9 @@ export default function MakersView() {
                     </tr>
                   </thead>
                   <tbody>
-                    {approved.map(({ email, makerDetails }, index) => {
+                    {approved.map(({ _id, email, makerDetails }, index) => {
                       return (
-                        <tr key={index}>
+                        <tr key={`approved-${_id}`}>
                           <td>
                             {makerDetails!.firstName} {makerDetails!.lastName}
                           </td>

@@ -10,9 +10,9 @@ import config from '../config';
 import { User } from '../schemas';
 import { sendEmail } from '../mailer';
 
+@Authorized(['admin'])
 @JsonController(`${config.apiPrefix}/makers`)
 export default class MakersController {
-  @Authorized(['admin'])
   @Get('/approved')
   getApproved() {
     return User.find({
@@ -26,7 +26,6 @@ export default class MakersController {
       });
   }
 
-  @Authorized(['admin'])
   @Get('/unapproved')
   getUnapproved() {
     return User.find({
@@ -41,7 +40,6 @@ export default class MakersController {
       });
   }
 
-  @Authorized(['admin'])
   @Put('/approve/:id')
   approveMaker(@Param('id') id: string) {
     return User.findByIdAndUpdate(id, { $set: { isVerifiedMaker: true } })
@@ -74,7 +72,8 @@ export default class MakersController {
 
           <p style="font-style: italic;">
             <span style="font-weight: bold">Note:</span>
-            When you return to the Collective Shield website, you may need to log out and log back in to activate your account.
+            When you return to the <a href="https://connect.collectiveshield.org">Collective Shield</a> website,
+            you may need to log out and log back in to activate your account.
           </p>
 
           <p>
