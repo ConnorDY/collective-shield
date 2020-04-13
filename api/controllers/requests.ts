@@ -162,12 +162,13 @@ export default class RequestsController {
     @Param('status') status: string,
     @CurrentUser() user: IUser
   ) {
-    // Printer assigned to a request can update only the status
-    // TODO/HELP - Need validation on status?
-    return Request.findOneAndUpdate(
-      { _id: id, makerID: user._id },
-      { $set: { status } }
-    )
+    // Printer assigned to a request (or admin) can update only the status
+    const query: MongooseFilterQuery<Pick<IRequest, any>> = { _id: id };
+    if (!user.isSuperAdmin) {
+      query.makerID = user._id;
+    }
+
+    return Request.findOneAndUpdate(query, { $set: { status } })
       .then((result) => {
         return result;
       })

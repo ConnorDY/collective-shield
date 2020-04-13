@@ -32,9 +32,7 @@ const GA_KEY = process.env.REACT_APP_GA_KEY;
 const App: React.FC = () => {
   const history = useHistory();
   const [user, setUser] = useState<User>();
-  const [role, setRole] = useState<string | null>(
-    sessionStorage.getItem('role')
-  );
+  const [role, setRole] = useState<string | null>(localStorage.getItem('role'));
 
   const getUser = () => {
     axios
@@ -61,7 +59,7 @@ const App: React.FC = () => {
         </Route>
 
         <Route path="/request" exact>
-          <RequestFormView user={user} />
+          <RequestFormView user={user} role={role!} />
         </Route>
 
         <Route path="/requests" exact>
@@ -69,7 +67,7 @@ const App: React.FC = () => {
         </Route>
 
         <Route path="/request/:id" exact>
-          <RequestFormView user={user} />
+          <RequestFormView user={user} role={role!} />
         </Route>
 
         <Route path="/makers" exact>
@@ -106,7 +104,7 @@ const App: React.FC = () => {
   return (
     <Provider store={store}>
       <div id="headerAndMain">
-        <Navbar user={user} />
+        <Navbar user={user} role={role} setRole={setRole} />
 
         <ScrollToTop>
           <main className="main">

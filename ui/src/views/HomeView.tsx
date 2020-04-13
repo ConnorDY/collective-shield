@@ -10,7 +10,7 @@ const HomeView: React.FC<{ user: User; role: string | null }> = ({
 }) => {
   if (!role) return <></>;
 
-  return role === 'requestor' ? (
+  return role === 'requester' ? (
     <MyRequestsView user={user} />
   ) : (
     <WorkView user={user} />
