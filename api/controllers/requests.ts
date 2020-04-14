@@ -12,6 +12,7 @@ import {
 } from 'routing-controllers';
 import { MongooseFilterQuery } from 'mongoose';
 import { celebrate, Segments } from 'celebrate';
+import { omit, pick } from 'lodash';
 
 import config from '../config';
 import { Request } from '../schemas';
@@ -138,10 +139,29 @@ export default class RequestsController {
     @CurrentUser() user: IUser,
     @Body() body: IRequest
   ) {
-    // Requestor can update any field
+    // Requestor can update any field, except makerNotes
     return Request.findOneAndUpdate(
       { _id: id, requestorID: user._id },
-      { $set: body }
+      { $set: omit(body, ['makerNotes']) }
+    )
+      .then((result) => {
+        return result;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  }
+
+  @Patch('/:id/maker-details')
+  patchMakerNotesById(
+    @Param('id') id: string,
+    @CurrentUser() user: IUser,
+    @Body() body: IRequest
+  ) {
+    // Maker can only update makerNotes
+    return Request.findOneAndUpdate(
+      { _id: id, makerID: user._id },
+      { $set: pick(body, ['makerNotes']) }
     )
       .then((result) => {
         return result;
