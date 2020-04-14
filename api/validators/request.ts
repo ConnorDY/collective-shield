@@ -34,7 +34,8 @@ const requestValidator = Joi.object().keys({
     .required(),
   addressZip: Joi.number().integer().required(),
   phone: Joi.string().required(),
-  details: Joi.string().allow('').optional()
+  details: Joi.string().allow('').optional(),
+  homePickUp: Joi.boolean().required(),
 });
 
 export default requestValidator;
