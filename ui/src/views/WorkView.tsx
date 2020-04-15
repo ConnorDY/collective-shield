@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import {
   Button,
   ButtonGroup,
@@ -141,6 +143,9 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                     <th className="requestedDate">Date Requested</th>
                     <th className="count">Count</th>
                     <th className="requestor">Requester</th>
+                    <th className="requestorCity">City</th>
+                    <th className="requestorFirstName">First Name</th>
+                    <th className="localDelivery">Local Delivery</th>
                     <th>Status</th>
                     <th>
                       <span className="sr-only">Action</span>
@@ -166,6 +171,22 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                         <td className="count">{w.maskShieldCount}</td>
                         <td className="requestor">
                           {w.facilityName || 'Organization not provided'}
+                        </td>
+                        <td className="requestorCity">
+                          {w.addressCity.toUpperCase() || 'City not provided'}
+                        </td>
+                        <td className="requestorFirstName">
+                          {w.firstName || 'First name not provided'}
+                        </td>
+                        <td className="localDelivery">
+                          {w.homePickUp ? (
+                            <FontAwesomeIcon
+                              className="green-checkmark"
+                              icon={faCheck}
+                            />
+                          ) : (
+                            <FontAwesomeIcon className="red-x" icon={faTimes} />
+                          )}
                         </td>
                         <td className="status">
                           <Dropdown as={ButtonGroup}>
