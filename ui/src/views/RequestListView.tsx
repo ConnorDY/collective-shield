@@ -123,7 +123,7 @@ const RequestListView: React.FC<{}> = () => {
               <table className="requested-list-table">
                 <thead>
                   <tr>
-                    <th className="requestedDate">Date Requested</th>
+                    <th className="requestedDate">Date</th>
                     <th className="count">Count</th>
                     <th className="requestor">Requester</th>
                     <th className="printer">Printer</th>

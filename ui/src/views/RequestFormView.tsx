@@ -119,7 +119,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
         'addressState',
         'addressZip',
         'phone',
-        'homePickUp',
+        'homePickUp'
       ]);
 
       axios
@@ -496,7 +496,8 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                       type="checkbox"
                       label={
                         <span>
-                          I'm willing to be contacted by a local printer for in-person delivery.
+                          I'm willing to be contacted by a local printer for
+                          in-person delivery.
                         </span>
                       }
                     />
