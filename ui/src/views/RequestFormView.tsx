@@ -240,32 +240,6 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
         <>
           <Row id="requested-row-1">
             <Col xs={6}>
-              <h4>Request Submitted By</h4>
-              <Card bg="light" id="requested-by-card">
-                <Card.Body>
-                  <Row>
-                    <Col sm={3}>
-                      {!isExisting && <Avatar size="100" user={user} />}
-                    </Col>
-
-                    <Col sm={9}>
-                      <Card.Title id="requested-by-name">
-                        {!isExisting
-                          ? `${user?.firstName} ${user?.lastName}`
-                          : detailsReq.email}
-                      </Card.Title>
-                      <Card.Text>
-                        {!isExisting && (
-                          <span id="requested-by-email">{user?.email}</span>
-                        )}
-                      </Card.Text>
-                    </Col>
-                  </Row>
-                </Card.Body>
-              </Card>
-            </Col>
-
-            <Col xs={6}>
               <h4>Number Requested</h4>
               <Form>
                 <Form.Group>
