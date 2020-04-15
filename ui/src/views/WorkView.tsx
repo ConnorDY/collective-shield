@@ -140,11 +140,11 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
               <table className="my-work-table">
                 <thead>
                   <tr>
-                    <th className="requestedDate">Date Requested</th>
+                    <th className="requestedDate">Date</th>
                     <th className="count">Count</th>
+                    <th className="requestorFirstName">Name</th>
                     <th className="requestor">Requester</th>
-                    <th className="requestorCity">City</th>
-                    <th className="requestorFirstName">First Name</th>
+                    <th className="requestorLocation">Location</th>
                     <th className="localDelivery">Local Delivery</th>
                     <th>Status</th>
                     <th>
@@ -169,14 +169,20 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                           </Link>
                         </td>
                         <td className="count">{w.maskShieldCount}</td>
+                        <td className="requestorFirstName">
+                          <span>
+                            {w.firstName || 'First name not provided'}
+                          </span>
+                        </td>
                         <td className="requestor">
                           {w.facilityName || 'Organization not provided'}
                         </td>
-                        <td className="requestorCity">
-                          {w.addressCity.toUpperCase() || 'City not provided'}
-                        </td>
-                        <td className="requestorFirstName">
-                          {w.firstName || 'First name not provided'}
+                        <td className="requestorLocation">
+                          {w.addressCity
+                            ? `${w.addressCity.toUpperCase()}, ${
+                                w.addressState
+                              }`
+                            : 'Location not provided'}
                         </td>
                         <td className="localDelivery">
                           {w.homePickUp ? (
@@ -246,7 +252,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
               <table className="available-work-table">
                 <thead>
                   <tr>
-                    <th className="requestedDate">Date Requested</th>
+                    <th className="requestedDate">Date</th>
                     <th className="count">Count</th>
                     <th className="distance">State</th>
                     <th className="requestor">Requester</th>

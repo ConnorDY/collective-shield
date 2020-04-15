@@ -12,19 +12,18 @@
 
   .count,
   .distance {
-    width: 10%;
-    max-width: 75px;
+    // width: 10%;
+    // max-width: 75px;
   }
 
   .details,
   .requestor {
-    width: 28%;
-    min-width: 200px;
+    // width: 28%;
+    // min-width: 200px;
   }
 
-  .requestorCity,
-  .requestorFirstName {
-    min-width: 150px;
+  .localDelivery {
+    text-align: center;
   }
 
   .green-checkmark {
@@ -48,7 +47,7 @@
   }
 
   .requestedDate {
-    width: 14%;
+    width: 10%;
   }
 }
 
