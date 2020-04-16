@@ -152,6 +152,8 @@ export default class RequestsController {
       });
   }
 
+  // TODO - update to allow /maker-details to accept only necessary fields
+  // https://github.com/ConnorDY/collective-shield/pull/117#issuecomment-614034590
   @Patch('/:id/maker-details')
   patchMakerNotesById(
     @Param('id') id: string,

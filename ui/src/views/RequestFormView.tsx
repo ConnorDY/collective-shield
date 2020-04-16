@@ -123,6 +123,8 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
         'homePickUp',
         'makerNotes',
       ]);
+      // TODO - update to allow /maker-details to accept only necessary fields
+      // https://github.com/ConnorDY/collective-shield/pull/117#issuecomment-614034590
 
       const endpoint = isMakerView ? `requests/${id}/maker-details` : 'requests';
       const method = isMakerView ? 'patch' : 'post';
