@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import {
   Button,
   ButtonGroup,
@@ -138,9 +140,12 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
               <table className="my-work-table">
                 <thead>
                   <tr>
-                    <th className="requestedDate">Date Requested</th>
+                    <th className="requestedDate">Date</th>
                     <th className="count">Count</th>
+                    <th className="requestorFirstName">Name</th>
                     <th className="requestor">Requester</th>
+                    <th className="requestorLocation">Location</th>
+                    <th className="localDelivery">Local Delivery</th>
                     <th>Status</th>
                     <th>
                       <span className="sr-only">Action</span>
@@ -164,8 +169,30 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                           </Link>
                         </td>
                         <td className="count">{w.maskShieldCount}</td>
+                        <td className="requestorFirstName">
+                          <span>
+                            {w.firstName || 'First name not provided'}
+                          </span>
+                        </td>
                         <td className="requestor">
                           {w.facilityName || 'Organization not provided'}
+                        </td>
+                        <td className="requestorLocation">
+                          {w.addressCity
+                            ? `${w.addressCity.toUpperCase()}, ${
+                                w.addressState
+                              }`
+                            : 'Location not provided'}
+                        </td>
+                        <td className="localDelivery">
+                          {w.homePickUp ? (
+                            <FontAwesomeIcon
+                              className="green-checkmark"
+                              icon={faCheck}
+                            />
+                          ) : (
+                            <FontAwesomeIcon className="red-x" icon={faTimes} />
+                          )}
                         </td>
                         <td className="status">
                           <Dropdown as={ButtonGroup}>
@@ -225,7 +252,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
               <table className="available-work-table">
                 <thead>
                   <tr>
-                    <th className="requestedDate">Date Requested</th>
+                    <th className="requestedDate">Date</th>
                     <th className="count">Count</th>
                     <th className="distance">State</th>
                     <th className="requestor">Requester</th>
