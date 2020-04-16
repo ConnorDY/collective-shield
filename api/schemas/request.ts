@@ -23,7 +23,8 @@ export const RequestSchema = new Schema(
     status: String,
     updateDate: Date,
     requestorID: String,
-    homePickUp: Boolean
+    homePickUp: Boolean,
+    makerNotes: String,
   },
   { toJSON: { virtuals: true } }
 );

@@ -24,4 +24,5 @@ export default interface Request {
   maker?: User;
   requestor?: User;
   homePickUp: boolean;
+  makerNotes?: string;
 }
