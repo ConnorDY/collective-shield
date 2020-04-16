@@ -53,7 +53,9 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
     phone: '',
     status: '',
     makerID: '',
-    requestorID: ''
+    requestorID: '',
+    homePickUp: false,
+    makerNotes: ''
   });
 
   const roleOptions = [
@@ -117,14 +119,27 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
         'addressCity',
         'addressState',
         'addressZip',
-        'phone'
+        'phone',
+        'homePickUp',
+        'makerNotes',
       ]);
+      // TODO - update to allow /maker-details to accept only necessary fields
+      // https://github.com/ConnorDY/collective-shield/pull/117#issuecomment-614034590
+
+      const endpoint = isMakerView ? `requests/${id}/maker-details` : 'requests';
+      const method = isMakerView ? 'patch' : 'post';
 
       axios
-        .post(buildEndpointUrl('requests'), data)
+        [method](buildEndpointUrl(endpoint), data)
         .then(() => {
-          setIsCreated(true);
-          scrollToTop();
+          if (isMakerView) {
+            toast.success('Successfully updated!', {
+              position: toast.POSITION.TOP_LEFT
+            });
+          } else {
+            setIsCreated(true);
+            scrollToTop();
+          }
         })
         .catch((err) => {
           toast.error(err.toString(), {
@@ -457,19 +472,40 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                   />
                 </Form.Group>
 
-                {!isExisting && (
+                <Form className="py-2">
+                  <Form.Group controlId="formBasicCheckboxHomePickUp">
+                    <Form.Check
+                      disabled={disabled}
+                      checked={detailsReq.homePickUp}
+                      onChange={(e: BaseSyntheticEvent) =>
+                        updateDetailsReq({ homePickUp: e.target.checked })
+                      }
+                      type="checkbox"
+                      label={
+                        <span>
+                          I'm willing to be contacted by a local printer for in-person delivery.
+                        </span>
+                      }
+                    />
+                  </Form.Group>
+                </Form>
+
+                {(!isExisting || isMakerView) && (
                   <div id="request-button-group">
                     <Button variant="primary" type="submit">
-                      Submit Request
+                      {isExisting ? 'Update Request' : 'Submit Request'}
                     </Button>
 
-                    <Button
-                      variant="light"
-                      id="cancel-request-button"
-                      onClick={cancel}
-                    >
-                      Cancel Request
-                    </Button>
+                    {
+                      !isExisting &&
+                        <Button
+                          variant="light"
+                          id="cancel-request-button"
+                          onClick={cancel}
+                        >
+                          Cancel Request
+                        </Button>
+                    }
                   </div>
                 )}
               </Form>
@@ -479,11 +515,11 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
               <h4>Request Details</h4>
               <h5>Add any details or comments about the request here</h5>
               <Form>
-                <Form.Group controlId="">
+                <Form.Group controlId="requestDetails">
                   <Form.Control
                     disabled={disabled}
                     as="textarea"
-                    rows="13"
+                    rows="11"
                     value={detailsReq.details}
                     onChange={(e: BaseSyntheticEvent) =>
                       updateDetailsReq({ details: e.target.value })
@@ -491,6 +527,33 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                   />
                 </Form.Group>
               </Form>
+
+              {
+                isExisting &&
+                <>
+                  <h4>Maker Notes</h4>
+                  <h5>Makers can add notes here, which are also visible to the requester</h5>
+                  <Form>
+                    <Form.Group controlId="requestMakerNotes">
+                      <Form.Control
+                        disabled={disabled && !isMakerView}
+                        as="textarea"
+                        rows="9"
+                        value={detailsReq.makerNotes}
+                        onChange={(e: BaseSyntheticEvent) =>
+                          updateDetailsReq({ makerNotes: e.target.value })
+                        }
+                      />
+                    </Form.Group>
+                  </Form>
+                  {
+                    isMakerView &&
+                      <Alert variant="info">
+                        Ensure that you click the "Update Request" button when are you done updating notes.
+                      </Alert>
+                  }
+                </>
+              }
             </Col>
           </Row>
         </>

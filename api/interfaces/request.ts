@@ -17,4 +17,6 @@ export default interface Request extends Document {
   updateDate?: Date;
   makerID?: string;
   requestorID: string;
+  homePickUp: boolean;
+  makerNotes?: string;
 }

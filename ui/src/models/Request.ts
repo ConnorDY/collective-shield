@@ -23,4 +23,6 @@ export default interface Request {
   requestorID: string;
   maker?: User;
   requestor?: User;
+  homePickUp: boolean;
+  makerNotes?: string;
 }

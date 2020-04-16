@@ -12,14 +12,28 @@
 
   .count,
   .distance {
-    width: 10%;
-    max-width: 75px;
+    // width: 10%;
+    // max-width: 75px;
   }
 
   .details,
   .requestor {
-    width: 28%;
-    min-width: 200px;
+    // width: 28%;
+    // min-width: 200px;
+  }
+
+  .localDelivery {
+    text-align: center;
+  }
+
+  .green-checkmark {
+    color: green;
+    font-size: 20px;
+  }
+
+  .red-x {
+    color: red;
+    font-size: 20px;
   }
 
   .action,
@@ -33,7 +47,7 @@
   }
 
   .requestedDate {
-    width: 14%;
+    width: 10%;
   }
 }
 
