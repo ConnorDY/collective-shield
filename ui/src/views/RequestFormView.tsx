@@ -253,42 +253,6 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
         </Row>
       ) : (
         <>
-          <Row id="requested-row-1">
-            <Col xs={6}>
-              <h4>Number Requested</h4>
-              <Form>
-                <Form.Group>
-                  <Form.Control
-                    required
-                    disabled={disabled}
-                    type="number"
-                    size="lg"
-                    custom
-                    id="requested-mask-shields-card"
-                    value={detailsReq.maskShieldCount}
-                    onChange={(e: BaseSyntheticEvent) => {
-                      // Allow range of 0 to 10000. 0 will still cause server-side error,
-                      // but makes the number input easier to change.
-                      let value = e.target.value;
-                      if (value < 0) value = 0;
-                      if (value > 10000) value = 10000;
-                      updateDetailsReq({ maskShieldCount: value });
-                    }}
-                  />
-                </Form.Group>
-              </Form>
-              {detailsReq.maskShieldCount >= 50 && !isExisting && (
-                <Alert variant="info">
-                  For this request size, you will also need to email us at{' '}
-                  <a href="mailto:support@collectiveshield.org">
-                    support@collectiveshield.org
-                  </a>{' '}
-                  after you submit your request.
-                </Alert>
-              )}
-            </Col>
-          </Row>
-
           <Row id="requested-row-2">
             <Col>
               <h4>Requester Contact Information</h4>
@@ -512,6 +476,38 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
             </Col>
 
             <Col>
+              <h4>Number Requested</h4>
+              <Form>
+                <Form.Group>
+                  <Form.Control
+                    required
+                    disabled={disabled}
+                    type="number"
+                    size="lg"
+                    custom
+                    id="requested-mask-shields-card"
+                    value={detailsReq.maskShieldCount}
+                    onChange={(e: BaseSyntheticEvent) => {
+                      // Allow range of 0 to 10000. 0 will still cause server-side error,
+                      // but makes the number input easier to change.
+                      let value = e.target.value;
+                      if (value < 0) value = 0;
+                      if (value > 10000) value = 10000;
+                      updateDetailsReq({ maskShieldCount: value });
+                    }}
+                  />
+                </Form.Group>
+              </Form>
+              {detailsReq.maskShieldCount >= 50 && !isExisting && (
+                <Alert variant="info">
+                  For this request size, you will also need to email us at{' '}
+                  <a href="mailto:support@collectiveshield.org">
+                    support@collectiveshield.org
+                  </a>{' '}
+                  after you submit your request.
+                </Alert>
+              )}
+
               <h4>Request Details</h4>
               <h5>Add any details or comments about the request here</h5>
               <Form>
@@ -519,7 +515,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                   <Form.Control
                     disabled={disabled}
                     as="textarea"
-                    rows="11"
+                    rows="6"
                     value={detailsReq.details}
                     onChange={(e: BaseSyntheticEvent) =>
                       updateDetailsReq({ details: e.target.value })
@@ -538,7 +534,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                       <Form.Control
                         disabled={disabled && !isMakerView}
                         as="textarea"
-                        rows="9"
+                        rows="6"
                         value={detailsReq.makerNotes}
                         onChange={(e: BaseSyntheticEvent) =>
                           updateDetailsReq({ makerNotes: e.target.value })
