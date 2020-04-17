@@ -54,7 +54,7 @@ const MyRequestsView: React.FC<{ user: User }> = ({ user }) => {
               <table className="my-work-table">
                 <thead>
                   <tr>
-                    <th className="date">Date Requested</th>
+                    <th className="date">Date</th>
                     <th className="count">Count</th>
                     <th className="details">Details</th>
                     <th className="status">Status</th>

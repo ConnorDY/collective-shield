@@ -12,6 +12,7 @@ import {
 } from 'routing-controllers';
 import { MongooseFilterQuery } from 'mongoose';
 import { celebrate, Segments } from 'celebrate';
+import { omit, pick } from 'lodash';
 
 import config from '../config';
 import { Request } from '../schemas';
@@ -138,10 +139,40 @@ export default class RequestsController {
     @CurrentUser() user: IUser,
     @Body() body: IRequest
   ) {
-    // Requestor can update any field
+    // Admin can patch any field on any request.
+    const query: MongooseFilterQuery<Pick<IRequest, any>> = { _id: id };
+    let omitFields = [];
+
+    // Requestor can update any field, except makerNotes
+    if (!user.isSuperAdmin) {
+      query.requestorID = user._id;
+      omitFields = [...omitFields, 'makerNotes'];
+    }
+
     return Request.findOneAndUpdate(
-      { _id: id, requestorID: user._id },
-      { $set: body }
+      query,
+      { $set: omit(body, omitFields) }
+    )
+      .then((result) => {
+        return result;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  }
+
+  // TODO - update to allow /maker-details to accept only necessary fields
+  // https://github.com/ConnorDY/collective-shield/pull/117#issuecomment-614034590
+  @Patch('/:id/maker-details')
+  patchMakerNotesById(
+    @Param('id') id: string,
+    @CurrentUser() user: IUser,
+    @Body() body: IRequest
+  ) {
+    // Maker can only update makerNotes
+    return Request.findOneAndUpdate(
+      { _id: id, makerID: user._id },
+      { $set: pick(body, ['makerNotes']) }
     )
       .then((result) => {
         return result;

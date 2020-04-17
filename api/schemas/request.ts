@@ -22,7 +22,9 @@ export const RequestSchema = new Schema(
     makerID: String,
     status: String,
     updateDate: Date,
-    requestorID: String
+    requestorID: String,
+    homePickUp: Boolean,
+    makerNotes: String,
   },
   { toJSON: { virtuals: true } }
 );

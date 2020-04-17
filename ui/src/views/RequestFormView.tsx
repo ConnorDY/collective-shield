@@ -29,9 +29,6 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
   const history = useHistory();
   let { id } = useParams();
 
-  const isExisting = id;
-  const disabled = !!isExisting;
-
   const [isCreated, setIsCreated] = useState(false);
   const [isValidated, setIsValidated] = useState(false);
 
@@ -53,7 +50,9 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
     phone: '',
     status: '',
     makerID: '',
-    requestorID: ''
+    requestorID: '',
+    homePickUp: false,
+    makerNotes: ''
   });
 
   const roleOptions = [
@@ -66,6 +65,10 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
   ];
 
   const isMakerView = role === 'maker';
+  const isAdminView = !!user.isSuperAdmin;
+
+  const isExisting = !!id;
+  const disabled = !!isExisting && !isAdminView;
 
   function updateDetailsReq(data: object) {
     setDetailsReq({
@@ -117,14 +120,28 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
         'addressCity',
         'addressState',
         'addressZip',
-        'phone'
+        'phone',
+        'homePickUp',
+        'makerNotes',
       ]);
+      // TODO - update to allow /maker-details to accept only necessary fields
+      // https://github.com/ConnorDY/collective-shield/pull/117#issuecomment-614034590
+
+      const routeSuffix = isMakerView && !isAdminView ? 'maker-details' : '';
+      const endpoint = isExisting ? `requests/${id}/${routeSuffix}` : 'requests';
+      const method = isExisting ? 'patch' : 'post';
 
       axios
-        .post(buildEndpointUrl('requests'), data)
+        [method](buildEndpointUrl(endpoint), data)
         .then(() => {
-          setIsCreated(true);
-          scrollToTop();
+          if (isExisting) {
+            toast.success('Successfully updated!', {
+              position: toast.POSITION.TOP_LEFT
+            });
+          } else {
+            setIsCreated(true);
+            scrollToTop();
+          }
         })
         .catch((err) => {
           toast.error(err.toString(), {
@@ -158,7 +175,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
 
         <Col sm={7} className="right-col">
           <Row>
-            {isExisting && (isMakerView || user.isSuperAdmin) && (
+            {isExisting && (isMakerView || isAdminView) && (
               <>
                 <Col className="col-auto">
                   <ShippingModal request={detailsReq as any} />
@@ -188,7 +205,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
               </>
             )}
 
-            {isExisting && !isMakerView && !user.isSuperAdmin && (
+            {isExisting && !isMakerView && !isAdminView && (
               <Col className="col-auto">{StatusOption(detailsReq.status)}</Col>
             )}
 
@@ -238,68 +255,6 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
         </Row>
       ) : (
         <>
-          <Row id="requested-row-1">
-            <Col xs={6}>
-              <h4>Request Submitted By</h4>
-              <Card bg="light" id="requested-by-card">
-                <Card.Body>
-                  <Row>
-                    <Col sm={3}>
-                      {!isExisting && <Avatar size="100" user={user} />}
-                    </Col>
-
-                    <Col sm={9}>
-                      <Card.Title id="requested-by-name">
-                        {!isExisting
-                          ? `${user?.firstName} ${user?.lastName}`
-                          : detailsReq.email}
-                      </Card.Title>
-                      <Card.Text>
-                        {!isExisting && (
-                          <span id="requested-by-email">{user?.email}</span>
-                        )}
-                      </Card.Text>
-                    </Col>
-                  </Row>
-                </Card.Body>
-              </Card>
-            </Col>
-
-            <Col xs={6}>
-              <h4>Number Requested</h4>
-              <Form>
-                <Form.Group>
-                  <Form.Control
-                    required
-                    disabled={disabled}
-                    type="number"
-                    size="lg"
-                    custom
-                    id="requested-mask-shields-card"
-                    value={detailsReq.maskShieldCount}
-                    onChange={(e: BaseSyntheticEvent) => {
-                      // Allow range of 0 to 10000. 0 will still cause server-side error,
-                      // but makes the number input easier to change.
-                      let value = e.target.value;
-                      if (value < 0) value = 0;
-                      if (value > 10000) value = 10000;
-                      updateDetailsReq({ maskShieldCount: value });
-                    }}
-                  />
-                </Form.Group>
-              </Form>
-              {detailsReq.maskShieldCount >= 50 && !isExisting && (
-                <Alert variant="info">
-                  For this request size, you will also need to email us at{' '}
-                  <a href="mailto:support@collectiveshield.org">
-                    support@collectiveshield.org
-                  </a>{' '}
-                  after you submit your request.
-                </Alert>
-              )}
-            </Col>
-          </Row>
-
           <Row id="requested-row-2">
             <Col>
               <h4>Requester Contact Information</h4>
@@ -483,33 +438,84 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                   />
                 </Form.Group>
 
-                {!isExisting && (
+                <Form.Group controlId="formBasicCheckboxHomePickUp">
+                  <Form.Check
+                    disabled={disabled}
+                    checked={detailsReq.homePickUp}
+                    onChange={(e: BaseSyntheticEvent) =>
+                      updateDetailsReq({ homePickUp: e.target.checked })
+                    }
+                    type="checkbox"
+                    label={
+                      <span>
+                        I'm willing to be contacted by a local printer for in-person delivery.
+                      </span>
+                    }
+                  />
+                </Form.Group>
+
+                {(!isExisting || isMakerView || isAdminView) && (
                   <div id="request-button-group">
                     <Button variant="primary" type="submit">
-                      Submit Request
+                      {isExisting ? 'Update Request' : 'Submit Request'}
                     </Button>
 
-                    <Button
-                      variant="light"
-                      id="cancel-request-button"
-                      onClick={cancel}
-                    >
-                      Cancel Request
-                    </Button>
+                    {
+                      !isExisting &&
+                        <Button
+                          variant="light"
+                          id="cancel-request-button"
+                          onClick={cancel}
+                        >
+                          Cancel Request
+                        </Button>
+                    }
                   </div>
                 )}
               </Form>
             </Col>
 
             <Col>
+              <h4>Number Requested</h4>
+              <Form>
+                <Form.Group>
+                  <Form.Control
+                    required
+                    disabled={disabled}
+                    type="number"
+                    size="lg"
+                    custom
+                    id="requested-mask-shields-card"
+                    value={detailsReq.maskShieldCount}
+                    onChange={(e: BaseSyntheticEvent) => {
+                      // Allow range of 0 to 10000. 0 will still cause server-side error,
+                      // but makes the number input easier to change.
+                      let value = e.target.value;
+                      if (value < 0) value = 0;
+                      if (value > 10000) value = 10000;
+                      updateDetailsReq({ maskShieldCount: value });
+                    }}
+                  />
+                </Form.Group>
+              </Form>
+              {detailsReq.maskShieldCount >= 50 && !isExisting && (
+                <Alert variant="info">
+                  For this request size, you will also need to email us at{' '}
+                  <a href="mailto:support@collectiveshield.org">
+                    support@collectiveshield.org
+                  </a>{' '}
+                  after you submit your request.
+                </Alert>
+              )}
+
               <h4>Request Details</h4>
               <h5>Add any details or comments about the request here</h5>
               <Form>
-                <Form.Group controlId="">
+                <Form.Group controlId="requestDetails">
                   <Form.Control
                     disabled={disabled}
                     as="textarea"
-                    rows="13"
+                    rows="6"
                     value={detailsReq.details}
                     onChange={(e: BaseSyntheticEvent) =>
                       updateDetailsReq({ details: e.target.value })
@@ -517,6 +523,33 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                   />
                 </Form.Group>
               </Form>
+
+              {
+                isExisting &&
+                <>
+                  <h4>Maker Notes</h4>
+                  <h5>Makers can add notes here, which are also visible to the requester</h5>
+                  <Form>
+                    <Form.Group controlId="requestMakerNotes">
+                      <Form.Control
+                        disabled={disabled && !isMakerView}
+                        as="textarea"
+                        rows="6"
+                        value={detailsReq.makerNotes}
+                        onChange={(e: BaseSyntheticEvent) =>
+                          updateDetailsReq({ makerNotes: e.target.value })
+                        }
+                      />
+                    </Form.Group>
+                  </Form>
+                  {
+                    isMakerView &&
+                      <Alert variant="info">
+                        Ensure that you click the "Update Request" button when are you done updating notes.
+                      </Alert>
+                  }
+                </>
+              }
             </Col>
           </Row>
         </>
