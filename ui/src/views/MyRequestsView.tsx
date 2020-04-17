@@ -8,7 +8,7 @@ import { get } from 'lodash';
 import User from '../models/User';
 import Request from '../models/Request';
 import { buildEndpointUrl } from '../utilities';
-import { FormatDate } from '../components/FormatDate';
+import { formatDate } from '../utilities/formatDate';
 
 const MyRequestsView: React.FC<{ user: User }> = ({ user }) => {
   const history = useHistory();
@@ -70,7 +70,7 @@ const MyRequestsView: React.FC<{ user: User }> = ({ user }) => {
                             to={`/request/${request._id}`}
                             title="View details for this request"
                           >
-                            {FormatDate(request.createDate!)}
+                            {formatDate(request.createDate!)}
                           </Link>
                         </td>
                         <td className="count">{request.maskShieldCount}</td>

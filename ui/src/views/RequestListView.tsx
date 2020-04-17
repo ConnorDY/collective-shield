@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import Request from '../models/Request';
 import StatusOption from '../components/StatusOption';
 import { buildEndpointUrl } from '../utilities';
-import { FormatDate } from '../components/FormatDate';
+import { formatDate } from '../utilities/formatDate';
 
 const RequestListView: React.FC<{}> = () => {
   const [allRequests, setAllRequests] = useState<Request[]>([]);
@@ -143,7 +143,7 @@ const RequestListView: React.FC<{}> = () => {
                             to={`/request/${r._id}`}
                             title="View details for this request"
                           >
-                            {FormatDate(r.createDate)}
+                            {formatDate(r.createDate)}
                           </Link>
                         </td>
                         <td className="count">{r.maskShieldCount}</td>
