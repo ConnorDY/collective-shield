@@ -29,9 +29,6 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
   const history = useHistory();
   let { id } = useParams();
 
-  const isExisting = id;
-  const disabled = !!isExisting;
-
   const [isCreated, setIsCreated] = useState(false);
   const [isValidated, setIsValidated] = useState(false);
 
@@ -68,6 +65,10 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
   ];
 
   const isMakerView = role === 'maker';
+  const isAdminView = !!user.isSuperAdmin;
+
+  const isExisting = !!id;
+  const disabled = !!isExisting && !isAdminView;
 
   function updateDetailsReq(data: object) {
     setDetailsReq({
@@ -126,14 +127,15 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
       // TODO - update to allow /maker-details to accept only necessary fields
       // https://github.com/ConnorDY/collective-shield/pull/117#issuecomment-614034590
 
-      const endpoint = isMakerView
-        ? `requests/${id}/maker-details`
+      const routeSuffix = isMakerView && !isAdminView ? 'maker-details' : '';
+      const endpoint = isExisting
+        ? `requests/${id}/${routeSuffix}`
         : 'requests';
-      const method = isMakerView ? 'patch' : 'post';
+      const method = isExisting ? 'patch' : 'post';
 
       axios[method](buildEndpointUrl(endpoint), data)
         .then(() => {
-          if (isMakerView) {
+          if (isExisting) {
             toast.success('Successfully updated!', {
               position: toast.POSITION.TOP_LEFT
             });
@@ -174,7 +176,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
 
         <Col sm={7} className="right-col">
           <Row>
-            {isExisting && (isMakerView || user.isSuperAdmin) && (
+            {isExisting && (isMakerView || isAdminView) && (
               <>
                 <Col className="col-auto">
                   <ShippingModal request={detailsReq as any} />
@@ -204,7 +206,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
               </>
             )}
 
-            {isExisting && !isMakerView && !user.isSuperAdmin && (
+            {isExisting && !isMakerView && !isAdminView && (
               <Col className="col-auto">{StatusOption(detailsReq.status)}</Col>
             )}
 
@@ -454,7 +456,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                   />
                 </Form.Group>
 
-                {(!isExisting || isMakerView) && (
+                {(!isExisting || isMakerView || isAdminView) && (
                   <div id="request-button-group">
                     <Button variant="primary" type="submit">
                       {isExisting ? 'Update Request' : 'Submit Request'}

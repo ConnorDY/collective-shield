@@ -139,11 +139,17 @@ export default class RequestsController {
     @CurrentUser() user: IUser,
     @Body() body: IRequest
   ) {
+    // Admin can patch any field on any request.
+    const query: MongooseFilterQuery<Pick<IRequest, any>> = { _id: id };
+    let omitFields = [];
+
     // Requestor can update any field, except makerNotes
-    return Request.findOneAndUpdate(
-      { _id: id, requestorID: user._id },
-      { $set: omit(body, ['makerNotes']) }
-    )
+    if (!user.isSuperAdmin) {
+      query.requestorID = user._id;
+      omitFields = [...omitFields, 'makerNotes'];
+    }
+
+    return Request.findOneAndUpdate(query, { $set: omit(body, omitFields) })
       .then((result) => {
         return result;
       })
