@@ -498,23 +498,21 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                   />
                 </Form.Group>
 
-                <Form className="py-2">
-                  <Form.Group controlId="formBasicCheckboxHomePickUp">
-                    <Form.Check
-                      disabled={disabled}
-                      checked={detailsReq.homePickUp}
-                      onChange={(e: BaseSyntheticEvent) =>
-                        updateDetailsReq({ homePickUp: e.target.checked })
-                      }
-                      type="checkbox"
-                      label={
-                        <span>
-                          I'm willing to be contacted by a local printer for in-person delivery.
-                        </span>
-                      }
-                    />
-                  </Form.Group>
-                </Form>
+                <Form.Group controlId="formBasicCheckboxHomePickUp">
+                  <Form.Check
+                    disabled={disabled}
+                    checked={detailsReq.homePickUp}
+                    onChange={(e: BaseSyntheticEvent) =>
+                      updateDetailsReq({ homePickUp: e.target.checked })
+                    }
+                    type="checkbox"
+                    label={
+                      <span>
+                        I'm willing to be contacted by a local printer for in-person delivery.
+                      </span>
+                    }
+                  />
+                </Form.Group>
 
                 {(!isExisting || isMakerView) && (
                   <div id="request-button-group">
