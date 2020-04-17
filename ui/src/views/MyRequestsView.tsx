@@ -70,7 +70,7 @@ const MyRequestsView: React.FC<{ user: User }> = ({ user }) => {
                             to={`/request/${request._id}`}
                             title="View details for this request"
                           >
-                            {moment(request.createDate).format('dddd, MMMM Do')}
+                            {moment(request.createDate).format('DD/MM/YY')}
                           </Link>
                         </td>
                         <td className="count">{request.maskShieldCount}</td>

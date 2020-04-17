@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ButtonGroup, Col, Dropdown, Row, Jumbotron } from 'react-bootstrap';
+import moment from 'moment';
 import axios from 'axios';
 import { get, lowerCase } from 'lodash';
 import { Link } from 'react-router-dom';
@@ -54,12 +55,11 @@ const RequestListView: React.FC<{}> = () => {
     searchResults = results;
   }
 
-  var options = { weekday: 'long', month: 'long', day: 'numeric' };
-
   const onSelect = (status: any) => {
     setSearchStatusTerm(status);
   };
 
+  console.log(allRequests);
   return (
     <div className="all-requests">
       <Row className="view-header">
@@ -137,7 +137,6 @@ const RequestListView: React.FC<{}> = () => {
 
                 <tbody>
                   {searchResults.map((r) => {
-                    const date = new Date(r.createDate);
                     return (
                       <tr key={r._id}>
                         <td className="requestedDate">
@@ -145,9 +144,7 @@ const RequestListView: React.FC<{}> = () => {
                             to={`/request/${r._id}`}
                             title="View details for this request"
                           >
-                            {new Intl.DateTimeFormat('en-US', options).format(
-                              date
-                            )}
+                            {moment(r.createDate).format('DD/MM/YY')}
                           </Link>
                         </td>
                         <td className="count">{r.maskShieldCount}</td>
