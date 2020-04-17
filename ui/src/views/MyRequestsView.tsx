@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button, Col, Row, Jumbotron } from 'react-bootstrap';
-import moment from 'moment';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { get } from 'lodash';
@@ -9,6 +8,7 @@ import { get } from 'lodash';
 import User from '../models/User';
 import Request from '../models/Request';
 import { buildEndpointUrl } from '../utilities';
+import { FormatDate } from '../components/FormatDate';
 
 const MyRequestsView: React.FC<{ user: User }> = ({ user }) => {
   const history = useHistory();
@@ -70,7 +70,7 @@ const MyRequestsView: React.FC<{ user: User }> = ({ user }) => {
                             to={`/request/${request._id}`}
                             title="View details for this request"
                           >
-                            {moment(request.createDate).format('DD/MM/YY')}
+                            {FormatDate(request.createDate!)}
                           </Link>
                         </td>
                         <td className="count">{request.maskShieldCount}</td>

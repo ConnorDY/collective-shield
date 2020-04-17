@@ -9,7 +9,6 @@ import {
   Row,
   Jumbotron
 } from 'react-bootstrap';
-import moment from 'moment';
 import axios from 'axios';
 import { find, indexOf } from 'lodash';
 import { toast } from 'react-toastify';
@@ -20,6 +19,7 @@ import Request from '../models/Request';
 import StatusOption from '../components/StatusOption';
 import { buildEndpointUrl } from '../utilities';
 import { statuses } from '../utilities/constants';
+import { FormatDate } from '../components/FormatDate';
 
 const googleDriveLink =
   'https://drive.google.com/drive/folders/1-7AqfcKaGstJ0goRNiYks1Y732DsCLHn?fbclid=IwAR201HiuLkO-IfymI_jZg23gccLgJ0tLUFUPtvm7SjPjhAaEpaa9EFlROsU';
@@ -161,7 +161,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                             to={`/request/${w._id}`}
                             title="View details for this request"
                           >
-                            {moment(w.createDate).format('DD/MM/YY')}
+                            {FormatDate(w.createDate!)}
                           </Link>
                         </td>
                         <td className="count">{w.maskShieldCount}</td>
@@ -267,7 +267,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                             to={`/request/${w._id}`}
                             title="View details for this request"
                           >
-                            {moment(w.createDate).format('DD/MM/YY')}
+                            {FormatDate(w.createDate!)}
                           </Link>
                         </td>
                         <td className="count">{w.maskShieldCount}</td>

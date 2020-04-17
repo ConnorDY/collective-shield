@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { ButtonGroup, Col, Dropdown, Row, Jumbotron } from 'react-bootstrap';
-import moment from 'moment';
 import axios from 'axios';
 import { get, lowerCase } from 'lodash';
 import { Link } from 'react-router-dom';
@@ -8,6 +7,7 @@ import { Link } from 'react-router-dom';
 import Request from '../models/Request';
 import StatusOption from '../components/StatusOption';
 import { buildEndpointUrl } from '../utilities';
+import { FormatDate } from '../components/FormatDate';
 
 const RequestListView: React.FC<{}> = () => {
   const [allRequests, setAllRequests] = useState<Request[]>([]);
@@ -143,7 +143,7 @@ const RequestListView: React.FC<{}> = () => {
                             to={`/request/${r._id}`}
                             title="View details for this request"
                           >
-                            {moment(r.createDate).format('DD/MM/YY')}
+                            {FormatDate(r.createDate)}
                           </Link>
                         </td>
                         <td className="count">{r.maskShieldCount}</td>
