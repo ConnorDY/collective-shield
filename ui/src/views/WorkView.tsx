@@ -9,6 +9,7 @@ import {
   Row,
   Jumbotron
 } from 'react-bootstrap';
+import moment from 'moment';
 import axios from 'axios';
 import { find, indexOf } from 'lodash';
 import { toast } from 'react-toastify';
@@ -105,8 +106,6 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
     }
   }, []);
 
-  var options = { weekday: 'long', month: 'long', day: 'numeric' };
-
   return (
     <div className="my-work">
       <Row className="view-header">
@@ -155,7 +154,6 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
 
                 <tbody>
                   {work.map((w) => {
-                    const date = new Date(w.createDate!);
                     return (
                       <tr key={`my-work-${w._id}`}>
                         <td className="requestedDate">
@@ -163,9 +161,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                             to={`/request/${w._id}`}
                             title="View details for this request"
                           >
-                            {new Intl.DateTimeFormat('en-US', options).format(
-                              date
-                            )}
+                            {moment(w.createDate).format('DD/MM/YY')}
                           </Link>
                         </td>
                         <td className="count">{w.maskShieldCount}</td>
@@ -264,7 +260,6 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
 
                 <tbody>
                   {availableWork.map((w) => {
-                    const date = new Date(w.createDate!);
                     return (
                       <tr key={`available-work-${w._id}`}>
                         <td className="requestedDate">
@@ -272,9 +267,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                             to={`/request/${w._id}`}
                             title="View details for this request"
                           >
-                            {new Intl.DateTimeFormat('en-US', options).format(
-                              date
-                            )}
+                            {moment(w.createDate).format('DD/MM/YY')}
                           </Link>
                         </td>
                         <td className="count">{w.maskShieldCount}</td>

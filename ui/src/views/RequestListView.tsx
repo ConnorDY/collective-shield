@@ -59,7 +59,6 @@ const RequestListView: React.FC<{}> = () => {
     setSearchStatusTerm(status);
   };
 
-  console.log(allRequests);
   return (
     <div className="all-requests">
       <Row className="view-header">
