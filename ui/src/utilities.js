@@ -41,10 +41,30 @@ const scrollToTop = () => {
   window.scrollTo(0, 0);
 };
 
+const downloadXLSX = (data, filenamePrefix = 'export') => {
+  const byteCharacters = atob(data);
+  const byteNumbers = new Array(byteCharacters.length);
+  for (var i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.charCodeAt(i);
+  }
+  const byteArray = new Uint8Array(byteNumbers);
+  const blob = new Blob([byteArray], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+
+  const filename = `${filenamePrefix}-${Date.now()}`;
+
+  const a = document.createElement('a');
+  const url = window.URL.createObjectURL(blob);
+  a.href = url;
+  a.setAttribute('download', filename);
+  document.body.appendChild(a);
+  a.click();
+}
+
 export {
   buildEndpointUrl,
   createCookie,
   readCookie,
   deleteCookie,
-  scrollToTop
+  scrollToTop,
+  downloadXLSX
 };
