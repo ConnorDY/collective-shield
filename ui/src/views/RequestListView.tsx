@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { ButtonGroup, Col, Dropdown, Row, Jumbotron } from 'react-bootstrap';
+import { Button, ButtonGroup, Col, Dropdown, Row, Jumbotron } from 'react-bootstrap';
 import axios from 'axios';
 import { get, lowerCase } from 'lodash';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFileExcel } from '@fortawesome/free-solid-svg-icons';
 
 import Request from '../models/Request';
 import StatusOption from '../components/StatusOption';
-import { buildEndpointUrl } from '../utilities';
+import { buildEndpointUrl, downloadXLSX } from '../utilities';
 
 const RequestListView: React.FC<{}> = () => {
   const [allRequests, setAllRequests] = useState<Request[]>([]);
@@ -60,6 +62,16 @@ const RequestListView: React.FC<{}> = () => {
     setSearchStatusTerm(status);
   };
 
+  const onDownload = () => {
+    axios.get(buildEndpointUrl(`requests/all/export`),
+      {
+        responseType: 'text',
+        headers: { 'Content-Type': 'application/octet-stream'}
+      }).then((res) => {
+        downloadXLSX(res.data, 'Requests');
+      })
+  }
+
   return (
     <div className="all-requests">
       <Row className="view-header">
@@ -111,6 +123,14 @@ const RequestListView: React.FC<{}> = () => {
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
+        </Col>
+
+        <Col xs={1} className="download">
+          <Button onClick={onDownload} title="Download to XSLX">
+            <FontAwesomeIcon
+              icon={faFileExcel}
+            />
+          </Button>
         </Col>
       </Row>
 
