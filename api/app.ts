@@ -16,6 +16,7 @@ import {
   LoginController,
   MakersController,
   MiscController,
+  ProductsController,
   RequestsController
 } from './controllers';
 import { authorizationChecker } from './utils';
@@ -78,6 +79,7 @@ useExpressServer(app, {
     LoginController,
     MakersController,
     MiscController,
+    ProductsController,
     RequestsController
   ],
   classTransformer: false,
