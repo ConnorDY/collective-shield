@@ -126,7 +126,7 @@ const RequestListView: React.FC<{}> = () => {
         </Col>
 
         <Col xs={1} className="download">
-          <Button onClick={onDownload} title="Download to XSLX">
+          <Button onClick={onDownload} title="Download to XLSX">
             <FontAwesomeIcon
               icon={faFileExcel}
             />
