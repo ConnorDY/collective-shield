@@ -6,13 +6,15 @@ import {
   Patch,
   Post,
   Put,
+  Res,
   CurrentUser,
   Authorized,
   UseBefore
 } from 'routing-controllers';
 import { MongooseFilterQuery } from 'mongoose';
 import { celebrate, Segments } from 'celebrate';
-import { omit, pick } from 'lodash';
+import { extend, get, keys, omit, pick, reduce } from 'lodash';
+import XLSX from 'xlsx';
 
 import config from '../config';
 import { Request } from '../schemas';
@@ -67,6 +69,51 @@ export default class RequestsController {
       .then((results) => {
         this.sortRequestsByCreateDate(results);
         return results;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  }
+
+  @Get('/all/export')
+  @Authorized(['admin'])
+  getAllExport(@Res() res: any) {
+    return Request.find()
+      .populate('maker')
+      .populate('requestor')
+      .then((results) => {
+        this.sortRequestsByCreateDate(results);
+
+        const results$ = results.map((m) => {
+          return {
+            ...omit(m['_doc'], ['_id', 'maker', 'requestor']),
+            _id: m['_doc']['_id'].toString(),
+            maker: get(m, '$$populatedVirtuals.maker.email'),
+            requester: get(m, '$$populatedVirtuals.maker.email')
+          };
+        });
+        // Reduce the cumulative keys into a single array [ 'jobRole', 'status', etc ]
+        const uniqueKeys = keys(reduce(results$, extend));
+        // Fill each result object with any missing keys
+        const data = results$.map((r) => {
+          let obj = {};
+          uniqueKeys.forEach((k = '') => (obj[k] = ''));
+          obj = { ...obj, ...r };
+          return obj;
+        });
+        // Convert the data into a workbook
+        const wb = XLSX.utils.book_new();
+        // Add JSON to workbook
+        const ws = XLSX.utils.json_to_sheet(data);
+        XLSX.utils.book_append_sheet(wb, ws, 'export.xlsx');
+
+        const wbout = XLSX.write(wb, {
+          type: 'base64',
+          bookType: 'xlsx',
+          bookSST: false
+        });
+        res.setHeader('Content-Type', 'application/octet-stream');
+        return res.send(wbout);
       })
       .catch((err) => {
         throw err;
