@@ -9,6 +9,7 @@ import {
   UseBefore
 } from 'routing-controllers';
 import { celebrate, Segments } from 'celebrate';
+import { orderBy } from 'lodash';
 
 import config from '../config';
 import { Product } from '../schemas';
@@ -21,7 +22,20 @@ export default class RequestsController {
 
   @Get('/all')
   getAll() {
-    return Product.find()
+    return Product.find().sort([["isArchived", 1], ["createDate", "desc"]])
+      .then((results) => {
+        return results;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  }
+
+  @Get('/available')
+  getAvailable() {
+    return Product.find({
+      isArchived: false,
+    }).sort([["createDate", "desc"]])
       .then((results) => {
         return results;
       })

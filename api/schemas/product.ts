@@ -8,7 +8,9 @@ export const ProductSchema = new Schema({
   imageUrl: String,
   packingUrl: String,
   modelUrl: String,
-  isArchived: Boolean
+  isArchived: Boolean,
+  createDate: Date,
+  updateDate: Date,
 });
 
 const Product = model<IProduct>('product', ProductSchema);
