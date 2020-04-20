@@ -84,20 +84,20 @@ export default class RequestsController {
       .then((results) => {
         this.sortRequestsByCreateDate(results);
 
-        const results$ = results.map(m => {
+        const results$ = results.map((m) => {
           return {
             ...omit(m['_doc'], ['_id', 'maker', 'requestor']),
             _id: m['_doc']['_id'].toString(),
             maker: get(m, '$$populatedVirtuals.maker.email'),
-            requester: get(m, '$$populatedVirtuals.maker.email'),
-          }
+            requester: get(m, '$$populatedVirtuals.maker.email')
+          };
         });
         // Reduce the cumulative keys into a single array [ 'jobRole', 'status', etc ]
         const uniqueKeys = keys(reduce(results$, extend));
         // Fill each result object with any missing keys
-        const data = results$.map(r => {
+        const data = results$.map((r) => {
           let obj = {};
-          uniqueKeys.forEach((k = '') => obj[k] = '');
+          uniqueKeys.forEach((k = '') => (obj[k] = ''));
           obj = { ...obj, ...r };
           return obj;
         });
@@ -105,11 +105,11 @@ export default class RequestsController {
         const wb = XLSX.utils.book_new();
         // Add JSON to workbook
         const ws = XLSX.utils.json_to_sheet(data);
-        XLSX.utils.book_append_sheet(wb, ws, "export.xlsx");
+        XLSX.utils.book_append_sheet(wb, ws, 'export.xlsx');
 
         const wbout = XLSX.write(wb, {
           type: 'base64',
-          bookType: "xlsx",
+          bookType: 'xlsx',
           bookSST: false
         });
         res.setHeader('Content-Type', 'application/octet-stream');
@@ -196,10 +196,7 @@ export default class RequestsController {
       omitFields = [...omitFields, 'makerNotes'];
     }
 
-    return Request.findOneAndUpdate(
-      query,
-      { $set: omit(body, omitFields) }
-    )
+    return Request.findOneAndUpdate(query, { $set: omit(body, omitFields) })
       .then((result) => {
         return result;
       })

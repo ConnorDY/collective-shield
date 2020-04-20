@@ -48,7 +48,9 @@ const downloadXLSX = (data, filenamePrefix = 'export') => {
     byteNumbers[i] = byteCharacters.charCodeAt(i);
   }
   const byteArray = new Uint8Array(byteNumbers);
-  const blob = new Blob([byteArray], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+  const blob = new Blob([byteArray], {
+    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  });
 
   const filename = `${filenamePrefix}-${Date.now()}`;
 
@@ -58,7 +60,7 @@ const downloadXLSX = (data, filenamePrefix = 'export') => {
   a.setAttribute('download', filename);
   document.body.appendChild(a);
   a.click();
-}
+};
 
 export {
   buildEndpointUrl,

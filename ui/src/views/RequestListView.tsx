@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Button, ButtonGroup, Col, Dropdown, Row, Jumbotron } from 'react-bootstrap';
+import {
+  Button,
+  ButtonGroup,
+  Col,
+  Dropdown,
+  Row,
+  Jumbotron
+} from 'react-bootstrap';
 import axios from 'axios';
 import { get, lowerCase } from 'lodash';
 import { Link } from 'react-router-dom';
@@ -9,6 +16,7 @@ import { faFileExcel } from '@fortawesome/free-solid-svg-icons';
 import Request from '../models/Request';
 import StatusOption from '../components/StatusOption';
 import { buildEndpointUrl, downloadXLSX } from '../utilities';
+import { formatDate } from '../utilities/formatDate';
 
 const RequestListView: React.FC<{}> = () => {
   const [allRequests, setAllRequests] = useState<Request[]>([]);
@@ -56,21 +64,20 @@ const RequestListView: React.FC<{}> = () => {
     searchResults = results;
   }
 
-  var options = { weekday: 'long', month: 'long', day: 'numeric' };
-
   const onSelect = (status: any) => {
     setSearchStatusTerm(status);
   };
 
   const onDownload = () => {
-    axios.get(buildEndpointUrl(`requests/all/export`),
-      {
+    axios
+      .get(buildEndpointUrl(`requests/all/export`), {
         responseType: 'text',
-        headers: { 'Content-Type': 'application/octet-stream'}
-      }).then((res) => {
-        downloadXLSX(res.data, 'Requests');
+        headers: { 'Content-Type': 'application/octet-stream' }
       })
-  }
+      .then((res) => {
+        downloadXLSX(res.data, 'Requests');
+      });
+  };
 
   return (
     <div className="all-requests">
@@ -127,9 +134,7 @@ const RequestListView: React.FC<{}> = () => {
 
         <Col xs={1} className="download">
           <Button onClick={onDownload} title="Download to XLSX">
-            <FontAwesomeIcon
-              icon={faFileExcel}
-            />
+            <FontAwesomeIcon icon={faFileExcel} />
           </Button>
         </Col>
       </Row>
@@ -157,7 +162,6 @@ const RequestListView: React.FC<{}> = () => {
 
                 <tbody>
                   {searchResults.map((r) => {
-                    const date = new Date(r.createDate);
                     return (
                       <tr key={r._id}>
                         <td className="requestedDate">
@@ -165,9 +169,7 @@ const RequestListView: React.FC<{}> = () => {
                             to={`/request/${r._id}`}
                             title="View details for this request"
                           >
-                            {new Intl.DateTimeFormat('en-US', options).format(
-                              date
-                            )}
+                            {formatDate(r.createDate)}
                           </Link>
                         </td>
                         <td className="count">{r.maskShieldCount}</td>
