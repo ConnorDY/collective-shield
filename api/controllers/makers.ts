@@ -44,7 +44,14 @@ export default class MakersController {
   approveMaker(@Param('id') id: string) {
     return User.findByIdAndUpdate(id, { $set: { isVerifiedMaker: true } })
       .then((user) => {
-        return sendEmail({
+        /*
+          Disabling email functionality for now per
+          https://trello.com/c/biYtz2br/84-remove-automatic-email-to-makers-upon-approval
+          Simply remove the "return user" and uncomment the EMAIL CONFIRMATION FUNCTIONALITY
+          commented code to restore this functionality.
+        */
+        // START EMAIL CONFIRMATION FUNCTIONALITY
+        /* return sendEmail({
           to: user.email,
           subject: 'Welcome to the Collective Shield community of makers!',
           body: `<p>
@@ -55,7 +62,7 @@ export default class MakersController {
             We are so pleased you joined us to create these much-needed items for those on frontlines of the battle against coronavirus.
             This is a very engaged community and we welcome your participation.
           </p>
-          
+
           <p>
             Please always remember to follow our guiding principles and treat those who request your products with the upmost care.
           </p>
@@ -81,12 +88,15 @@ export default class MakersController {
             <span style="font-weight: bold">The Collective Shield team</span>
           </p>`
         })
-          .then(() => {
-            return user;
-          })
-          .catch((err) => {
-            throw err;
-          });
+        .then(() => {
+          return user;
+        })
+        .catch((err) => {
+          throw err;
+        });
+        */
+        // END EMAIL CONFIRMATION FUNCTIONALITY
+        return user;
       })
       .catch((err) => {
         throw err;
