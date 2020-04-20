@@ -254,8 +254,10 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                   <tr>
                     <th className="requestedDate">Date</th>
                     <th className="count">Count</th>
-                    <th className="distance">State</th>
+                    <th className="requestorFirstName">Name</th>
                     <th className="requestor">Requester</th>
+                    <th className="requestorLocation">Location</th>
+                    <th className="localDelivery">Local Delivery</th>
                     <th>
                       <span className="sr-only">Claim</span>
                     </th>
@@ -278,9 +280,30 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                           </Link>
                         </td>
                         <td className="count">{w.maskShieldCount}</td>
-                        <td className="distance">{w.addressState}</td>
+                        <td className="requestorFirstName">
+                          <span>
+                            {w.firstName || 'First name not provided'}
+                          </span>
+                        </td>
                         <td className="requestor">
                           {w.facilityName || 'Organization not provided'}
+                        </td>
+                        <td className="requestorLocation">
+                          {w.addressCity
+                            ? `${w.addressCity.toUpperCase()}, ${
+                                w.addressState
+                              }`
+                            : 'Location not provided'}
+                        </td>
+                        <td className="localDelivery">
+                          {w.homePickUp ? (
+                            <FontAwesomeIcon
+                              className="green-checkmark"
+                              icon={faCheck}
+                            />
+                          ) : (
+                            <FontAwesomeIcon className="red-x" icon={faTimes} />
+                          )}
                         </td>
                         <td className="claim">
                           <Button
