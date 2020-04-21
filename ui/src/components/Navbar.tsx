@@ -19,6 +19,9 @@ const MainNav: React.FC<{
 
   const oppositeRole = role === 'maker' ? 'requester' : 'maker';
 
+  const isRequester = role === 'requester';
+  const isMaker = role === 'maker';
+
   function switchRole() {
     localStorage.setItem('role', oppositeRole);
     setRole(oppositeRole);
@@ -48,23 +51,37 @@ const MainNav: React.FC<{
                 <Col xs={12} lg={6} className="nav-links">
                   {user && (
                     <Nav className="mr-auto text-lg-center">
-                      {showAdmin && (
+                      {
+                        <NavLink
+                          exact
+                          to="/"
+                          activeClassName="active"
+                          className="nav-link"
+                        >
+                          { isRequester ? 'My Requests' : 'Work' }
+                        </NavLink>
+                      }
+                      {
+                        isRequester && !showAdmin &&
                         <>
                           <NavLink
                             exact
-                            to="/"
+                            to="/request"
                             activeClassName="active"
                             className="nav-link"
                           >
-                            Work
+                            New Request
                           </NavLink>
-
+                        </>
+                      }
+                      {showAdmin && (
+                        <>
                           <NavLink
                             to="/requests"
                             activeClassName="active"
                             className="nav-link"
                           >
-                            Requests
+                            All Requests
                           </NavLink>
 
                           <NavLink

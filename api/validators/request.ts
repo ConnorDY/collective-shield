@@ -36,7 +36,8 @@ const requestValidator = Joi.object().keys({
   phone: Joi.string().required(),
   details: Joi.string().allow('').optional(),
   homePickUp: Joi.boolean().required(),
-  makerNotes: Joi.string().allow('').optional()
+  makerNotes: Joi.string().allow('').optional(),
+  productID: Joi.string().required(),
 });
 
 export default requestValidator;

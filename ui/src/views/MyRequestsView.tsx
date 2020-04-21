@@ -56,7 +56,7 @@ const MyRequestsView: React.FC<{ user: User }> = ({ user }) => {
                   <tr>
                     <th className="date">Date</th>
                     <th className="count">Count</th>
-                    <th className="details">Details</th>
+                    <th className="product">Product</th>
                     <th className="status">Status</th>
                   </tr>
                 </thead>
@@ -74,10 +74,7 @@ const MyRequestsView: React.FC<{ user: User }> = ({ user }) => {
                           </Link>
                         </td>
                         <td className="count">{request.maskShieldCount}</td>
-                        <td className="details">
-                          {request.details.substring(0, 21)}
-                          {get(request, 'details', '').length > 20 ? '...' : ''}
-                        </td>
+                        <td className="product">{get(request, 'product.name', 'N/A')}</td>
                         <td className="status">{request.status}</td>
                       </tr>
                     );

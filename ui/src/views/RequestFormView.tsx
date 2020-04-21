@@ -8,12 +8,14 @@ import {
   Col,
   Dropdown,
   Form,
-  Row
+  Row,
+  Spinner
 } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import { pick } from 'lodash';
+import { compact, find, get, orderBy, pick, uniqBy } from 'lodash';
 
+import Product from '../models/Product';
 import User from '../models/User';
 import StatusOption from '../components/StatusOption';
 import ShippingModal from '../components/ShippingModal';
@@ -29,6 +31,9 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
 
   const [isCreated, setIsCreated] = useState(false);
   const [isValidated, setIsValidated] = useState(false);
+  const [productsIsLoading, setProductsIsLoading] = useState(false);
+
+  const [products, setProducts] = useState<Product[]>([]);
 
   // Request Details
   const [detailsReq, setDetailsReq] = useState({
@@ -50,7 +55,8 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
     makerID: '',
     requestorID: '',
     homePickUp: false,
-    makerNotes: ''
+    makerNotes: '',
+    productID: '',
   });
 
   const roleOptions = [
@@ -67,6 +73,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
 
   const isExisting = !!id;
   const disabled = !!isExisting && !isAdminView;
+  const selectedProduct = find(products, p => p['_id'] === detailsReq.productID) || { imageUrl: '', _id: '', name: '' };
 
   function updateDetailsReq(data: object) {
     setDetailsReq({
@@ -75,9 +82,28 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
     });
   }
 
+  function updateProducts(data: Product[] = []) {
+    setProducts(prev => orderBy(compact(uniqBy([...prev, ...data], '_id')), '_id'));
+  }
+
   function getDetails() {
     axios.get(buildEndpointUrl(`requests/${id}`)).then((res) => {
       updateDetailsReq(res.data);
+      const product = get(res, 'data.product', {});
+      updateProducts([product]);
+    });
+  }
+
+  function getProducts() {
+    setProductsIsLoading(true);
+    axios.get(buildEndpointUrl('products/available')).then((res) => {
+      updateProducts(res.data);
+      const firstProduct = get(orderBy(res.data, '_id'), '[0]._id', '');
+      if (!isExisting) updateDetailsReq({ productID: firstProduct });
+      // force some loading time so that there isn't a flicker
+      setTimeout(() => {
+        setProductsIsLoading(false);
+      }, 300);
     });
   }
 
@@ -120,7 +146,8 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
         'addressZip',
         'phone',
         'homePickUp',
-        'makerNotes'
+        'makerNotes',
+        'productID',
       ]);
       // TODO - update to allow /maker-details to accept only necessary fields
       // https://github.com/ConnorDY/collective-shield/pull/117#issuecomment-614034590
@@ -157,7 +184,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
   // on load
   useEffect(() => {
     axios.defaults.headers.post['CSRF-Token'] = readCookie('XSRF-TOKEN');
-
+    getProducts();
     if (id) getDetails();
   }, []);
 
@@ -166,6 +193,13 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
   if (isCreated) h1 = 'Thank You!';
 
   return (
+    productsIsLoading ?
+    <Row className="justify-content-md-center">
+      <Spinner animation="border" role="status">
+        <span className="sr-only">Loading...</span>
+      </Spinner>
+    </Row>
+    :
     <div className="request-details">
       <Row className="view-header">
         <Col>
@@ -252,16 +286,16 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
         </Row>
       ) : (
         <>
+        <Form
+          noValidate
+          validated={isValidated}
+          onSubmit={(e: React.BaseSyntheticEvent) => {
+            handleSubmit(e);
+          }}
+        >
           <Row id="requested-row-2">
             <Col>
               <h4>Requester Contact Information</h4>
-              <Form
-                noValidate
-                validated={isValidated}
-                onSubmit={(e: React.BaseSyntheticEvent) => {
-                  handleSubmit(e);
-                }}
-              >
                 <Form.Group controlId="formBasicJobTitle">
                   <Form.Label>Role</Form.Label>
                   <Form.Control
@@ -469,18 +503,48 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                     )}
                   </div>
                 )}
-              </Form>
             </Col>
 
             <Col>
+              <h4>Product</h4>
+              <Form.Group controlId="formBasicProduct">
+                <Form.Label>Select a Product</Form.Label>
+                <Form.Control
+                  disabled={disabled}
+                  as="select"
+                  required
+                  value={detailsReq.productID}
+                  onChange={(e: BaseSyntheticEvent) =>
+                    // reset otherJobRole on change
+                    updateDetailsReq({
+                      productID: e.target.value
+                    })
+                  }
+                >
+                  {isExisting && <option disabled value="">No product selected</option>}
+                  {products.map((product) => {
+                    return <option value={get(product, '_id')} key={get(product, '_id')}>{get(product, 'name')}</option>;
+                  })}
+                </Form.Control>
+                {
+                  selectedProduct.imageUrl && selectedProduct._id &&
+                    <a href={`/product/${selectedProduct._id}`} target="_blank">
+                      <img
+                        alt={selectedProduct.name}
+                        className="pt-3"
+                        src={selectedProduct.imageUrl || '/placeholder.png'}
+                        height="120px"
+                      />
+                    </a>
+                }
+              </Form.Group>
+
               <h4>Number Requested</h4>
-              <Form>
                 <Form.Group>
                   <Form.Control
                     required
                     disabled={disabled}
                     type="number"
-                    size="lg"
                     custom
                     id="requested-mask-shields-card"
                     value={detailsReq.maskShieldCount}
@@ -494,7 +558,6 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                     }}
                   />
                 </Form.Group>
-              </Form>
               {detailsReq.maskShieldCount >= 50 && !isExisting && (
                 <Alert variant="info">
                   For this request size, you will also need to email us at{' '}
@@ -507,7 +570,6 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
 
               <h4>Request Details</h4>
               <h5>Add any details or comments about the request here</h5>
-              <Form>
                 <Form.Group controlId="requestDetails">
                   <Form.Control
                     disabled={disabled}
@@ -519,16 +581,11 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                     }
                   />
                 </Form.Group>
-              </Form>
 
               {isExisting && (
                 <>
                   <h4>Maker Notes</h4>
-                  <h5>
-                    Makers can add notes here, which are also visible to the
-                    requester
-                  </h5>
-                  <Form>
+                  <h5>Makers can add notes here, which are also visible to the requester</h5>
                     <Form.Group controlId="requestMakerNotes">
                       <Form.Control
                         disabled={disabled && !isMakerView}
@@ -540,17 +597,17 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                         }
                       />
                     </Form.Group>
-                  </Form>
-                  {isMakerView && (
-                    <Alert variant="info">
-                      Ensure that you click the "Update Request" button when are
-                      you done updating notes.
-                    </Alert>
-                  )}
+                  {
+                    isMakerView &&
+                      <Alert variant="info">
+                        Ensure that you click the "Update Request" button when are you done updating notes.
+                      </Alert>
+                  }
                 </>
               )}
             </Col>
           </Row>
+          </Form>
         </>
       )}
     </div>
