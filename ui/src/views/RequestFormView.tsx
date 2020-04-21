@@ -5,7 +5,6 @@ import {
   Alert,
   Button,
   ButtonGroup,
-  Card,
   Col,
   Dropdown,
   Form,
@@ -16,7 +15,6 @@ import axios from 'axios';
 import { pick } from 'lodash';
 
 import User from '../models/User';
-import Avatar from '../components/Avatar';
 import StatusOption from '../components/StatusOption';
 import ShippingModal from '../components/ShippingModal';
 import { buildEndpointUrl, readCookie, scrollToTop } from '../utilities';
@@ -211,9 +209,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
             )}
 
             <Col className="col-auto">
-              <Link to="/">
-                <Button>Go back</Button>
-              </Link>
+              <Button onClick={history.goBack}>Go back</Button>
             </Col>
           </Row>
         </Col>

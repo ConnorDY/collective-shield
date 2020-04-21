@@ -1,5 +1,5 @@
 import React, { useEffect, useState, BaseSyntheticEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useParams } from 'react-router';
 import {
   Alert,
@@ -22,6 +22,7 @@ const ProductFormView: React.FC<{ user: User, role: string }> = ({
   role
 }) => {
   let { id } = useParams();
+  const history = useHistory();
 
   const [isCreated, setIsCreated] = useState(false);
   const [isValidated, setIsValidated] = useState(false);
@@ -120,9 +121,7 @@ const ProductFormView: React.FC<{ user: User, role: string }> = ({
         <Col sm={7} className="right-col">
           <Row>
             <Col className="col-auto">
-              <Link to="/">
-                <Button>Go back</Button>
-              </Link>
+              <Button onClick={history.goBack}>Go back</Button>
             </Col>
           </Row>
         </Col>
@@ -266,7 +265,7 @@ const ProductFormView: React.FC<{ user: User, role: string }> = ({
                 }
 
                 {
-                  !isAdminView &&
+                  !isAdminView && detailsReq.isArchived &&
                   <Alert variant="danger">This product has been archived and is no longer available to request.</Alert>
                 }
 

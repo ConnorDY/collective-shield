@@ -19,6 +19,7 @@ import MakerVerificationPendingView from './views/MakerVerificationPendingView';
 import MakerVerificationView from './views/MakerVerificationView';
 import MakersView from './views/MakersView';
 import ProductFormView from './views/ProductFormView';
+import ProductListView from './views/ProductListView';
 import RequestListView from './views/RequestListView';
 import RequestFormView from './views/RequestFormView';
 import ErrorView from './views/ErrorView';
@@ -70,6 +71,10 @@ const App: React.FC = () => {
 
         <Route path="/product/:id" exact>
           <ProductFormView key="get" user={user} role={role!} />
+        </Route>
+
+        <Route path="/products" exact>
+          <ProductListView key="create" user={user} role={role!} />
         </Route>
 
         <Route path="/request" exact>

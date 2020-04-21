@@ -7,6 +7,8 @@ export default interface IProduct extends Document {
   packingUrl?: string;
   modelUrl?: string;
   isArchived?: boolean;
+  createDate?: Date;
+  updateDate?: Date;
 }
 
 export interface IProductPatch extends Document {
@@ -16,4 +18,6 @@ export interface IProductPatch extends Document {
   packingUrl?: string;
   modelUrl?: string;
   isArchived?: boolean;
+  createDate?: Date;
+  updateDate?: Date;
 }

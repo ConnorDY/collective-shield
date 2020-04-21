@@ -76,6 +76,13 @@ const MainNav: React.FC<{
                           </NavLink>
                         </>
                       )}
+                      <NavLink
+                        to="/products"
+                        activeClassName="active"
+                        className="nav-link"
+                      >
+                        Products
+                      </NavLink>
                     </Nav>
                   )}
                 </Col>
