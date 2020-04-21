@@ -153,11 +153,12 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
       // https://github.com/ConnorDY/collective-shield/pull/117#issuecomment-614034590
 
       const routeSuffix = isMakerView && !isAdminView ? 'maker-details' : '';
-      const endpoint = isExisting ? `requests/${id}/${routeSuffix}` : 'requests';
+      const endpoint = isExisting
+        ? `requests/${id}/${routeSuffix}`
+        : 'requests';
       const method = isExisting ? 'patch' : 'post';
 
-      axios
-        [method](buildEndpointUrl(endpoint), data)
+      axios[method](buildEndpointUrl(endpoint), data)
         .then(() => {
           if (isExisting) {
             toast.success('Successfully updated!', {
@@ -478,7 +479,8 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                     type="checkbox"
                     label={
                       <span>
-                        I'm willing to be contacted by a local printer for in-person delivery.
+                        I'm willing to be contacted by a local printer for
+                        in-person delivery.
                       </span>
                     }
                   />
@@ -490,16 +492,15 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                       {isExisting ? 'Update Request' : 'Submit Request'}
                     </Button>
 
-                    {
-                      !isExisting &&
-                        <Button
-                          variant="light"
-                          id="cancel-request-button"
-                          onClick={cancel}
-                        >
-                          Cancel Request
-                        </Button>
-                    }
+                    {!isExisting && (
+                      <Button
+                        variant="light"
+                        id="cancel-request-button"
+                        onClick={cancel}
+                      >
+                        Cancel Request
+                      </Button>
+                    )}
                   </div>
                 )}
             </Col>
@@ -581,8 +582,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                   />
                 </Form.Group>
 
-              {
-                isExisting &&
+              {isExisting && (
                 <>
                   <h4>Maker Notes</h4>
                   <h5>Makers can add notes here, which are also visible to the requester</h5>
@@ -604,7 +604,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                       </Alert>
                   }
                 </>
-              }
+              )}
             </Col>
           </Row>
           </Form>
