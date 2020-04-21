@@ -18,6 +18,7 @@ import LogoutView from './views/LogoutView';
 import MakerVerificationPendingView from './views/MakerVerificationPendingView';
 import MakerVerificationView from './views/MakerVerificationView';
 import MakersView from './views/MakersView';
+import ProductFormView from './views/ProductFormView';
 import RequestListView from './views/RequestListView';
 import RequestFormView from './views/RequestFormView';
 import ErrorView from './views/ErrorView';
@@ -58,12 +59,25 @@ const App: React.FC = () => {
           <HomeView user={user} role={role!} />
         </Route>
 
+        /*
+         Use keys for components that are shared across routes.
+         Otherwise component state will persist on an immediate route
+         change from one to the other.
+        */
+        <Route path="/product" exact>
+          <ProductFormView key="create" user={user} role={role!} />
+        </Route>
+
+        <Route path="/product/:id" exact>
+          <ProductFormView key="get" user={user} role={role!} />
+        </Route>
+
         <Route path="/request" exact>
-          <RequestFormView user={user} role={role!} />
+          <RequestFormView key="create" user={user} role={role!} />
         </Route>
 
         <Route path="/request/:id" exact>
-          <RequestFormView user={user} role={role!} />
+          <RequestFormView key="get" user={user} role={role!} />
         </Route>
 
         <Route path="/verification" exact>
