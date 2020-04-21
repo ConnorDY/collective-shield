@@ -27,6 +27,7 @@ export default class RequestsController {
   @Get('/assigned')
   getMyAssigned(@CurrentUser() user: IUser) {
     return Request.find({ makerID: user._id })
+      .populate('product')
       .then((results) => {
         this.sortRequestsByCreateDate(results);
         return results;
@@ -39,6 +40,7 @@ export default class RequestsController {
   @Get('/me')
   getMyCreated(@CurrentUser() user: IUser) {
     return Request.find({ requestorID: user._id })
+      .populate('product')
       .then((results) => {
         this.sortRequestsByCreateDate(results);
         return results;
@@ -51,6 +53,7 @@ export default class RequestsController {
   @Get('/open')
   getOpen() {
     return Request.find({ makerID: undefined })
+      .populate('product')
       .then((results) => {
         this.sortRequestsByCreateDate(results);
         return results;
@@ -66,6 +69,7 @@ export default class RequestsController {
     return Request.find()
       .populate('maker')
       .populate('requestor')
+        .populate('product')
       .then((results) => {
         this.sortRequestsByCreateDate(results);
         return results;
@@ -81,6 +85,7 @@ export default class RequestsController {
     return Request.find()
       .populate('maker')
       .populate('requestor')
+        .populate('product')
       .then((results) => {
         this.sortRequestsByCreateDate(results);
 
@@ -123,12 +128,14 @@ export default class RequestsController {
   @Post()
   @UseBefore(celebrate({ [Segments.BODY]: requestValidator }))
   createRequest(@CurrentUser() user: IUser, @Body() body: IRequest) {
-    return Request.create({
-      ...body,
-      status: 'Requested',
-      createDate: new Date(),
-      requestorID: user._id
-    })
+    return Request.create(
+      {
+        ...body,
+        status: 'Requested',
+        createDate: new Date(),
+        requestorID: user._id
+      }
+    )
       .then((result) => {
         return result;
       })
@@ -142,6 +149,7 @@ export default class RequestsController {
     return Request.findOne({
       _id: id
     })
+      .populate('product')
       .then((result) => {
         return result;
       })
@@ -198,7 +206,8 @@ export default class RequestsController {
 
     return Request.findOneAndUpdate(
       query,
-      { $set: omit(body, omitFields) }
+      { $set: omit(body, omitFields) },
+      { runValidators: true }
     )
       .then((result) => {
         return result;

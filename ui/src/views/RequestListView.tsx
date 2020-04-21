@@ -152,6 +152,7 @@ const RequestListView: React.FC<{}> = () => {
                     <th className="requestor">Requester</th>
                     <th className="printer">Printer</th>
                     <th className="status">Status</th>
+                    <th className="product">Product</th>
                   </tr>
                 </thead>
 
@@ -181,6 +182,20 @@ const RequestListView: React.FC<{}> = () => {
                         </td>
                         <td className="status">
                           {StatusOption(r.status || 'Requested')}
+                        </td>
+                        <td>
+                          {
+                            r.product ?
+                              <Link to={`/product/${r.product._id}`}>
+                                <img
+                                  height="70px"
+                                  alt={r.product.name}
+                                  src={r.product.imageUrl! || '/placeholder.png'}
+                                />
+                              </Link>
+                              :
+                              'N/A'
+                          }
                         </td>
                       </tr>
                     );

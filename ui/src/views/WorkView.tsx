@@ -143,7 +143,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                     <th className="requestedDate">Date</th>
                     <th className="count">Count</th>
                     <th className="requestorFirstName">Name</th>
-                    <th className="requestor">Requester</th>
+                    <th className="Product">Product</th>
                     <th className="requestorLocation">Location</th>
                     <th className="localDelivery">Local Delivery</th>
                     <th>Status</th>
@@ -171,11 +171,22 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                         <td className="count">{w.maskShieldCount}</td>
                         <td className="requestorFirstName">
                           <span>
-                            {w.firstName || 'First name not provided'}
+                            {w.firstName || 'N/A'}
                           </span>
                         </td>
-                        <td className="requestor">
-                          {w.facilityName || 'Organization not provided'}
+                        <td className="product">
+                          {
+                            w.product ?
+                              <Link to={`/product/${w.product._id}`}>
+                                <img
+                                  height="70px"
+                                  alt={w.product.name}
+                                  src={w.product.imageUrl! || '/placeholder.png'}
+                                />
+                              </Link>
+                              :
+                              'N/A'
+                          }
                         </td>
                         <td className="requestorLocation">
                           {w.addressCity
@@ -255,7 +266,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                     <th className="requestedDate">Date</th>
                     <th className="count">Count</th>
                     <th className="requestorFirstName">Name</th>
-                    <th className="requestor">Requester</th>
+                    <th className="product">Product</th>
                     <th className="requestorLocation">Location</th>
                     <th className="localDelivery">Local Delivery</th>
                     <th>
@@ -282,11 +293,22 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                         <td className="count">{w.maskShieldCount}</td>
                         <td className="requestorFirstName">
                           <span>
-                            {w.firstName || 'First name not provided'}
+                            {w.firstName || 'N/A'}
                           </span>
                         </td>
-                        <td className="requestor">
-                          {w.facilityName || 'Organization not provided'}
+                        <td className="product">
+                          {
+                            w.product ?
+                              <Link to={`/product/${w.product._id}`}>
+                                <img
+                                  height="70px"
+                                  alt={w.product.name}
+                                  src={w.product.imageUrl! || '/placeholder.png'}
+                                />
+                              </Link>
+                              :
+                              'N/A'
+                          }
                         </td>
                         <td className="requestorLocation">
                           {w.addressCity

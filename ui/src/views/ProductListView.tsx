@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Col, Row, Jumbotron } from 'react-bootstrap';
 import axios from 'axios';
 import { get, lowerCase } from 'lodash';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 
@@ -13,6 +13,7 @@ import { buildEndpointUrl } from '../utilities';
 const ProductListView: React.FC<{ user: User; role: string }> = ({ user, role }) => {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const history = useHistory();
 
   let searchResults: any[] = [];
 
@@ -66,7 +67,7 @@ const ProductListView: React.FC<{ user: User; role: string }> = ({ user, role })
         </Col>
         {
           isAdminView &&
-          <Col xs={12} md={3} className="right-col my-auto text-sm-right">
+          <Col className="right-col my-auto col-md-auto text-sm-right">
             <Link to="/product">
               <Button>
                 New Product
@@ -74,6 +75,9 @@ const ProductListView: React.FC<{ user: User; role: string }> = ({ user, role })
             </Link>
           </Col>
         }
+        <Col className="right-col my-auto col-md-auto text-sm-right">
+          <Button className="ml-3" onClick={history.goBack}>Go back</Button>
+        </Col>
       </Row>
 
       <Row>
