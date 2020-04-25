@@ -502,8 +502,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                       type="checkbox"
                       label={
                         <span>
-                          I have accept the limitations of this product. Click on
-                          this link{' '}
+                          I have accept the limitations of this product. Click on{' '}
                           <a
                             href="https://collectiveshield.org/limitations"
                             target="_blank"
