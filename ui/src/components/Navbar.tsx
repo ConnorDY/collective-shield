@@ -2,6 +2,8 @@ import React from 'react';
 import { Col, Container, Row, Navbar, Nav } from 'react-bootstrap';
 import { NavLink, Link, useHistory } from 'react-router-dom';
 import { get } from 'lodash';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
 import User from '../models/User';
 import Avatar from './Avatar';
@@ -113,19 +115,29 @@ const MainNav: React.FC<{
 
                       <Avatar size="40" user={user} />
 
-                      <Link
-                        to="#"
-                        onClick={() => switchRole()}
-                        className="ml-lg-3"
-                      >
-                        Switch to{' '}
-                        {oppositeRole.charAt(0).toUpperCase() +
-                          oppositeRole.slice(1)}
-                      </Link>
+                      {
+                        showAdmin &&
+                          <Link
+                            to="#"
+                            onClick={() => switchRole()}
+                            className="ml-lg-3"
+                          >
+                            Switch to{' '}
+                            {oppositeRole.charAt(0).toUpperCase() +
+                              oppositeRole.slice(1)}
+                          </Link>
+                      }
 
                       <Link to="/logout" className="ml-lg-3">
                         Logout
                       </Link>
+
+                      <a className="ml-3" href="mailto:support@collectiveshield.org" title="Contact Us">
+                        <FontAwesomeIcon
+                          icon={faQuestionCircle}
+                          size="lg"
+                        />
+                      </a>
                     </Navbar.Text>
                   ) : (
                     <></>
