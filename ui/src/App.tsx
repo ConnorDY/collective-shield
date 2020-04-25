@@ -85,6 +85,10 @@ const App: React.FC = () => {
           <RequestFormView key="get" user={user} role={role!} />
         </Route>
 
+        <Route path="/request/product/:productId" exact>
+          <RequestFormView key="request-product" user={user} role={role!} />
+        </Route>
+
         <Route path="/verification" exact>
           <MakerVerificationView user={user} />
         </Route>

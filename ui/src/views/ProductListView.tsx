@@ -106,10 +106,11 @@ const ProductListView: React.FC<{ user: User; role: string }> = ({ user, role })
                           <th>Available</th>
                         </>
                     }
-                    {
-
-                    }
                     <th>Image</th>
+                    {
+                      !isAdminView && !isMakerView &&
+                        <th>Action</th>
+                    }
                   </tr>
                 </thead>
 
@@ -154,6 +155,14 @@ const ProductListView: React.FC<{ user: User; role: string }> = ({ user, role })
                           src={r.imageUrl || '/placeholder.png'}
                         />
                       </td>
+                      {
+                        !isAdminView && !isMakerView &&
+                        <td>
+                          <Link to={`/request/product/${r._id}`}>
+                            <Button variant="info" disabled={r.isArchived}>Request</Button>
+                          </Link>
+                        </td>
+                      }
                     </tr>
                   ))}
                 </tbody>

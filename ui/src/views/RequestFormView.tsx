@@ -27,7 +27,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
   role
 }) => {
   const history = useHistory();
-  let { id } = useParams();
+  let { id, productId } = useParams();
 
   const [isCreated, setIsCreated] = useState(false);
   const [isValidated, setIsValidated] = useState(false);
@@ -99,8 +99,12 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
     setProductsIsLoading(true);
     axios.get(buildEndpointUrl('products/available')).then((res) => {
       updateProducts(res.data);
-      const firstProduct = get(orderBy(res.data, '_id'), '[0]._id', '');
-      if (!isExisting) updateDetailsReq({ productID: firstProduct });
+      let defaultProduct = get(orderBy(res.data, '_id'), '[0]._id', '');
+      if (productId) {
+        const productByRoute = find(res.data, p => p._id === productId);
+        if (productByRoute) defaultProduct = productId;
+      }
+      if (!isExisting) updateDetailsReq({ productID: defaultProduct });
       // force some loading time so that there isn't a flicker
       setTimeout(() => {
         setProductsIsLoading(false);
@@ -539,14 +543,21 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                 </Form.Control>
                 {
                   selectedProduct.imageUrl && selectedProduct._id &&
-                    <a href={`/product/${selectedProduct._id}`} target="_blank">
-                      <img
-                        alt={selectedProduct.name}
-                        className="pt-3"
-                        src={selectedProduct.imageUrl || '/placeholder.png'}
-                        height="120px"
-                      />
-                    </a>
+                    <Row>
+                      <Col className="col-md-auto">
+                        <a href={`/product/${selectedProduct._id}`} target="_blank">
+                          <img
+                            alt={selectedProduct.name}
+                            className="pt-3"
+                            src={selectedProduct.imageUrl || '/placeholder.png'}
+                            height="120px"
+                          />
+                        </a>
+                      </Col>
+                      <Col style={{ display: 'flex', alignItems: 'center' }}>
+                        <a href={`/product/${selectedProduct._id}`} target="_blank">Click here to view details</a>
+                      </Col>
+                    </Row>
                 }
               </Form.Group>
 
