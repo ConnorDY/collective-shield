@@ -591,7 +591,13 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
               )}
 
               <h4>Request Details</h4>
-              <h5>Add any details or comments about the request here</h5>
+              <h5>
+                {
+                  !isMakerView && !isAdminView ?
+                  'Notes or instructions about your request' :
+                  'Notes or instructions from the requester'
+                }
+              </h5>
                 <Form.Group controlId="requestDetails">
                   <Form.Control
                     disabled={disabled}
@@ -607,7 +613,13 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
               {isExisting && (
                 <>
                   <h4>Maker Notes</h4>
-                  <h5>Makers can add notes here, which are also visible to the requester</h5>
+                  <h5>
+                    {
+                      !isMakerView && !isAdminView ?
+                      'Updates from Collective Shield makers about your request' :
+                      'Updates to the requester or to other makers. Makers and requesters can see these notes.'
+                    }
+                  </h5>
                     <Form.Group controlId="requestMakerNotes">
                       <Form.Control
                         disabled={disabled && !isMakerView}
