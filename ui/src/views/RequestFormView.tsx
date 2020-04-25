@@ -57,6 +57,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
     homePickUp: false,
     makerNotes: '',
     productID: '',
+    doesAgree: false,
   });
 
   const roleOptions = [
@@ -485,24 +486,34 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                     }
                   />
                 </Form.Group>
-
-                {(!isExisting || isMakerView || isAdminView) && (
-                  <div id="request-button-group">
-                    <Button variant="primary" type="submit">
-                      {isExisting ? 'Update Request' : 'Submit Request'}
-                    </Button>
-
-                    {!isExisting && (
-                      <Button
-                        variant="light"
-                        id="cancel-request-button"
-                        onClick={cancel}
-                      >
-                        Cancel Request
-                      </Button>
-                    )}
-                  </div>
-                )}
+                {
+                  !isExisting &&
+                  <Form.Group controlId="formBasicCheckboxDoesAgree">
+                    <Form.Check
+                      required
+                      checked={detailsReq.doesAgree}
+                      onChange={(e: BaseSyntheticEvent) =>
+                        updateDetailsReq({ doesAgree: e.target.checked })
+                      }
+                      type="checkbox"
+                      label={
+                        <span>
+                          I have accept the limitations of this product. Click on
+                          this link{' '}
+                          <a
+                            href="https://collectiveshield.org/limitations"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="Product Limitations"
+                          >
+                            this link
+                          </a>
+                          {' '}to read the product limitations.
+                        </span>
+                      }
+                    />
+                  </Form.Group>
+                }
             </Col>
 
             <Col>
@@ -604,6 +615,27 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                       </Alert>
                   }
                 </>
+              )}
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              {(!isExisting || isMakerView || isAdminView) && (
+                <div id="request-button-group">
+                  <Button variant="primary" type="submit">
+                    {isExisting ? 'Update Request' : 'Submit Request'}
+                  </Button>
+
+                  {!isExisting && (
+                    <Button
+                      variant="light"
+                      id="cancel-request-button"
+                      onClick={cancel}
+                    >
+                      Cancel Request
+                    </Button>
+                  )}
+                </div>
               )}
             </Col>
           </Row>
