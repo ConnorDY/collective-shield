@@ -255,13 +255,13 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
             <p>
               Please update the status of your job to keep the requester
               apprised of your progress using the drop-down menu in the upper
-              right corner of this screen.
+              right corner of this screen and the Maker Notes section.
             </p>
             <p>
               When your job is complete, either email the requester directly to
-              arrange transfer or select "Get Shipping Label" and Collective
-              Shield will email a pre-paid label to you. Don’t forget to include
-              the{' '}
+              arrange transfer (if they agreed to local delivery) or select
+              "Get Shipping Label" and Collective Shield will email a pre-paid label to you.
+              Don’t forget to include the{' '}
               <a href="/PrintInsert_20200406.pdf" target="_blank">
                 shipping insert
               </a>{' '}
