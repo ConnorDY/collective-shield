@@ -30,6 +30,7 @@ const ProductFormView: React.FC<{ user: User, role: string }> = ({
 
   // Product Details
   const [detailsReq, setDetailsReq] = useState({
+    _id: '',
     name: '',
     description: '',
     imageUrl: '',
@@ -277,6 +278,15 @@ const ProductFormView: React.FC<{ user: User, role: string }> = ({
                   </div>
                 )}
               </Form>
+
+              {
+                !isAdminView && !isMakerView && !detailsReq.isArchived &&
+                <div className="mt-5">
+                  <Link to={`/request/product/${detailsReq._id}`}>
+                    <Button variant="info">Request this product</Button>
+                  </Link>
+                </div>
+              }
             </Col>
             <Col>
               <img src={detailsReq.imageUrl || '/placeholder.png'} width="100%" />
