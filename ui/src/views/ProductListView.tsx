@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Col, Row, Jumbotron } from 'react-bootstrap';
 import axios from 'axios';
 import { get, lowerCase } from 'lodash';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 
@@ -13,7 +13,6 @@ import { buildEndpointUrl } from '../utilities';
 const ProductListView: React.FC<{ user: User; role: string }> = ({ user, role }) => {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const history = useHistory();
 
   let searchResults: any[] = [];
 
@@ -21,7 +20,7 @@ const ProductListView: React.FC<{ user: User; role: string }> = ({ user, role })
   const isAdminView = !!user.isSuperAdmin;
 
   function getAllProducts() {
-    const endpoint = isAdminView || isMakerView ? 'products/all' : 'products/available';
+    const endpoint = isAdminView ? 'products/all' : 'products/available';
     axios.get(buildEndpointUrl(endpoint)).then((res) => {
       setAllProducts(res.data);
     });
