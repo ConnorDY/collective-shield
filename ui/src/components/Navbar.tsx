@@ -115,18 +115,15 @@ const MainNav: React.FC<{
 
                       <Avatar size="40" user={user} />
 
-                      {
-                        showAdmin &&
-                          <Link
-                            to="#"
-                            onClick={() => switchRole()}
-                            className="ml-lg-3"
-                          >
-                            Switch to{' '}
-                            {oppositeRole.charAt(0).toUpperCase() +
-                              oppositeRole.slice(1)}
-                          </Link>
-                      }
+                      <Link
+                        to="#"
+                        onClick={() => switchRole()}
+                        className="ml-lg-3"
+                      >
+                        Switch to{' '}
+                        {oppositeRole.charAt(0).toUpperCase() +
+                          oppositeRole.slice(1)}
+                      </Link>
 
                       <Link to="/logout" className="ml-lg-3">
                         Logout
