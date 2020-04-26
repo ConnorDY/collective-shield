@@ -19,6 +19,7 @@ import Request from '../models/Request';
 import StatusOption from '../components/StatusOption';
 import { buildEndpointUrl } from '../utilities';
 import { statuses } from '../utilities/constants';
+import { formatDate } from '../utilities/formatDate';
 
 const googleDriveLink =
   'https://drive.google.com/drive/folders/1-7AqfcKaGstJ0goRNiYks1Y732DsCLHn?fbclid=IwAR201HiuLkO-IfymI_jZg23gccLgJ0tLUFUPtvm7SjPjhAaEpaa9EFlROsU';
@@ -105,8 +106,6 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
     }
   }, []);
 
-  var options = { weekday: 'long', month: 'long', day: 'numeric' };
-
   return (
     <div className="my-work">
       <Row className="view-header">
@@ -143,7 +142,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                     <th className="requestedDate">Date</th>
                     <th className="count">Count</th>
                     <th className="requestorFirstName">Name</th>
-                    <th className="requestor">Requester</th>
+                    <th className="Product">Product</th>
                     <th className="requestorLocation">Location</th>
                     <th className="localDelivery">Local Delivery</th>
                     <th>Status</th>
@@ -155,7 +154,6 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
 
                 <tbody>
                   {work.map((w) => {
-                    const date = new Date(w.createDate!);
                     return (
                       <tr key={`my-work-${w._id}`}>
                         <td className="requestedDate">
@@ -163,19 +161,28 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                             to={`/request/${w._id}`}
                             title="View details for this request"
                           >
-                            {new Intl.DateTimeFormat('en-US', options).format(
-                              date
-                            )}
+                            {formatDate(w.createDate!)}
                           </Link>
                         </td>
                         <td className="count">{w.maskShieldCount}</td>
                         <td className="requestorFirstName">
                           <span>
-                            {w.firstName || 'First name not provided'}
+                            {w.firstName || 'N/A'}
                           </span>
                         </td>
-                        <td className="requestor">
-                          {w.facilityName || 'Organization not provided'}
+                        <td className="product">
+                          {
+                            w.product ?
+                              <Link to={`/product/${w.product._id}`}>
+                                <img
+                                  height="70px"
+                                  alt={w.product.name}
+                                  src={w.product.imageUrl! || '/placeholder.png'}
+                                />
+                              </Link>
+                              :
+                              'N/A'
+                          }
                         </td>
                         <td className="requestorLocation">
                           {w.addressCity
@@ -254,8 +261,10 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                   <tr>
                     <th className="requestedDate">Date</th>
                     <th className="count">Count</th>
-                    <th className="distance">State</th>
-                    <th className="requestor">Requester</th>
+                    <th className="requestorFirstName">Name</th>
+                    <th className="product">Product</th>
+                    <th className="requestorLocation">Location</th>
+                    <th className="localDelivery">Local Delivery</th>
                     <th>
                       <span className="sr-only">Claim</span>
                     </th>
@@ -264,7 +273,6 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
 
                 <tbody>
                   {availableWork.map((w) => {
-                    const date = new Date(w.createDate!);
                     return (
                       <tr key={`available-work-${w._id}`}>
                         <td className="requestedDate">
@@ -272,15 +280,45 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                             to={`/request/${w._id}`}
                             title="View details for this request"
                           >
-                            {new Intl.DateTimeFormat('en-US', options).format(
-                              date
-                            )}
+                            {formatDate(w.createDate!)}
                           </Link>
                         </td>
                         <td className="count">{w.maskShieldCount}</td>
-                        <td className="distance">{w.addressState}</td>
-                        <td className="requestor">
-                          {w.facilityName || 'Organization not provided'}
+                        <td className="requestorFirstName">
+                          <span>
+                            {w.firstName || 'N/A'}
+                          </span>
+                        </td>
+                        <td className="product">
+                          {
+                            w.product ?
+                              <Link to={`/product/${w.product._id}`}>
+                                <img
+                                  height="70px"
+                                  alt={w.product.name}
+                                  src={w.product.imageUrl! || '/placeholder.png'}
+                                />
+                              </Link>
+                              :
+                              'N/A'
+                          }
+                        </td>
+                        <td className="requestorLocation">
+                          {w.addressCity
+                            ? `${w.addressCity.toUpperCase()}, ${
+                                w.addressState
+                              }`
+                            : 'Location not provided'}
+                        </td>
+                        <td className="localDelivery">
+                          {w.homePickUp ? (
+                            <FontAwesomeIcon
+                              className="green-checkmark"
+                              icon={faCheck}
+                            />
+                          ) : (
+                            <FontAwesomeIcon className="red-x" icon={faTimes} />
+                          )}
                         </td>
                         <td className="claim">
                           <Button

@@ -2,6 +2,8 @@ import React from 'react';
 import { Col, Container, Row, Navbar, Nav } from 'react-bootstrap';
 import { NavLink, Link, useHistory } from 'react-router-dom';
 import { get } from 'lodash';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
 import User from '../models/User';
 import Avatar from './Avatar';
@@ -18,6 +20,9 @@ const MainNav: React.FC<{
   const logoFill = ['default', 'blue-purple', 'orange', 'gray'];
 
   const oppositeRole = role === 'maker' ? 'requester' : 'maker';
+
+  const isRequester = role === 'requester';
+  const isMaker = role === 'maker';
 
   function switchRole() {
     localStorage.setItem('role', oppositeRole);
@@ -48,23 +53,37 @@ const MainNav: React.FC<{
                 <Col xs={12} lg={6} className="nav-links">
                   {user && (
                     <Nav className="mr-auto text-lg-center">
-                      {showAdmin && (
+                      {
+                        <NavLink
+                          exact
+                          to="/"
+                          activeClassName="active"
+                          className="nav-link"
+                        >
+                          { isRequester ? 'My Requests' : 'Work' }
+                        </NavLink>
+                      }
+                      {
+                        isRequester && !showAdmin &&
                         <>
                           <NavLink
                             exact
-                            to="/"
+                            to="/request"
                             activeClassName="active"
                             className="nav-link"
                           >
-                            Work
+                            New Request
                           </NavLink>
-
+                        </>
+                      }
+                      {showAdmin && (
+                        <>
                           <NavLink
                             to="/requests"
                             activeClassName="active"
                             className="nav-link"
                           >
-                            Requests
+                            All Requests
                           </NavLink>
 
                           <NavLink
@@ -76,6 +95,13 @@ const MainNav: React.FC<{
                           </NavLink>
                         </>
                       )}
+                      <NavLink
+                        to="/products"
+                        activeClassName="active"
+                        className="nav-link"
+                      >
+                        Products
+                      </NavLink>
                     </Nav>
                   )}
                 </Col>
@@ -102,6 +128,13 @@ const MainNav: React.FC<{
                       <Link to="/logout" className="ml-lg-3">
                         Logout
                       </Link>
+
+                      <a className="ml-3" href="mailto:support@collectiveshield.org" title="Contact Us">
+                        <FontAwesomeIcon
+                          icon={faQuestionCircle}
+                          size="lg"
+                        />
+                      </a>
                     </Navbar.Text>
                   ) : (
                     <></>

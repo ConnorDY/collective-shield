@@ -1,4 +1,5 @@
 import User from './User';
+import Product from './Product';
 
 export default interface Request {
   _id: string;
@@ -25,4 +26,5 @@ export default interface Request {
   requestor?: User;
   homePickUp: boolean;
   makerNotes?: string;
+  product?: Product;
 }

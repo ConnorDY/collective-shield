@@ -1,0 +1,7 @@
+.product-details {
+  input:disabled,
+  textarea:disabled {
+    background: $white;
+    color: $black;
+  }
+}

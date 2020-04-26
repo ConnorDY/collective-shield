@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
 
 import { IRequest } from '../interfaces';
+import FKHelper from './helpers/foreign-key-helper';
 
 export const RequestSchema = new Schema(
   {
@@ -25,6 +26,17 @@ export const RequestSchema = new Schema(
     requestorID: String,
     homePickUp: Boolean,
     makerNotes: String,
+    productID: {
+  		type: String,
+  		ref: 'product',
+  		validate: {
+  			isAsync: true,
+  			validator: function(v) {
+  				return FKHelper(model('product'), v);
+  			},
+  			message: `Product doesn't exist`
+  		}
+  	}
   },
   { toJSON: { virtuals: true } }
 );
@@ -39,6 +51,13 @@ RequestSchema.virtual('maker', {
 RequestSchema.virtual('requestor', {
   ref: 'user',
   localField: 'requestorID',
+  foreignField: '_id',
+  justOne: true
+});
+
+RequestSchema.virtual('product', {
+  ref: 'product',
+  localField: 'productID',
   foreignField: '_id',
   justOne: true
 });

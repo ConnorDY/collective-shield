@@ -35,16 +35,28 @@
         padding-right: 1.5rem;
       }
     }
+
+    .download {
+      padding: 9px 15px;
+    }
   }
 
   .requested-list-table {
     .requestedDate {
-      width: 20%;
+      width: 11%;
       padding: 0 1.8rem 0 1.8rem;
     }
 
     .count {
-      width: 10%;
+      width: 5%;
+    }
+
+    .requestor {
+      width: 25%;
+    }
+
+    .printer {
+      width: 28%;
     }
 
     tbody > tr {

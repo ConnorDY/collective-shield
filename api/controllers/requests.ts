@@ -6,17 +6,19 @@ import {
   Patch,
   Post,
   Put,
+  Res,
   CurrentUser,
   Authorized,
   UseBefore
 } from 'routing-controllers';
 import { MongooseFilterQuery } from 'mongoose';
 import { celebrate, Segments } from 'celebrate';
-import { omit, pick } from 'lodash';
+import { extend, get, keys, omit, pick, reduce } from 'lodash';
+import XLSX from 'xlsx';
 
 import config from '../config';
 import { Request } from '../schemas';
-import { IRequest, IUser } from '../interfaces';
+import { IRequest, IRequestPatch, IUser } from '../interfaces';
 import { requestValidator, statusValidator } from '../validators';
 
 @Authorized()
@@ -25,6 +27,7 @@ export default class RequestsController {
   @Get('/assigned')
   getMyAssigned(@CurrentUser() user: IUser) {
     return Request.find({ makerID: user._id })
+      .populate('product')
       .then((results) => {
         this.sortRequestsByCreateDate(results);
         return results;
@@ -37,6 +40,7 @@ export default class RequestsController {
   @Get('/me')
   getMyCreated(@CurrentUser() user: IUser) {
     return Request.find({ requestorID: user._id })
+      .populate('product')
       .then((results) => {
         this.sortRequestsByCreateDate(results);
         return results;
@@ -49,6 +53,7 @@ export default class RequestsController {
   @Get('/open')
   getOpen() {
     return Request.find({ makerID: undefined })
+      .populate('product')
       .then((results) => {
         this.sortRequestsByCreateDate(results);
         return results;
@@ -64,6 +69,7 @@ export default class RequestsController {
     return Request.find()
       .populate('maker')
       .populate('requestor')
+        .populate('product')
       .then((results) => {
         this.sortRequestsByCreateDate(results);
         return results;
@@ -73,15 +79,63 @@ export default class RequestsController {
       });
   }
 
+  @Get('/all/export')
+  @Authorized(['admin'])
+  getAllExport(@Res() res: any) {
+    return Request.find()
+      .populate('maker')
+      .populate('requestor')
+        .populate('product')
+      .then((results) => {
+        this.sortRequestsByCreateDate(results);
+
+        const results$ = results.map((m) => {
+          return {
+            ...omit(m['_doc'], ['_id', 'maker', 'requestor']),
+            _id: m['_doc']['_id'].toString(),
+            maker: get(m, '$$populatedVirtuals.maker.email'),
+            requester: get(m, '$$populatedVirtuals.maker.email')
+          };
+        });
+        // Reduce the cumulative keys into a single array [ 'jobRole', 'status', etc ]
+        const uniqueKeys = keys(reduce(results$, extend));
+        // Fill each result object with any missing keys
+        const data = results$.map((r) => {
+          let obj = {};
+          uniqueKeys.forEach((k = '') => (obj[k] = ''));
+          obj = { ...obj, ...r };
+          return obj;
+        });
+        // Convert the data into a workbook
+        const wb = XLSX.utils.book_new();
+        // Add JSON to workbook
+        const ws = XLSX.utils.json_to_sheet(data);
+        XLSX.utils.book_append_sheet(wb, ws, 'export.xlsx');
+
+        const wbout = XLSX.write(wb, {
+          type: 'base64',
+          bookType: 'xlsx',
+          bookSST: false
+        });
+        res.setHeader('Content-Type', 'application/octet-stream');
+        return res.send(wbout);
+      })
+      .catch((err) => {
+        throw err;
+      });
+  }
+
   @Post()
   @UseBefore(celebrate({ [Segments.BODY]: requestValidator }))
   createRequest(@CurrentUser() user: IUser, @Body() body: IRequest) {
-    return Request.create({
-      ...body,
-      status: 'Requested',
-      createDate: new Date(),
-      requestorID: user._id
-    })
+    return Request.create(
+      {
+        ...body,
+        status: 'Requested',
+        createDate: new Date(),
+        requestorID: user._id
+      }
+    )
       .then((result) => {
         return result;
       })
@@ -95,6 +149,7 @@ export default class RequestsController {
     return Request.findOne({
       _id: id
     })
+      .populate('product')
       .then((result) => {
         return result;
       })
@@ -121,12 +176,21 @@ export default class RequestsController {
   @Put('/unassign/:id')
   unassignMe(@Param('id') id: string, @CurrentUser() user: IUser) {
     // Require printer to already be assigned to request
+    let query = { _id: id, makerID: user._id }
+    if (user.isSuperAdmin) {
+      query = omit(query, ['makerID']);
+    }
     return Request.findOneAndUpdate(
-      { _id: id, makerID: user._id },
+      query,
       { $set: { makerID: undefined, status: 'Requested' } }
     )
-      .then((result) => {
-        return result;
+      .then(() => {
+        return Request.findOne({ _id: id })
+          .populate('maker')
+          .populate('requestor')
+          .populate('product')
+          .then(result => result)
+          .catch(err => { throw err; });
       })
       .catch((err) => {
         throw err;
@@ -137,7 +201,7 @@ export default class RequestsController {
   patchOneById(
     @Param('id') id: string,
     @CurrentUser() user: IUser,
-    @Body() body: IRequest
+    @Body() body: IRequestPatch
   ) {
     // Admin can patch any field on any request.
     const query: MongooseFilterQuery<Pick<IRequest, any>> = { _id: id };
@@ -151,10 +215,16 @@ export default class RequestsController {
 
     return Request.findOneAndUpdate(
       query,
-      { $set: omit(body, omitFields) }
+      { $set: omit(body, omitFields) },
+      { runValidators: true }
     )
-      .then((result) => {
-        return result;
+      .then(() => {
+        return Request.findOne({ _id: id })
+          .populate('maker')
+          .populate('requestor')
+          .populate('product')
+          .then(result => result)
+          .catch(err => { throw err; });
       })
       .catch((err) => {
         throw err;
