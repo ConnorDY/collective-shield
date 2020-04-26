@@ -5,38 +5,90 @@ import {
   Col,
   Dropdown,
   Row,
+  Spinner,
   Jumbotron
 } from 'react-bootstrap';
 import axios from 'axios';
-import { get, lowerCase } from 'lodash';
+import { get, lowerCase, indexOf } from 'lodash';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileExcel } from '@fortawesome/free-solid-svg-icons';
 
 import Request from '../models/Request';
+import User from '../models/User';
+import AssignMakerModal from '../components/AssignMakerModal';
 import StatusOption from '../components/StatusOption';
 import { buildEndpointUrl, downloadXLSX } from '../utilities';
 import { formatDate } from '../utilities/formatDate';
 
 const RequestListView: React.FC<{}> = () => {
   const [allRequests, setAllRequests] = useState<Request[]>([]);
+  const [allRequestsIsLoading, setAllRequestsIsLoading] = useState(false);
+  const [approved, setApproved] = useState<User[]>([]);
+  const [approvedIsLoading, setApprovedIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchStatusTerm, setSearchStatusTerm] = useState('');
+  const [modalRequestId, setModalRequestId] = useState('');
+
+  const isLoading = allRequestsIsLoading || approvedIsLoading;
 
   let searchResults: any[] = [];
 
+  function closeModal() {
+    setModalRequestId('');
+  }
+
   function getAllRequests() {
+    setAllRequestsIsLoading(true);
     axios.get(buildEndpointUrl(`requests/all`)).then((res) => {
       setAllRequests(res.data);
+      setAllRequestsIsLoading(false);
     });
   }
+
+  function getApprovedMakers() {
+    setApprovedIsLoading(true);
+    axios.get(buildEndpointUrl('makers/approved')).then((res) => {
+      setApproved(res.data);
+      setApprovedIsLoading(false);
+    });
+  }
+
   const handleChange = (event: any) => {
     setSearchTerm(event.target.value);
   };
 
+  const assignMaker = (event: any, shouldUnassign = false) => {
+    const makerID = event.target!.value;
+    const url = shouldUnassign ? `requests/unassign/${modalRequestId}` : `requests/${modalRequestId}`;
+    const method = shouldUnassign ? 'put' : 'patch';
+    axios[method](buildEndpointUrl(url), shouldUnassign ? undefined : { makerID })
+      .then((res: any) => {
+        console.log(res);
+        toast.success('Maker successfully assigned!', {
+          position: toast.POSITION.TOP_LEFT
+        });
+        const request$ = allRequests.find(f => f._id === modalRequestId);
+        const index = indexOf(allRequests, request$);
+        allRequests[index] = res.data;
+        closeModal();
+      })
+      .catch(err => {
+        toast.error(err.toString(), {
+          position: toast.POSITION.TOP_LEFT
+        });
+      });
+  };
+
+  const unassignMaker = () => {
+    assignMaker({ target: { value: '' }}, true);
+  }
+
   // on load
   useEffect(() => {
     getAllRequests();
+    getApprovedMakers();
   }, []);
 
   if (allRequests.length) {
@@ -80,6 +132,13 @@ const RequestListView: React.FC<{}> = () => {
   };
 
   return (
+    isLoading ?
+    <Row className="justify-content-md-center">
+      <Spinner animation="border" role="status">
+        <span className="sr-only">Loading...</span>
+      </Spinner>
+    </Row>
+    :
     <div className="all-requests">
       <Row className="view-header">
         <Col>
@@ -178,9 +237,11 @@ const RequestListView: React.FC<{}> = () => {
                           {r.requestor!.firstName} {r.requestor!.lastName}
                         </td>
                         <td className="printer">
-                          {r.maker
-                            ? `${r.maker.firstName} ${r.maker.lastName}`
-                            : ''}
+                          <Button className="font-weight-bold p-0" variant="link" onClick={() => setModalRequestId(r._id)} title="Re-assign">
+                            {r.maker
+                              ? `${r.maker.firstName} ${r.maker.lastName}`
+                              : 'Unassigned'}
+                          </Button>
                         </td>
                         <td className="status">
                           {StatusOption(r.status || 'Requested')}
@@ -208,6 +269,14 @@ const RequestListView: React.FC<{}> = () => {
           </Col>
         )}
       </Row>
+      {modalRequestId && (
+        <AssignMakerModal
+          makers={approved}
+          onAssign={assignMaker}
+          onUnassign={unassignMaker}
+          onClose={closeModal}
+        />
+      )}
     </div>
   );
 };
