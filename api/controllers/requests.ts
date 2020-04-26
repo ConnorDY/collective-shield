@@ -18,7 +18,7 @@ import XLSX from 'xlsx';
 
 import config from '../config';
 import { Request } from '../schemas';
-import { IRequest, IUser } from '../interfaces';
+import { IRequest, IRequestPatch, IUser } from '../interfaces';
 import { requestValidator, statusValidator } from '../validators';
 
 @Authorized()
@@ -176,12 +176,21 @@ export default class RequestsController {
   @Put('/unassign/:id')
   unassignMe(@Param('id') id: string, @CurrentUser() user: IUser) {
     // Require printer to already be assigned to request
+    let query = { _id: id, makerID: user._id }
+    if (user.isSuperAdmin) {
+      query = omit(query, ['makerID']);
+    }
     return Request.findOneAndUpdate(
-      { _id: id, makerID: user._id },
+      query,
       { $set: { makerID: undefined, status: 'Requested' } }
     )
-      .then((result) => {
-        return result;
+      .then(() => {
+        return Request.findOne({ _id: id })
+          .populate('maker')
+          .populate('requestor')
+          .populate('product')
+          .then(result => result)
+          .catch(err => { throw err; });
       })
       .catch((err) => {
         throw err;
@@ -192,7 +201,7 @@ export default class RequestsController {
   patchOneById(
     @Param('id') id: string,
     @CurrentUser() user: IUser,
-    @Body() body: IRequest
+    @Body() body: IRequestPatch
   ) {
     // Admin can patch any field on any request.
     const query: MongooseFilterQuery<Pick<IRequest, any>> = { _id: id };
@@ -209,8 +218,13 @@ export default class RequestsController {
       { $set: omit(body, omitFields) },
       { runValidators: true }
     )
-      .then((result) => {
-        return result;
+      .then(() => {
+        return Request.findOne({ _id: id })
+          .populate('maker')
+          .populate('requestor')
+          .populate('product')
+          .then(result => result)
+          .catch(err => { throw err; });
       })
       .catch((err) => {
         throw err;
