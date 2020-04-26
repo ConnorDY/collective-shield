@@ -246,10 +246,6 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
             {isExisting && !isMakerView && !isAdminView && (
               <Col className="col-auto">{StatusOption(detailsReq.status)}</Col>
             )}
-
-            <Col className="col-auto">
-              <Button onClick={history.goBack}>Go back</Button>
-            </Col>
           </Row>
         </Col>
       </Row>

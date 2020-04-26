@@ -75,9 +75,6 @@ const ProductListView: React.FC<{ user: User; role: string }> = ({ user, role })
             </Link>
           </Col>
         }
-        <Col className="right-col my-auto col-md-auto text-sm-right">
-          <Button className="ml-3" onClick={history.goBack}>Go back</Button>
-        </Col>
       </Row>
 
       <Row>

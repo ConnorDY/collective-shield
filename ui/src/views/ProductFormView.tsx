@@ -118,14 +118,6 @@ const ProductFormView: React.FC<{ user: User, role: string }> = ({
         <Col>
           <h1 className="h1">{h1}</h1>
         </Col>
-
-        <Col sm={7} className="right-col">
-          <Row>
-            <Col className="col-auto">
-              <Button onClick={history.goBack}>Go back</Button>
-            </Col>
-          </Row>
-        </Col>
       </Row>
 
       {isCreated ? (
