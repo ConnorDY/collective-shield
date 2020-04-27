@@ -74,7 +74,9 @@ const MyRequestsView: React.FC<{ user: User }> = ({ user }) => {
                           </Link>
                         </td>
                         <td className="count">{request.maskShieldCount}</td>
-                        <td className="product">{get(request, 'product.name', 'N/A')}</td>
+                        <td className="product">
+                          {get(request, 'product.name', 'N/A')}
+                        </td>
                         <td className="status">{request.status}</td>
                       </tr>
                     );

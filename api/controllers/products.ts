@@ -19,10 +19,13 @@ import { productValidator, productPatchValidator } from '../validators';
 @Authorized()
 @JsonController(`${config.apiPrefix}/products`)
 export default class RequestsController {
-
   @Get('/all')
   getAll() {
-    return Product.find().sort([["isArchived", 1], ["createDate", "desc"]])
+    return Product.find()
+      .sort([
+        ['isArchived', 1],
+        ['createDate', 'desc']
+      ])
       .then((results) => {
         return results;
       })
@@ -34,8 +37,9 @@ export default class RequestsController {
   @Get('/available')
   getAvailable() {
     return Product.find({
-      isArchived: false,
-    }).sort([["createDate", "desc"]])
+      isArchived: false
+    })
+      .sort([['createDate', 'desc']])
       .then((results) => {
         return results;
       })
@@ -76,10 +80,7 @@ export default class RequestsController {
   @Patch('/:id')
   @Authorized(['admin'])
   @UseBefore(celebrate({ [Segments.BODY]: productPatchValidator }))
-  patchProduct(
-    @Param('id') id: string,
-    @Body() body: IProductPatch
-  ) {
+  patchProduct(@Param('id') id: string, @Body() body: IProductPatch) {
     return Product.findOneAndUpdate(
       { _id: id },
       { $set: { ...body, updateDate: new Date() } }

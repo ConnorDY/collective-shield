@@ -60,11 +60,10 @@ const MainNav: React.FC<{
                           activeClassName="active"
                           className="nav-link"
                         >
-                          { isRequester ? 'My Requests' : 'Work' }
+                          {isRequester ? 'My Requests' : 'Work'}
                         </NavLink>
                       }
-                      {
-                        isRequester && !showAdmin &&
+                      {isRequester && !showAdmin && (
                         <>
                           <NavLink
                             exact
@@ -75,7 +74,7 @@ const MainNav: React.FC<{
                             New Request
                           </NavLink>
                         </>
-                      }
+                      )}
                       {showAdmin && (
                         <>
                           <NavLink
@@ -129,11 +128,12 @@ const MainNav: React.FC<{
                         Logout
                       </Link>
 
-                      <a className="ml-3" href="mailto:support@collectiveshield.org" title="Contact Us">
-                        <FontAwesomeIcon
-                          icon={faQuestionCircle}
-                          size="lg"
-                        />
+                      <a
+                        className="ml-3"
+                        href="mailto:support@collectiveshield.org"
+                        title="Contact Us"
+                      >
+                        <FontAwesomeIcon icon={faQuestionCircle} size="lg" />
                       </a>
                     </Navbar.Text>
                   ) : (

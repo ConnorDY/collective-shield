@@ -6,8 +6,15 @@ const Footer: React.FC<{}> = () => {
     <footer id="footer">
       <Container>
         <Row className="justify-content-md-center">
-          <Col xs={12} md={4} lg={3}>© {new Date().getFullYear()} Collective Shield</Col>
-          <Col xs={12} lg={4}>Contact us at <a href="mailto:support@collectiveshield.org">support@collectiveshield.org</a></Col>
+          <Col xs={12} md={4} lg={3}>
+            © {new Date().getFullYear()} Collective Shield
+          </Col>
+          <Col xs={12} lg={4}>
+            Contact us at{' '}
+            <a href="mailto:support@collectiveshield.org">
+              support@collectiveshield.org
+            </a>
+          </Col>
         </Row>
       </Container>
     </footer>

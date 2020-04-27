@@ -10,7 +10,7 @@ export const ProductSchema = new Schema({
   modelUrl: String,
   isArchived: Boolean,
   createDate: Date,
-  updateDate: Date,
+  updateDate: Date
 });
 
 const Product = model<IProduct>('product', ProductSchema);
