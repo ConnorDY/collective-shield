@@ -88,7 +88,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
 
   function updateProducts(data: Product[] = []) {
     setProducts((prev) =>
-      orderBy(compact(uniqBy([...prev, ...data], '_id')), '_id')
+      orderBy(compact(uniqBy([...prev, ...data], '_id')), ['sortDate', 'desc'])
     );
   }
 
@@ -104,7 +104,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
     setProductsIsLoading(true);
     axios.get(buildEndpointUrl('products/available')).then((res) => {
       updateProducts(res.data);
-      let defaultProduct = get(orderBy(res.data, '_id'), '[0]._id', '');
+      let defaultProduct = get(orderBy(res.data, 'orderDate', 'desc'), '[0]._id', '');
       if (productId) {
         const productByRoute = find(res.data, (p) => p._id === productId);
         if (productByRoute) defaultProduct = productId;
