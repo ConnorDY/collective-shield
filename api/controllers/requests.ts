@@ -161,7 +161,7 @@ export default class RequestsController {
     // Require no printer to already be assigned to request
     return Request.findOneAndUpdate(
       { _id: id, makerID: undefined },
-      { $set: { makerID: user._id } }
+      { $set: { makerID: user._id, status: 'Queued' } }
     )
       .then((result) => {
         return result;
