@@ -61,20 +61,25 @@ const RequestListView: React.FC<{}> = () => {
 
   const assignMaker = (event: any, shouldUnassign = false) => {
     const makerID = event.target!.value;
-    const url = shouldUnassign ? `requests/unassign/${modalRequestId}` : `requests/${modalRequestId}`;
+    const url = shouldUnassign
+      ? `requests/unassign/${modalRequestId}`
+      : `requests/${modalRequestId}`;
     const method = shouldUnassign ? 'put' : 'patch';
-    axios[method](buildEndpointUrl(url), shouldUnassign ? undefined : { makerID })
+    axios[method](
+      buildEndpointUrl(url),
+      shouldUnassign ? undefined : { makerID }
+    )
       .then((res: any) => {
         console.log(res);
         toast.success('Maker successfully assigned!', {
           position: toast.POSITION.TOP_LEFT
         });
-        const request$ = allRequests.find(f => f._id === modalRequestId);
+        const request$ = allRequests.find((f) => f._id === modalRequestId);
         const index = indexOf(allRequests, request$);
         allRequests[index] = res.data;
         closeModal();
       })
-      .catch(err => {
+      .catch((err) => {
         toast.error(err.toString(), {
           position: toast.POSITION.TOP_LEFT
         });
@@ -82,8 +87,8 @@ const RequestListView: React.FC<{}> = () => {
   };
 
   const unassignMaker = () => {
-    assignMaker({ target: { value: '' }}, true);
-  }
+    assignMaker({ target: { value: '' } }, true);
+  };
 
   // on load
   useEffect(() => {
@@ -131,14 +136,13 @@ const RequestListView: React.FC<{}> = () => {
       });
   };
 
-  return (
-    isLoading ?
+  return isLoading ? (
     <Row className="justify-content-md-center">
       <Spinner animation="border" role="status">
         <span className="sr-only">Loading...</span>
       </Spinner>
     </Row>
-    :
+  ) : (
     <div className="all-requests">
       <Row className="view-header">
         <Col>
@@ -237,7 +241,12 @@ const RequestListView: React.FC<{}> = () => {
                           {r.requestor!.firstName} {r.requestor!.lastName}
                         </td>
                         <td className="printer">
-                          <Button className="font-weight-bold p-0" variant="link" onClick={() => setModalRequestId(r._id)} title="Re-assign">
+                          <Button
+                            className="font-weight-bold p-0"
+                            variant="link"
+                            onClick={() => setModalRequestId(r._id)}
+                            title="Re-assign"
+                          >
                             {r.maker
                               ? `${r.maker.firstName} ${r.maker.lastName}`
                               : 'Unassigned'}
@@ -247,18 +256,17 @@ const RequestListView: React.FC<{}> = () => {
                           {StatusOption(r.status || 'Requested')}
                         </td>
                         <td>
-                          {
-                            r.product ?
-                              <Link to={`/product/${r.product._id}`}>
-                                <img
-                                  height="70px"
-                                  alt={r.product.name}
-                                  src={r.product.imageUrl! || '/placeholder.png'}
-                                />
-                              </Link>
-                              :
-                              'N/A'
-                          }
+                          {r.product ? (
+                            <Link to={`/product/${r.product._id}`}>
+                              <img
+                                height="70px"
+                                alt={r.product.name}
+                                src={r.product.imageUrl! || '/placeholder.png'}
+                              />
+                            </Link>
+                          ) : (
+                            'N/A'
+                          )}
                         </td>
                       </tr>
                     );

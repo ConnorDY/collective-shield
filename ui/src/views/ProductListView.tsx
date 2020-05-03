@@ -10,7 +10,10 @@ import User from '../models/User';
 import Product from '../models/Product';
 import { buildEndpointUrl } from '../utilities';
 
-const ProductListView: React.FC<{ user: User; role: string }> = ({ user, role }) => {
+const ProductListView: React.FC<{ user: User; role: string }> = ({
+  user,
+  role
+}) => {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -35,17 +38,12 @@ const ProductListView: React.FC<{ user: User; role: string }> = ({ user, role })
   }, []);
 
   if (allProducts.length) {
-    const keys = [
-      'name',
-      'description'
-    ];
+    const keys = ['name', 'description'];
 
     const results = allProducts.filter((m) => {
-      return (
-        keys.some((k) => {
-          return lowerCase(get(m, k, '')).includes(lowerCase(searchTerm || ''));
-        })
-      );
+      return keys.some((k) => {
+        return lowerCase(get(m, k, '')).includes(lowerCase(searchTerm || ''));
+      });
     });
     searchResults = results;
   }
@@ -64,16 +62,13 @@ const ProductListView: React.FC<{ user: User; role: string }> = ({ user, role })
             onChange={handleChange}
           />
         </Col>
-        {
-          isAdminView &&
+        {isAdminView && (
           <Col className="right-col my-auto col-md-auto text-sm-right">
             <Link to="/product">
-              <Button>
-                New Product
-              </Button>
+              <Button>New Product</Button>
             </Link>
           </Col>
-        }
+        )}
       </Row>
 
       <Row>
@@ -90,23 +85,16 @@ const ProductListView: React.FC<{ user: User; role: string }> = ({ user, role })
                 <thead>
                   <tr>
                     <th>Name</th>
-                    {
-                      !isAdminView && !isMakerView &&
-                        <th>Description</th>
-                    }
-                    {
-                      (isAdminView || isMakerView) &&
-                        <>
-                          <th>Packing Instructions</th>
-                          <th>3D Model</th>
-                          <th>Available</th>
-                        </>
-                    }
+                    {!isAdminView && !isMakerView && <th>Description</th>}
+                    {(isAdminView || isMakerView) && (
+                      <>
+                        <th>Packing Instructions</th>
+                        <th>3D Model</th>
+                        <th>Available</th>
+                      </>
+                    )}
                     <th>Image</th>
-                    {
-                      !isAdminView && !isMakerView &&
-                        <th>Action</th>
-                    }
+                    {!isAdminView && !isMakerView && <th>Action</th>}
                   </tr>
                 </thead>
 
@@ -116,34 +104,39 @@ const ProductListView: React.FC<{ user: User; role: string }> = ({ user, role })
                       <td className="font-weight-bold" style={{ width: '20%' }}>
                         <Link to={`/product/${r._id}`}>{r.name}</Link>
                       </td>
-                      {
-                        !isAdminView && !isMakerView &&
+                      {!isAdminView && !isMakerView && (
                         <td style={{ width: '70%' }}>
-                          {r.description.substring(0,150)}
+                          {r.description.substring(0, 150)}
                           {r.description.length >= 150 && '...'}
                         </td>
-                      }
-                      {
-                        (isAdminView || isMakerView) &&
-                          <>
-                            <td>
-                              <a href={r.packingUrl} target="_blank">View packing instructions</a>
-                            </td>
-                            <td>
-                              <a href={r.modelUrl} target="_blank">View 3D model</a>
-                            </td>
-                            <td>
-                              {!r.isArchived ? (
-                                <FontAwesomeIcon
-                                  className="green-checkmark"
-                                  icon={faCheck}
-                                />
-                              ) : (
-                                <FontAwesomeIcon className="red-x" icon={faTimes} />
-                              )}
-                            </td>
-                          </>
-                      }
+                      )}
+                      {(isAdminView || isMakerView) && (
+                        <>
+                          <td>
+                            <a href={r.packingUrl} target="_blank">
+                              View packing instructions
+                            </a>
+                          </td>
+                          <td>
+                            <a href={r.modelUrl} target="_blank">
+                              View 3D model
+                            </a>
+                          </td>
+                          <td>
+                            {!r.isArchived ? (
+                              <FontAwesomeIcon
+                                className="green-checkmark"
+                                icon={faCheck}
+                              />
+                            ) : (
+                              <FontAwesomeIcon
+                                className="red-x"
+                                icon={faTimes}
+                              />
+                            )}
+                          </td>
+                        </>
+                      )}
                       <td>
                         <img
                           height="70px"
@@ -151,14 +144,15 @@ const ProductListView: React.FC<{ user: User; role: string }> = ({ user, role })
                           src={r.imageUrl || '/placeholder.png'}
                         />
                       </td>
-                      {
-                        !isAdminView && !isMakerView &&
+                      {!isAdminView && !isMakerView && (
                         <td>
                           <Link to={`/request/product/${r._id}`}>
-                            <Button variant="info" disabled={r.isArchived}>Request</Button>
+                            <Button variant="info" disabled={r.isArchived}>
+                              Request
+                            </Button>
                           </Link>
                         </td>
-                      }
+                      )}
                     </tr>
                   ))}
                 </tbody>

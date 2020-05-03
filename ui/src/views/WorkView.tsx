@@ -28,10 +28,13 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
   const history = useHistory();
   const [availableWork, setAvailableWork] = useState<Request[]>([]);
   const [work, setWork] = useState<Request[]>([]);
+  const [statusFilter, setStatusFilter] = useState('');
+  const [filteredWork, setFilteredWork] = useState<Request[]>([]);
 
   function getWork() {
     axios.get(buildEndpointUrl('requests/assigned')).then((res) => {
       setWork(res.data);
+      setFilteredWork(res.data);
     });
   }
 
@@ -56,6 +59,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
           const index = indexOf(work, updated);
           work[index].status = status;
           setWork(work$);
+          setFilteredWork(work$);
         } else {
           toast.error('ERROR', {
             position: toast.POSITION.TOP_LEFT
@@ -70,6 +74,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
   }
 
   function assignWork(id: string) {
+    setStatusFilter('');
     axios
       .put(buildEndpointUrl(`requests/assign/${id}`))
       .then(() => {
@@ -106,6 +111,20 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
     }
   }, []);
 
+  // onSelect sets line item output for given a selected status filter
+  function onSelect(statusSelection: string) {
+    setStatusFilter(statusSelection);
+
+    if (statusSelection.trim().toLowerCase().length === 0) {
+      setFilteredWork(work);
+    } else {
+      const filteredWork = work.filter((w) => {
+        return w.status.toLowerCase() === statusSelection.trim().toLowerCase();
+      });
+      setFilteredWork(filteredWork);
+    }
+  }
+
   return (
     <div className="my-work">
       <Row className="view-header">
@@ -135,6 +154,38 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
           </Col>
         ) : (
           <Col>
+            <Dropdown as={ButtonGroup} onSelect={onSelect}>
+              <Dropdown.Toggle
+                id={`status-dropdown-2`}
+                variant="outline-secondary"
+              >
+                {StatusOption(statusFilter || 'FilterbyStatus')}
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu onSelect={onSelect}>
+                <Dropdown.Item eventKey="">{StatusOption('All')}</Dropdown.Item>
+
+                <Dropdown.Item eventKey="Requested">
+                  {StatusOption('Requested')}
+                </Dropdown.Item>
+
+                <Dropdown.Item eventKey="Queued">
+                  {StatusOption('Queued')}
+                </Dropdown.Item>
+
+                <Dropdown.Item eventKey="Printing">
+                  {StatusOption('Printing')}
+                </Dropdown.Item>
+
+                <Dropdown.Item eventKey="Completed">
+                  {StatusOption('Completed')}
+                </Dropdown.Item>
+
+                <Dropdown.Item eventKey="Shipped">
+                  {StatusOption('Shipped')}
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
             <div className="table-wrapper">
               <table className="my-work-table">
                 <thead>
@@ -153,7 +204,7 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                 </thead>
 
                 <tbody>
-                  {work.map((w) => {
+                  {filteredWork.map((w) => {
                     return (
                       <tr key={`my-work-${w._id}`}>
                         <td className="requestedDate">
@@ -166,23 +217,20 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                         </td>
                         <td className="count">{w.maskShieldCount}</td>
                         <td className="requestorFirstName">
-                          <span>
-                            {w.firstName || 'N/A'}
-                          </span>
+                          <span>{w.firstName || 'N/A'}</span>
                         </td>
                         <td className="product">
-                          {
-                            w.product ?
-                              <Link to={`/product/${w.product._id}`}>
-                                <img
-                                  height="70px"
-                                  alt={w.product.name}
-                                  src={w.product.imageUrl! || '/placeholder.png'}
-                                />
-                              </Link>
-                              :
-                              'N/A'
-                          }
+                          {w.product ? (
+                            <Link to={`/product/${w.product._id}`}>
+                              <img
+                                height="70px"
+                                alt={w.product.name}
+                                src={w.product.imageUrl! || '/placeholder.png'}
+                              />
+                            </Link>
+                          ) : (
+                            'N/A'
+                          )}
                         </td>
                         <td className="requestorLocation">
                           {w.addressCity
@@ -285,23 +333,20 @@ const WorkView: React.FC<{ user: User }> = ({ user }) => {
                         </td>
                         <td className="count">{w.maskShieldCount}</td>
                         <td className="requestorFirstName">
-                          <span>
-                            {w.firstName || 'N/A'}
-                          </span>
+                          <span>{w.firstName || 'N/A'}</span>
                         </td>
                         <td className="product">
-                          {
-                            w.product ?
-                              <Link to={`/product/${w.product._id}`}>
-                                <img
-                                  height="70px"
-                                  alt={w.product.name}
-                                  src={w.product.imageUrl! || '/placeholder.png'}
-                                />
-                              </Link>
-                              :
-                              'N/A'
-                          }
+                          {w.product ? (
+                            <Link to={`/product/${w.product._id}`}>
+                              <img
+                                height="70px"
+                                alt={w.product.name}
+                                src={w.product.imageUrl! || '/placeholder.png'}
+                              />
+                            </Link>
+                          ) : (
+                            'N/A'
+                          )}
                         </td>
                         <td className="requestorLocation">
                           {w.addressCity

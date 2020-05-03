@@ -27,16 +27,16 @@ export const RequestSchema = new Schema(
     homePickUp: Boolean,
     makerNotes: String,
     productID: {
-  		type: String,
-  		ref: 'product',
-  		validate: {
-  			isAsync: true,
-  			validator: function(v) {
-  				return FKHelper(model('product'), v);
-  			},
-  			message: `Product doesn't exist`
-  		}
-  	}
+      type: String,
+      ref: 'product',
+      validate: {
+        isAsync: true,
+        validator: function (v) {
+          return FKHelper(model('product'), v);
+        },
+        message: `Product doesn't exist`
+      }
+    }
   },
   { toJSON: { virtuals: true } }
 );
