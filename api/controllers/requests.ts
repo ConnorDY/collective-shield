@@ -69,7 +69,7 @@ export default class RequestsController {
     return Request.find()
       .populate('maker')
       .populate('requestor')
-        .populate('product')
+      .populate('product')
       .then((results) => {
         this.sortRequestsByCreateDate(results);
         return results;
@@ -85,7 +85,7 @@ export default class RequestsController {
     return Request.find()
       .populate('maker')
       .populate('requestor')
-        .populate('product')
+      .populate('product')
       .then((results) => {
         this.sortRequestsByCreateDate(results);
 
@@ -128,14 +128,12 @@ export default class RequestsController {
   @Post()
   @UseBefore(celebrate({ [Segments.BODY]: requestValidator }))
   createRequest(@CurrentUser() user: IUser, @Body() body: IRequest) {
-    return Request.create(
-      {
-        ...body,
-        status: 'Requested',
-        createDate: new Date(),
-        requestorID: user._id
-      }
-    )
+    return Request.create({
+      ...body,
+      status: 'Requested',
+      createDate: new Date(),
+      requestorID: user._id
+    })
       .then((result) => {
         return result;
       })
@@ -163,7 +161,7 @@ export default class RequestsController {
     // Require no printer to already be assigned to request
     return Request.findOneAndUpdate(
       { _id: id, makerID: undefined },
-      { $set: { makerID: user._id } }
+      { $set: { makerID: user._id, status: 'Queued' } }
     )
       .then((result) => {
         return result;
@@ -176,21 +174,22 @@ export default class RequestsController {
   @Put('/unassign/:id')
   unassignMe(@Param('id') id: string, @CurrentUser() user: IUser) {
     // Require printer to already be assigned to request
-    let query = { _id: id, makerID: user._id }
+    let query = { _id: id, makerID: user._id };
     if (user.isSuperAdmin) {
       query = omit(query, ['makerID']);
     }
-    return Request.findOneAndUpdate(
-      query,
-      { $set: { makerID: undefined, status: 'Requested' } }
-    )
+    return Request.findOneAndUpdate(query, {
+      $set: { makerID: undefined, status: 'Requested' }
+    })
       .then(() => {
         return Request.findOne({ _id: id })
           .populate('maker')
           .populate('requestor')
           .populate('product')
-          .then(result => result)
-          .catch(err => { throw err; });
+          .then((result) => result)
+          .catch((err) => {
+            throw err;
+          });
       })
       .catch((err) => {
         throw err;
@@ -223,8 +222,10 @@ export default class RequestsController {
           .populate('maker')
           .populate('requestor')
           .populate('product')
-          .then(result => result)
-          .catch(err => { throw err; });
+          .then((result) => result)
+          .catch((err) => {
+            throw err;
+          });
       })
       .catch((err) => {
         throw err;
