@@ -3,8 +3,9 @@ import { Button, Col, Row, Jumbotron } from 'react-bootstrap';
 import axios from 'axios';
 import { get, lowerCase } from 'lodash';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faChevronCircleUp, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 import User from '../models/User';
 import Product from '../models/Product';
@@ -28,6 +29,19 @@ const ProductListView: React.FC<{ user: User; role: string }> = ({
       setAllProducts(res.data);
     });
   }
+
+  function orderProductToTop(id = '') {
+    axios.put(buildEndpointUrl(`products/${id}/order-to-top`))
+      .then(() => {
+        getAllProducts();
+      })
+      .catch((err) => {
+        toast.error(err.toString(), {
+          position: toast.POSITION.TOP_LEFT
+        });
+      });
+  }
+
   const handleChange = (event: any) => {
     setSearchTerm(event.target.value);
   };
@@ -94,6 +108,7 @@ const ProductListView: React.FC<{ user: User; role: string }> = ({
                       </>
                     )}
                     <th>Image</th>
+                    {!!isAdminView && <th>Move to top</th>}
                     {!isAdminView && !isMakerView && <th>Action</th>}
                   </tr>
                 </thead>
@@ -144,6 +159,22 @@ const ProductListView: React.FC<{ user: User; role: string }> = ({
                           src={r.imageUrl || '/placeholder.png'}
                         />
                       </td>
+                      {
+                        !!isAdminView &&
+                        <td>
+                          <Button
+                            title="Move to top"
+                            variant="link"
+                            disabled={r.isArchived}
+                            onClick={() => orderProductToTop(r._id)}
+                          >
+                            <FontAwesomeIcon
+                              className={r.isArchived ? 'gray-chevron' : 'green-chevron'}
+                              icon={faChevronCircleUp}
+                            />
+                          </Button>
+                        </td>
+                      }
                       {!isAdminView && !isMakerView && (
                         <td>
                           <Link to={`/request/product/${r._id}`}>

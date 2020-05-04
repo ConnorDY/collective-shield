@@ -5,6 +5,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   Authorized,
   UseBefore
 } from 'routing-controllers';
@@ -24,6 +25,7 @@ export default class RequestsController {
     return Product.find()
       .sort([
         ['isArchived', 1],
+        ['orderDate', 'desc'],
         ['createDate', 'desc']
       ])
       .then((results) => {
@@ -39,7 +41,7 @@ export default class RequestsController {
     return Product.find({
       isArchived: false
     })
-      .sort([['createDate', 'desc']])
+      .sort([['orderDate', 'desc']])
       .then((results) => {
         return results;
       })
@@ -84,6 +86,21 @@ export default class RequestsController {
     return Product.findOneAndUpdate(
       { _id: id },
       { $set: { ...body, updateDate: new Date() } }
+    )
+      .then((result) => {
+        return result;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  }
+
+  @Put('/:id/order-to-top')
+  @Authorized(['admin'])
+  patchProductOrder(@Param('id') id: string) {
+    return Product.findOneAndUpdate(
+      { _id: id },
+      { $set: { orderDate: new Date() } }
     )
       .then((result) => {
         return result;
