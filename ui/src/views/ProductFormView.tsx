@@ -1,13 +1,7 @@
 import React, { useEffect, useState, BaseSyntheticEvent } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useParams } from 'react-router';
-import {
-  Alert,
-  Button,
-  Col,
-  Form,
-  Row
-} from 'react-bootstrap';
+import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { get, pick } from 'lodash';
@@ -17,7 +11,7 @@ import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import User from '../models/User';
 import { buildEndpointUrl, readCookie, scrollToTop } from '../utilities';
 
-const ProductFormView: React.FC<{ user: User, role: string }> = ({
+const ProductFormView: React.FC<{ user: User; role: string }> = ({
   user,
   role
 }) => {
@@ -80,8 +74,7 @@ const ProductFormView: React.FC<{ user: User, role: string }> = ({
       if (isExisting) endpoint = `${endpoint}/${id}`;
       const method = isExisting ? 'patch' : 'post';
 
-      axios
-        [method](buildEndpointUrl(endpoint), data)
+      axios[method](buildEndpointUrl(endpoint), data)
         .then((res) => {
           if (isExisting) {
             toast.success('Successfully updated!', {
@@ -126,7 +119,9 @@ const ProductFormView: React.FC<{ user: User, role: string }> = ({
             <div className="c-requestForm -pad">
               <Alert variant="success">
                 <div style={{ fontSize: '1.2em' }}>
-                  <span>Product was successfully created. View your new product by{' '}</span>
+                  <span>
+                    Product was successfully created. View your new product by{' '}
+                  </span>
                   <Link to={`/product/${createdId}`}>clicking here.</Link>
                 </div>
               </Alert>
@@ -170,8 +165,7 @@ const ProductFormView: React.FC<{ user: User, role: string }> = ({
                   />
                 </Form.Group>
 
-                {
-                  isAdminView &&
+                {isAdminView && (
                   <Form.Group controlId="formBasicImageUrl">
                     <Form.Label>Image URL</Form.Label>
                     <Form.Control
@@ -183,10 +177,9 @@ const ProductFormView: React.FC<{ user: User, role: string }> = ({
                       }
                     />
                   </Form.Group>
-                }
+                )}
 
-                {
-                  (isMakerView || isAdminView) &&
+                {(isMakerView || isAdminView) && (
                   <>
                     <Form.Group controlId="formBasicPackingUrl">
                       <Form.Label>Packing Details URL</Form.Label>
@@ -202,10 +195,13 @@ const ProductFormView: React.FC<{ user: User, role: string }> = ({
                           />
                         </Col>
                         <Col xs={1} className="pl-0">
-                          <Button className="pl-0" href={detailsReq.packingUrl} variant="link" title="Packing Instructions">
-                            <FontAwesomeIcon
-                              icon={faExternalLinkAlt}
-                            />
+                          <Button
+                            className="pl-0"
+                            href={detailsReq.packingUrl}
+                            variant="link"
+                            title="Packing Instructions"
+                          >
+                            <FontAwesomeIcon icon={faExternalLinkAlt} />
                           </Button>
                         </Col>
                       </Row>
@@ -226,19 +222,21 @@ const ProductFormView: React.FC<{ user: User, role: string }> = ({
                           />
                         </Col>
                         <Col xs={1} className="pl-0">
-                          <Button className="pl-0" href={detailsReq.modelUrl} variant="link" title="3D Model URL">
-                            <FontAwesomeIcon
-                              icon={faExternalLinkAlt}
-                            />
+                          <Button
+                            className="pl-0"
+                            href={detailsReq.modelUrl}
+                            variant="link"
+                            title="3D Model URL"
+                          >
+                            <FontAwesomeIcon icon={faExternalLinkAlt} />
                           </Button>
                         </Col>
                       </Row>
                     </Form.Group>
                   </>
-                }
+                )}
 
-                {
-                  isAdminView &&
+                {isAdminView && (
                   <Form.Group controlId="formBasicCheckboxIsArchived">
                     <Form.Label>Archive Status</Form.Label>
                     <Form.Check
@@ -250,17 +248,20 @@ const ProductFormView: React.FC<{ user: User, role: string }> = ({
                       type="checkbox"
                       label={
                         <span>
-                          Checked box indicates that this product is archived and not available for new requests.
+                          Checked box indicates that this product is archived
+                          and not available for new requests.
                         </span>
                       }
                     />
                   </Form.Group>
-                }
+                )}
 
-                {
-                  !isAdminView && detailsReq.isArchived &&
-                  <Alert variant="danger">This product has been archived and is no longer available to request.</Alert>
-                }
+                {!isAdminView && detailsReq.isArchived && (
+                  <Alert variant="danger">
+                    This product has been archived and is no longer available to
+                    request.
+                  </Alert>
+                )}
 
                 {(!isExisting || isAdminView) && (
                   <div id="request-button-group">
@@ -271,17 +272,19 @@ const ProductFormView: React.FC<{ user: User, role: string }> = ({
                 )}
               </Form>
 
-              {
-                !isAdminView && !isMakerView && !detailsReq.isArchived &&
+              {!isAdminView && !isMakerView && !detailsReq.isArchived && (
                 <div className="mt-5">
                   <Link to={`/request/product/${detailsReq._id}`}>
                     <Button variant="info">Request this product</Button>
                   </Link>
                 </div>
-              }
+              )}
             </Col>
             <Col>
-              <img src={detailsReq.imageUrl || '/placeholder.png'} width="100%" />
+              <img
+                src={detailsReq.imageUrl || '/placeholder.png'}
+                width="100%"
+              />
             </Col>
           </Row>
         </>

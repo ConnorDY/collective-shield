@@ -17,37 +17,41 @@ const MakerDetailsModal: React.FC<{
         </Modal.Header>
 
         <Modal.Body className="mv-3">
-          <Button variant="danger" onClick={onUnassign}>Unassign maker</Button>
+          <Button variant="danger" onClick={onUnassign}>
+            Unassign maker
+          </Button>
         </Modal.Body>
         <Modal.Body>
-        <div className="table-wrapper table-scroll-vertical">
-          <Table striped bordered size="sm">
-            <thead>
-              <tr>
-                <th>Maker</th>
-                <th>Email</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                makers.map(m => (
+          <div className="table-wrapper table-scroll-vertical">
+            <Table striped bordered size="sm">
+              <thead>
+                <tr>
+                  <th>Maker</th>
+                  <th>Email</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {makers.map((m) => (
                   <tr key={m._id}>
                     <td>
                       {m!.firstName} {m!.lastName}
                     </td>
+                    <td>{m!.email || 'N/A'}</td>
                     <td>
-                      {m!.email || 'N/A'}
-                    </td>
-                    <td>
-                      <Button value={m._id} onClick={onAssign} variant="primary">Assign</Button>
+                      <Button
+                        value={m._id}
+                        onClick={onAssign}
+                        variant="primary"
+                      >
+                        Assign
+                      </Button>
                     </td>
                   </tr>
-                ))
-              }
-            </tbody>
-          </Table>
-        </div>
+                ))}
+              </tbody>
+            </Table>
+          </div>
         </Modal.Body>
 
         <Modal.Footer>

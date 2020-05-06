@@ -59,48 +59,36 @@ const App: React.FC = () => {
         <Route path="/" exact>
           <HomeView user={user} role={role!} />
         </Route>
-
-        /*
-         Use keys for components that are shared across routes.
-         Otherwise component state will persist on an immediate route
-         change from one to the other.
-        */
+        /* Use keys for components that are shared across routes. Otherwise
+        component state will persist on an immediate route change from one to
+        the other. */
         <Route path="/product" exact>
           <ProductFormView key="create" user={user} role={role!} />
         </Route>
-
         <Route path="/product/:id" exact>
           <ProductFormView key="get" user={user} role={role!} />
         </Route>
-
         <Route path="/products" exact>
           <ProductListView key="create" user={user} role={role!} />
         </Route>
-
         <Route path="/request" exact>
           <RequestFormView key="create" user={user} role={role!} />
         </Route>
-
         <Route path="/request/:id" exact>
           <RequestFormView key="get" user={user} role={role!} />
         </Route>
-
         <Route path="/request/product/:productId" exact>
           <RequestFormView key="request-product" user={user} role={role!} />
         </Route>
-
         <Route path="/verification" exact>
           <MakerVerificationView user={user} />
         </Route>
-
         <Route path="/verification-pending" exact>
           <MakerVerificationPendingView />
         </Route>
-
         <Route path="/logout" exact>
           <LogoutView />
         </Route>
-
         {user.isSuperAdmin && (
           <>
             <Route path="/requests" exact>
@@ -112,7 +100,6 @@ const App: React.FC = () => {
             </Route>
           </>
         )}
-
         <Route path="*">
           <ErrorView />
         </Route>

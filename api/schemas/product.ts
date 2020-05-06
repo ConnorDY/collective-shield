@@ -11,6 +11,7 @@ export const ProductSchema = new Schema({
   isArchived: Boolean,
   createDate: Date,
   updateDate: Date,
+  orderDate: Date,
 });
 
 const Product = model<IProduct>('product', ProductSchema);

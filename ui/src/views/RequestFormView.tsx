@@ -57,7 +57,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
     homePickUp: false,
     makerNotes: '',
     productID: '',
-    doesAgree: false,
+    doesAgree: false
   });
 
   const roleOptions = [
@@ -74,7 +74,10 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
 
   const isExisting = !!id;
   const disabled = !!isExisting && !isAdminView;
-  const selectedProduct = find(products, p => p['_id'] === detailsReq.productID) || { imageUrl: '', _id: '', name: '' };
+  const selectedProduct = find(
+    products,
+    (p) => p['_id'] === detailsReq.productID
+  ) || { imageUrl: '', _id: '', name: '' };
 
   function updateDetailsReq(data: object) {
     setDetailsReq({
@@ -84,7 +87,9 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
   }
 
   function updateProducts(data: Product[] = []) {
-    setProducts(prev => orderBy(compact(uniqBy([...prev, ...data], '_id')), '_id'));
+    setProducts((prev) =>
+      orderBy(compact(uniqBy([...prev, ...data], '_id')), ['sortDate', 'desc'])
+    );
   }
 
   function getDetails() {
@@ -99,9 +104,9 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
     setProductsIsLoading(true);
     axios.get(buildEndpointUrl('products/available')).then((res) => {
       updateProducts(res.data);
-      let defaultProduct = get(orderBy(res.data, '_id'), '[0]._id', '');
+      let defaultProduct = get(orderBy(res.data, 'orderDate', 'desc'), '[0]._id', '');
       if (productId) {
-        const productByRoute = find(res.data, p => p._id === productId);
+        const productByRoute = find(res.data, (p) => p._id === productId);
         if (productByRoute) defaultProduct = productId;
       }
       if (!isExisting) updateDetailsReq({ productID: defaultProduct });
@@ -152,7 +157,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
         'phone',
         'homePickUp',
         'makerNotes',
-        'productID',
+        'productID'
       ]);
       // TODO - update to allow /maker-details to accept only necessary fields
       // https://github.com/ConnorDY/collective-shield/pull/117#issuecomment-614034590
@@ -197,14 +202,13 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
   if (isExisting) h1 = 'Request Details';
   if (isCreated) h1 = 'Thank You!';
 
-  return (
-    productsIsLoading ?
+  return productsIsLoading ? (
     <Row className="justify-content-md-center">
       <Spinner animation="border" role="status">
         <span className="sr-only">Loading...</span>
       </Spinner>
     </Row>
-    :
+  ) : (
     <div className="request-details">
       <Row className="view-header">
         <Col>
@@ -260,9 +264,9 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
             </p>
             <p>
               When your job is complete, either email the requester directly to
-              arrange transfer (if they agreed to local delivery) or select
-              "Get Shipping Label" and Collective Shield will email a pre-paid label to you.
-              Don’t forget to include the{' '}
+              arrange transfer (if they agreed to local delivery) or select "Get
+              Shipping Label" and Collective Shield will email a pre-paid label
+              to you. Don’t forget to include the{' '}
               <a href="/PrintInsert_20200406.pdf" target="_blank">
                 shipping insert
               </a>{' '}
@@ -287,16 +291,16 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
         </Row>
       ) : (
         <>
-        <Form
-          noValidate
-          validated={isValidated}
-          onSubmit={(e: React.BaseSyntheticEvent) => {
-            handleSubmit(e);
-          }}
-        >
-          <Row id="requested-row-2">
-            <Col>
-              <h4>Requester Contact Information</h4>
+          <Form
+            noValidate
+            validated={isValidated}
+            onSubmit={(e: React.BaseSyntheticEvent) => {
+              handleSubmit(e);
+            }}
+          >
+            <Row id="requested-row-2">
+              <Col>
+                <h4>Requester Contact Information</h4>
                 <Form.Group controlId="formBasicJobTitle">
                   <Form.Label>Role</Form.Label>
                   <Form.Control
@@ -486,8 +490,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                     }
                   />
                 </Form.Group>
-                {
-                  !isExisting &&
+                {!isExisting && (
                   <Form.Group controlId="formBasicCheckboxDoesAgree">
                     <Form.Check
                       required
@@ -498,7 +501,7 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                       type="checkbox"
                       label={
                         <span>
-                          I have accept the limitations of this product. Click on{' '}
+                          I accept the limitations of this product. Click on{' '}
                           <a
                             href="https://collectiveshield.org/limitations"
                             target="_blank"
@@ -506,41 +509,54 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                             title="Product Limitations"
                           >
                             this link
-                          </a>
-                          {' '}to read the product limitations.
+                          </a>{' '}
+                          to read the product limitations.
                         </span>
                       }
                     />
                   </Form.Group>
-                }
-            </Col>
+                )}
+              </Col>
 
-            <Col>
-              <h4>Product</h4>
-              <Form.Group controlId="formBasicProduct">
-                <Form.Label>Select a Product</Form.Label>
-                <Form.Control
-                  disabled={disabled}
-                  as="select"
-                  required
-                  value={detailsReq.productID}
-                  onChange={(e: BaseSyntheticEvent) =>
-                    // reset otherJobRole on change
-                    updateDetailsReq({
-                      productID: e.target.value
-                    })
-                  }
-                >
-                  {isExisting && <option disabled value="">No product selected</option>}
-                  {products.map((product) => {
-                    return <option value={get(product, '_id')} key={get(product, '_id')}>{get(product, 'name')}</option>;
-                  })}
-                </Form.Control>
-                {
-                  selectedProduct.imageUrl && selectedProduct._id &&
+              <Col>
+                <h4>Product</h4>
+                <Form.Group controlId="formBasicProduct">
+                  <Form.Label>Select a Product</Form.Label>
+                  <Form.Control
+                    disabled={disabled}
+                    as="select"
+                    required
+                    value={detailsReq.productID}
+                    onChange={(e: BaseSyntheticEvent) =>
+                      // reset otherJobRole on change
+                      updateDetailsReq({
+                        productID: e.target.value
+                      })
+                    }
+                  >
+                    {isExisting && (
+                      <option disabled value="">
+                        No product selected
+                      </option>
+                    )}
+                    {products.map((product) => {
+                      return (
+                        <option
+                          value={get(product, '_id')}
+                          key={get(product, '_id')}
+                        >
+                          {get(product, 'name')}
+                        </option>
+                      );
+                    })}
+                  </Form.Control>
+                  {selectedProduct.imageUrl && selectedProduct._id && (
                     <Row>
                       <Col className="col-md-auto">
-                        <a href={`/product/${selectedProduct._id}`} target="_blank">
+                        <a
+                          href={`/product/${selectedProduct._id}`}
+                          target="_blank"
+                        >
                           <img
                             alt={selectedProduct.name}
                             className="pt-3"
@@ -550,13 +566,18 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                         </a>
                       </Col>
                       <Col style={{ display: 'flex', alignItems: 'center' }}>
-                        <a href={`/product/${selectedProduct._id}`} target="_blank">Click here to view details</a>
+                        <a
+                          href={`/product/${selectedProduct._id}`}
+                          target="_blank"
+                        >
+                          Click here to view details
+                        </a>
                       </Col>
                     </Row>
-                }
-              </Form.Group>
+                  )}
+                </Form.Group>
 
-              <h4>Number Requested</h4>
+                <h4>Number Requested</h4>
                 <Form.Group>
                   <Form.Control
                     required
@@ -575,24 +596,22 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                     }}
                   />
                 </Form.Group>
-              {detailsReq.maskShieldCount >= 50 && !isExisting && (
-                <Alert variant="info">
-                  For this request size, you will also need to email us at{' '}
-                  <a href="mailto:support@collectiveshield.org">
-                    support@collectiveshield.org
-                  </a>{' '}
-                  after you submit your request.
-                </Alert>
-              )}
+                {detailsReq.maskShieldCount >= 50 && !isExisting && (
+                  <Alert variant="info">
+                    For this request size, you will also need to email us at{' '}
+                    <a href="mailto:support@collectiveshield.org">
+                      support@collectiveshield.org
+                    </a>{' '}
+                    after you submit your request.
+                  </Alert>
+                )}
 
-              <h4>Request Details</h4>
-              <h5>
-                {
-                  !isMakerView && !isAdminView ?
-                  'Notes or instructions about your request' :
-                  'Notes or instructions from the requester'
-                }
-              </h5>
+                <h4>Request Details</h4>
+                <h5>
+                  {!isMakerView && !isAdminView
+                    ? 'Notes or instructions about your request'
+                    : 'Notes or instructions from the requester'}
+                </h5>
                 <Form.Group controlId="requestDetails">
                   <Form.Control
                     disabled={disabled}
@@ -605,16 +624,14 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                   />
                 </Form.Group>
 
-              {isExisting && (
-                <>
-                  <h4>Maker Notes</h4>
-                  <h5>
-                    {
-                      !isMakerView && !isAdminView ?
-                      'Updates from Collective Shield makers about your request' :
-                      'Updates to the requester or to other makers. Makers and requesters can see these notes.'
-                    }
-                  </h5>
+                {isExisting && (
+                  <>
+                    <h4>Maker Notes</h4>
+                    <h5>
+                      {!isMakerView && !isAdminView
+                        ? 'Updates from Collective Shield makers about your request'
+                        : 'Updates to the requester or to other makers. Makers and requesters can see these notes.'}
+                    </h5>
                     <Form.Group controlId="requestMakerNotes">
                       <Form.Control
                         disabled={disabled && !isMakerView}
@@ -626,37 +643,37 @@ const RequestFormView: React.FC<{ user: User; role: string }> = ({
                         }
                       />
                     </Form.Group>
-                  {
-                    isMakerView &&
+                    {isMakerView && (
                       <Alert variant="info">
-                        Ensure that you click the "Update Request" button when are you done updating notes.
+                        Ensure that you click the "Update Request" button when
+                        are you done updating notes.
                       </Alert>
-                  }
-                </>
-              )}
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              {(!isExisting || isMakerView || isAdminView) && (
-                <div id="request-button-group">
-                  <Button variant="primary" type="submit">
-                    {isExisting ? 'Update Request' : 'Submit Request'}
-                  </Button>
-
-                  {!isExisting && (
-                    <Button
-                      variant="light"
-                      id="cancel-request-button"
-                      onClick={cancel}
-                    >
-                      Cancel Request
+                    )}
+                  </>
+                )}
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                {(!isExisting || isMakerView || isAdminView) && (
+                  <div id="request-button-group">
+                    <Button variant="primary" type="submit">
+                      {isExisting ? 'Update Request' : 'Submit Request'}
                     </Button>
-                  )}
-                </div>
-              )}
-            </Col>
-          </Row>
+
+                    {!isExisting && (
+                      <Button
+                        variant="light"
+                        id="cancel-request-button"
+                        onClick={cancel}
+                      >
+                        Cancel Request
+                      </Button>
+                    )}
+                  </div>
+                )}
+              </Col>
+            </Row>
           </Form>
         </>
       )}

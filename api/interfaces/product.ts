@@ -9,6 +9,7 @@ export default interface IProduct extends Document {
   isArchived?: boolean;
   createDate?: Date;
   updateDate?: Date;
+  orderDate?: Date;
 }
 
 export interface IProductPatch extends Document {
@@ -20,4 +21,5 @@ export interface IProductPatch extends Document {
   isArchived?: boolean;
   createDate?: Date;
   updateDate?: Date;
+  orderDate?: Date;
 }

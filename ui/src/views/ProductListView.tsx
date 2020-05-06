@@ -3,14 +3,18 @@ import { Button, Col, Row, Jumbotron } from 'react-bootstrap';
 import axios from 'axios';
 import { get, lowerCase } from 'lodash';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faChevronCircleUp, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 import User from '../models/User';
 import Product from '../models/Product';
 import { buildEndpointUrl } from '../utilities';
 
-const ProductListView: React.FC<{ user: User; role: string }> = ({ user, role }) => {
+const ProductListView: React.FC<{ user: User; role: string }> = ({
+  user,
+  role
+}) => {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -25,6 +29,19 @@ const ProductListView: React.FC<{ user: User; role: string }> = ({ user, role })
       setAllProducts(res.data);
     });
   }
+
+  function orderProductToTop(id = '') {
+    axios.put(buildEndpointUrl(`products/${id}/order-to-top`))
+      .then(() => {
+        getAllProducts();
+      })
+      .catch((err) => {
+        toast.error(err.toString(), {
+          position: toast.POSITION.TOP_LEFT
+        });
+      });
+  }
+
   const handleChange = (event: any) => {
     setSearchTerm(event.target.value);
   };
@@ -35,17 +52,12 @@ const ProductListView: React.FC<{ user: User; role: string }> = ({ user, role })
   }, []);
 
   if (allProducts.length) {
-    const keys = [
-      'name',
-      'description'
-    ];
+    const keys = ['name', 'description'];
 
     const results = allProducts.filter((m) => {
-      return (
-        keys.some((k) => {
-          return lowerCase(get(m, k, '')).includes(lowerCase(searchTerm || ''));
-        })
-      );
+      return keys.some((k) => {
+        return lowerCase(get(m, k, '')).includes(lowerCase(searchTerm || ''));
+      });
     });
     searchResults = results;
   }
@@ -64,16 +76,13 @@ const ProductListView: React.FC<{ user: User; role: string }> = ({ user, role })
             onChange={handleChange}
           />
         </Col>
-        {
-          isAdminView &&
+        {isAdminView && (
           <Col className="right-col my-auto col-md-auto text-sm-right">
             <Link to="/product">
-              <Button>
-                New Product
-              </Button>
+              <Button>New Product</Button>
             </Link>
           </Col>
-        }
+        )}
       </Row>
 
       <Row>
@@ -90,23 +99,17 @@ const ProductListView: React.FC<{ user: User; role: string }> = ({ user, role })
                 <thead>
                   <tr>
                     <th>Name</th>
-                    {
-                      !isAdminView && !isMakerView &&
-                        <th>Description</th>
-                    }
-                    {
-                      (isAdminView || isMakerView) &&
-                        <>
-                          <th>Packing Instructions</th>
-                          <th>3D Model</th>
-                          <th>Available</th>
-                        </>
-                    }
+                    {!isAdminView && !isMakerView && <th>Description</th>}
+                    {(isAdminView || isMakerView) && (
+                      <>
+                        <th>Packing Instructions</th>
+                        <th>3D Model</th>
+                        <th>Available</th>
+                      </>
+                    )}
                     <th>Image</th>
-                    {
-                      !isAdminView && !isMakerView &&
-                        <th>Action</th>
-                    }
+                    {!!isAdminView && <th>Move to top</th>}
+                    {!isAdminView && !isMakerView && <th>Action</th>}
                   </tr>
                 </thead>
 
@@ -116,34 +119,39 @@ const ProductListView: React.FC<{ user: User; role: string }> = ({ user, role })
                       <td className="font-weight-bold" style={{ width: '20%' }}>
                         <Link to={`/product/${r._id}`}>{r.name}</Link>
                       </td>
-                      {
-                        !isAdminView && !isMakerView &&
+                      {!isAdminView && !isMakerView && (
                         <td style={{ width: '70%' }}>
-                          {r.description.substring(0,150)}
+                          {r.description.substring(0, 150)}
                           {r.description.length >= 150 && '...'}
                         </td>
-                      }
-                      {
-                        (isAdminView || isMakerView) &&
-                          <>
-                            <td>
-                              <a href={r.packingUrl} target="_blank">View packing instructions</a>
-                            </td>
-                            <td>
-                              <a href={r.modelUrl} target="_blank">View 3D model</a>
-                            </td>
-                            <td>
-                              {!r.isArchived ? (
-                                <FontAwesomeIcon
-                                  className="green-checkmark"
-                                  icon={faCheck}
-                                />
-                              ) : (
-                                <FontAwesomeIcon className="red-x" icon={faTimes} />
-                              )}
-                            </td>
-                          </>
-                      }
+                      )}
+                      {(isAdminView || isMakerView) && (
+                        <>
+                          <td>
+                            <a href={r.packingUrl} target="_blank">
+                              View packing instructions
+                            </a>
+                          </td>
+                          <td>
+                            <a href={r.modelUrl} target="_blank">
+                              View 3D model
+                            </a>
+                          </td>
+                          <td>
+                            {!r.isArchived ? (
+                              <FontAwesomeIcon
+                                className="green-checkmark"
+                                icon={faCheck}
+                              />
+                            ) : (
+                              <FontAwesomeIcon
+                                className="red-x"
+                                icon={faTimes}
+                              />
+                            )}
+                          </td>
+                        </>
+                      )}
                       <td>
                         <img
                           height="70px"
@@ -152,13 +160,30 @@ const ProductListView: React.FC<{ user: User; role: string }> = ({ user, role })
                         />
                       </td>
                       {
-                        !isAdminView && !isMakerView &&
+                        !!isAdminView &&
                         <td>
-                          <Link to={`/request/product/${r._id}`}>
-                            <Button variant="info" disabled={r.isArchived}>Request</Button>
-                          </Link>
+                          <Button
+                            title="Move to top"
+                            variant="link"
+                            disabled={r.isArchived}
+                            onClick={() => orderProductToTop(r._id)}
+                          >
+                            <FontAwesomeIcon
+                              className={r.isArchived ? 'gray-chevron' : 'green-chevron'}
+                              icon={faChevronCircleUp}
+                            />
+                          </Button>
                         </td>
                       }
+                      {!isAdminView && !isMakerView && (
+                        <td>
+                          <Link to={`/request/product/${r._id}`}>
+                            <Button variant="info" disabled={r.isArchived}>
+                              Request
+                            </Button>
+                          </Link>
+                        </td>
+                      )}
                     </tr>
                   ))}
                 </tbody>

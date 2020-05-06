@@ -9,6 +9,7 @@
     border: 2px solid $grey;
     border-radius: 4px;
     margin-bottom: 3em;
+    margin-top: 0.5em;
     min-width: 520px;
   }
 
@@ -45,6 +46,16 @@
 
   .red-x {
     color: red;
+    font-size: 20px;
+  }
+
+  .green-chevron {
+    color: green;
+    font-size: 20px;
+  }
+
+  .gray-chevron {
+    color: $grey-dark;
     font-size: 20px;
   }
 }
